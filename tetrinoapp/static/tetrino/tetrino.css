@@ -1,0 +1,14 @@
+/* Main Body Style */
+body {
+    height: 100vh;
+    background-color: rgb(15, 15, 15);
+    padding: 0px;
+    margin: 0px;
+    gap:0px;
+    border-width: 0px;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+}
+
+/* Elements Styling */
