@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tetrino</title>
+    <script src="{% static 'tetrinoapp/tetrino.js' %}"></script>
+    <link rel="stylesheet" type 'text/css' href="{% static 'tetrinoapp/tetrino.css' %}">
+</head>
+
+<body>
+    <!-- Main Game Window -->
+    <div class="game">
+        <div class="game_header"> TETRINO</div>
+        <div class="game_main">
+            <div class="tetrino_main">
+                <canvas class="canvas" id="gamecanvas"></canvas>
+                <!-- Holds the drawing canvas -->
+            </div>
+            <div class="tetrino_score">
+                <!-- Show classic info: title, score, level, lines cleaned and next piece -->
+                <div class="tetrino_score_widget" id="widget_score">
+                    <div class="widget_description">Score</div>
+                    <div class="widget_value">453324</div>
+                </div>
+                <div class="tetrino_score_widget" id="widget_level">
+                    <div class="widget_description">Level</div>
+                    <div class="widget_value">55</div>
+                </div>
+                <div class="tetrino_score_widget" id="widget_lines">
+                    <div class="widget_description">Lines</div>
+                    <div class="widget_value">432</div>
+                </div>
+                <div class="tetrino_score_widget" id="widget_next_tetrino">
+                    <div class="widget_description">Next</div>
+                    <div class="widget_value"></div>
+                </div>
+                <div class="tetrino_score_widget" id="widget_blank_space"></div>
+            </div>
+        </div>
+        <div class="game_footer">
+            <div class="game_controls" id="control_left">⇦</div>
+            <div class="game_controls" id="control_down">⇨</div>
+            <div class="game_controls" id="control_right">⇩</div>
+            <div class="game_controls" id="control_rotate">↻</div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

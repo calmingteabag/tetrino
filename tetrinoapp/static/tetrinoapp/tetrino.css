@@ -1,0 +1,237 @@
+/* HTML Body Style */
+body {
+    height: 100vh;
+    background-color: rgb(17, 17, 17);
+    padding: 0px;
+    margin: 0px;
+    border-width: 0px;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    color: white;
+}
+
+/* Game Styling */
+div.game {
+    display:flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Header */
+div.game_header {
+    height:10vh;
+    background-color: rgb(3, 0, 79);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(112, 176, 250);
+    font-size : 5vh;
+    margin-top: 4vw;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    margin-bottom: 2vw;
+    
+}
+
+/* Game Main Content */
+div.game_main {
+    height:65vh;
+    display:flex;
+    margin-top: 2vw;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    margin-bottom: 2vw;
+}
+
+div.tetrino_main {
+    width:70%;
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+}
+
+canvas.canvas {
+    background-color: rgb(192, 25, 25);
+    padding:0px;
+    margin:0px;
+    width: 95%;
+    height: 100%;
+    background-color: rgb(3, 0, 79);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(112, 176, 250);
+}
+
+div.tetrino_score {
+    width:30%;
+    background-color: rgb(3, 0, 79);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+    font-family: Arial, Helvetica, sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(112, 176, 250);
+}
+
+div.tetrino_score_widget {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(112, 176, 250);
+}
+
+#widget_score {
+    height: 20%;
+    width: 100%;
+    border-width:0px;
+    border-style:none;
+}
+
+#widget_level {
+    height: 15%;
+    width: 100%;
+    border-width:0px;
+    border-style:none;
+}
+
+#widget_lines {
+    height: 15%;
+    width: 100%;
+    border-width:0px;
+    border-style:none;
+}
+
+#widget_next_tetrino {
+    height: 30%;
+    width: 100%;
+    border-width:0px;
+    border-style:none;
+}
+
+#widget_blank_space {
+    height: 20%;
+    width: 100%;
+    border-width:0px;
+    border-style:none;
+}
+
+div.widget_description {
+    width:100%;
+    height:40%;
+    background-color: rgb(0, 66, 221);
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size:4vw;
+    letter-spacing:0.5vh;
+    font-weight: 600;
+}
+
+div.widget_value {
+    width: 100%;
+    height: 60%;
+    font-size:5vw;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Footer */
+div.game_footer {
+    height:25vh;
+    background-color: rgb(3, 0, 79);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(112, 176, 250);
+    margin-top: 2vw;
+    margin-left: 4vw;
+    margin-right: 4vw;
+    margin-bottom: 4vw;
+    gap: 2vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+}
+
+div.game_controls {
+    width: 40%;
+    height: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(112, 176, 250);
+    font-size:15vw;
+    font-weight: 800;
+}
+
+/* Desktop Styling */
+
+@media only screen and (min-width: 900px) {
+    div.game {
+        font-size: 2vw;
+        letter-spacing: 0.5vw;
+        width: 40vw;
+        height: 100vh;
+        margin-top: 0.5vw;
+        margin-left: 0.5vw;
+        margin-right: 0.5vw;
+        margin-bottom: 0.5vw;
+    }
+
+    div.game_header {
+        height: 10%;
+        font-size: 3vw;
+        letter-spacing: 0.1vw;
+        margin-top: 0.5vw;
+        margin-left: 0.5vw;
+        margin-right: 0.5vw;
+        margin-bottom: 0.5vw;
+    }
+
+    div.game_main{
+        height: 75%;
+        margin-top: 0.5vw;
+        margin-left: 0.5vw;
+        margin-right: 0.5vw;
+        margin-bottom: 0.5vw;
+    }
+
+    div.game_footer{
+        height: 15%;
+        margin-top: 0.5vw;
+        margin-left: 0.5vw;
+        margin-right: 0.5vw;
+        margin-bottom: 0.5vw;
+    }
+
+    div.widget_description {
+        font-size: 2vw;
+        letter-spacing: 0.09vw;
+    }
+
+    div.widget_value {
+        font-size: 2vw;
+        letter-spacing: 0.2vw;
+    }
+    div.game_controls{
+        font-size: 4vw;
+        width: 80%;
+        height: 70%;
+    }
+}
