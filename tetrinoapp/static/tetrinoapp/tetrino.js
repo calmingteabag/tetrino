@@ -83,53 +83,60 @@ class TetrinoGame {
 
 
     // Element movement
-    moveElementUp(x, y, x_max, y_max) {
+    moveElementUp(x, y, x_max, y_max, color, tetrino) {
         // Moves upward (just for testing, pieces don't move up in tetris)
+
         this.refreshGameArea()
 
-        if (y_move < 0) {
+        if (this.y_pos < 0) {
             this.y_pos = 0
-            this.baseElement(x, y, x_max, y_max, 'red')
+            this.baseElement(x, this.y_pos, x_max, y_max, color)
         } else {
-            this.baseElement(x, y, x_max, y_max, 'red')
+            this.baseElement(x, y, x_max, y_max, color)
         }
     }
 
-    moveElementDown(x, y, x_max, y_max) {
+    moveElementDown(x, y, x_max, y_max, color, tetrino) {
         // Moves downward
+
         this.refreshGameArea()
 
-        if (y_move == 800) {
+        if (this.y_pos == 800) {
             this.y_pos = 760
-            this.baseElement(x, y, x_max, y_max, 'red')
+            this.baseElement(x, this.y_pos, x_max, y_max, color)
         } else {
-            this.baseElement(x, y, x_max, y_max, 'red')
+            this.baseElement(x, y, x_max, y_max, color)
         }
     }
 
-    moveElementLeft(x, y, x_max, y_max) {
+
+    moveElementLeft(x, y, x_max, y_max, color, tetrino) {
         // Moves left
+
         this.refreshGameArea()
 
-        if (x_move < 0) {
+        if (this.x_pos < 0) {
             this.x_pos = 0
-            this.baseElement(x, y, x_max, y_max, 'red')
+            this.baseElement(this.x_pos, y, x_max, y_max, color)
         } else {
-            this.baseElement(x, y, x_max, y_max, 'red')
+            this.baseElement(x, y, x_max, y_max, color)
         }
     }
 
-    moveElementRight(x, y, x_max, y_max) {
+
+    moveElementRight(x, y, x_max, y_max, color, tetrino) {
         // Moves right
+
         this.refreshGameArea()
 
-        if (x == 400) {
+        if (this.x_pos == 400) {
             this.x_pos = 360
-            this.baseElement(x, y, x_max, y_max, 'red')
+            this.baseElement(this.x_pos, y, x_max, y_max, color)
         } else {
-            this.baseElement(x, y, x_max, y_max, 'red')
+            this.baseElement(x, y, x_max, y_max, color)
         }
     }
+
 
     moveElementRotate() {
         // Rotates element
@@ -137,27 +144,22 @@ class TetrinoGame {
 
     moveTetrino(usrkey) {
         // Moves element by calling directions
-        let mov_x_pos = 0
-        let mov_y_pos = 0
-        let x_width = mov_x_pos + 40
-        let y_width = mov_y_pos + 40
-
 
         if (usrkey.key == 'ArrowUp' || usrkey.key == 'w') {
-            this.moveElementUp(mov_x_pos, mov_y_pos, x_width, y_width, "red")
-            mov_y_pos -= 40
+            this.y_pos -= 40
+            this.moveElementUp(this.x_pos, this.y_pos, this.width, this.height, "FF00FF")
 
         } else if (usrkey.key == 'ArrowDown' || usrkey.key == 's') {
-            this.moveElementDown(mov_x_pos, mov_y_pos, x_width, y_width, "red")
-            mov_y_pos += 40
+            this.y_pos += 40
+            this.moveElementDown(this.x_pos, this.y_pos, this.width, this.height, "FF00FF")
 
         } else if (usrkey.key == 'ArrowLeft' || usrkey.key == 'a') {
-            this.moveElementLeft(mov_x_pos, mov_y_pos, x_width, y_width, "red")
-            mov_x_pos -= 40
+            this.x_pos -= 40
+            this.moveElementLeft(this.x_pos, this.y_pos, this.width, this.height, "FF00FF")
 
         } else if (usrkey.key == 'ArrowRight' || usrkey.key == 'd') {
-            this.moveElementRight(mov_x_pos, mov_y_pos, x_width, y_width, "red")
-            mov_x_pos += 40
+            this.x_pos += 40
+            this.moveElementRight(this.x_pos, this.y_pos, this.width, this.height, "FF00FF")
         }
 
         console.log(usrkey.key)
@@ -172,7 +174,7 @@ class TetrinoGame {
 
     // Run game
     loadAllListeners() {
-        document.addEventListener("DOMContentLoaded", () => { this.tetrinoShapeCross(0, 0, 40, 40, "#33ccff") }, false);
+        document.addEventListener("DOMContentLoaded", () => { this.baseElement(0, 0, 40, 40, "#33ccff") }, false);
         // document.addEventListener("DOMContentLoaded", this.clearGamingArea, false);
         document.addEventListener('keydown', (key) => { this.moveTetrino(key) });
     };
