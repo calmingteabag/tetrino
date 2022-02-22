@@ -52,15 +52,13 @@ div.tetrino_main {
     width:70%;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1vw;
 }
 
 canvas.canvas {
-    background-color: rgb(192, 25, 25);
     padding:0px;
     margin:0px;
-    width: 95%;
-    height: 100%;
     background-color: rgb(3, 0, 79);
     border-style: solid;
     border-width: 1px;

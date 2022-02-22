@@ -14,13 +14,13 @@
     <!-- Main Game Window -->
     <div class="game">
         <div class="game_header"> TETRINO</div>
+        <!-- Game canvas -->
         <div class="game_main">
             <div class="tetrino_main">
-                <canvas class="canvas" id="gamecanvas"></canvas>
-                <!-- Holds the drawing canvas -->
+                <canvas class="canvas" id="gamecanvas" width="400" height="800"></canvas>
             </div>
+            <!-- Game info-->
             <div class="tetrino_score">
-                <!-- Show classic info: title, score, level, lines cleaned and next piece -->
                 <div class="tetrino_score_widget" id="widget_score">
                     <div class="widget_description">Score</div>
                     <div class="widget_value">453324</div>
@@ -40,15 +40,14 @@
                 <div class="tetrino_score_widget" id="widget_blank_space"></div>
             </div>
         </div>
+        <!-- Controls  -->
         <div class="game_footer">
             <div class="game_controls" id="control_left">⇦</div>
             <div class="game_controls" id="control_down">⇨</div>
             <div class="game_controls" id="control_right">⇩</div>
             <div class="game_controls" id="control_rotate">↻</div>
         </div>
-
     </div>
-
 </body>
 
 </html>
