@@ -13,3 +13,10 @@ tamanho variável como eu fiz (acompanhando o tamanho do div, pra ficar bonito).
 tenha 10 x 20 quadradinhos, é só dividir o tamanho do canvas por 10 e andar esse tanto, maravilha. So que não. 
 
 O problema é que a divisão retorna um float (ex, width de 532 / 10 pixels) e a coisa desanda com as peças terminando em posições erradas (por ex, passando do fim do tabuleiro). Minha outra ideia brilhante foi usar arredondamento, que foi basicamente trocar seis por meia duzia. 
+
+# Dia 3
+
+Arrumei a parte da movimentação das peças e descobri que, se faço o tamanho do canvas pelo css e não pelo atributo do html, ele desaranja tudo (pois flexbox). Acabei fazendo um canvas de tamanho fixo no html que deixou layout feio, mas por outro lado facilitou a parte da lógica do jogo. Agora que só tenho que lidar com valores cheios e não proporções.
+
+Outra coisa, imaginando que o jogo é um tabuleiro de x colunas por y linhas, uma hora ele vai precisar saber o que tem em cada uma das 'células' (imagine uma tabela excel), pra efeito de colisão ou algo nesse sentido. Então criei uma array 2D com todas as 'celulas' e pra cada celula um objeto que vai guardar informação sobre a ela (coordenadas, se ocupada ou não, etc). Assim o jogo pode acessar o que tem na celula usando simples coordenadas, do tipo tabuleiro[0][2]. 
+
