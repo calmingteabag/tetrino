@@ -172,6 +172,8 @@ class TetrinoGame {
 
         if (moveDirection == 'down' && currYpos == this.gameheight - 1) {
             // just remembering this.gameheight -1 because array goes from 0 to length -1
+            // need to add another comparator, 
+            // Object.values(this.gameCoords[this.y_pos][this.x_pos])[2] == '' 
             return false
         } else if (moveDirection == 'left' && currXpos == 0) {
             return false

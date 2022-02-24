@@ -4,15 +4,13 @@ Assim como o Pentaword (a versão caseira do Wordle/Letreco), a idéia não é s
 
 # Dia 1
 
-Terminei o design basico do jogo. Como nos projetos anteriores eu sempre pensava em desktop primeiro pra depois pensar em mobile, resolvi fazer o contrario e ir direto pra mobile. Como resultado o design pra mobile ficou aceitavel, mas pra desktop ficou meio estranho, mas depois ajusto se precisar.
+Terminei o design basico do jogo. Como nos projetos anteriores eu sempre pensava em desktop primeiro pra depois pensar em mobile, resolvi fazer o contrario e ir direto pra mobile. Como resultado, o design pra mobile ficou aceitavel, mas para desktop ficou meio estranho. Arrumo depois se precisar
 
 # Dia 2
 
-Comecei a mexer com a funcionalidade do jogo e depois de bater a cabeça um pouco como de costume, a base de movimentação das peças saiu. Ainda ficaram algumas coisas para resolver, mas a principal delas é o canvas que no caso de um jogo tipo tetris, não pode ter
-tamanho variável como eu fiz (acompanhando o tamanho do div, pra ficar bonito). A ideia que pensei foi, se quero que o 'tabuleiro' 
-tenha 10 x 20 quadradinhos, é só dividir o tamanho do canvas por 10 e andar esse tanto, maravilha. So que não. 
+Comecei a mexer com a funcionalidade do jogo e depois de bater a cabeça um pouco, como de costume, a base de movimentação das peças saiu. Ainda ficaram algumas coisas para resolver, mas a principal delas é o canvas que no caso de um jogo tipo tetris, não pode ter tamanho variável como eu fiz (acompanhando o tamanho do div, para ficar bonito). A ideia que pensei foi, "se quero que o 'tabuleiro' tenha 10 x 20 quadradinhos, é só dividir o tamanho do canvas por 10 e andar esse tanto". Maravilha, pensei. Só que não. 
 
-O problema é que a divisão retorna um float (ex, width de 532 / 10 pixels) e a coisa desanda com as peças terminando em posições erradas (por ex, passando do fim do tabuleiro). Minha outra ideia brilhante foi usar arredondamento, que foi basicamente trocar seis por meia duzia. 
+O problema é que a divisão retorna um float (ex, width de 532 / 10 pixels) e a coisa desanda com as peças terminando em posições erradas (por exemplo, passando do fim do tabuleiro). Minha outra ideia brilhante foi usar arredondamento, que foi basicamente trocar seis por meia duzia. 
 
 # Dia 3
 
@@ -20,3 +18,9 @@ Arrumei a parte da movimentação das peças e descobri que, se faço o tamanho 
 
 Outra coisa, imaginando que o jogo é um tabuleiro de x colunas por y linhas, uma hora ele vai precisar saber o que tem em cada uma das 'células' (imagine uma tabela excel), pra efeito de colisão ou algo nesse sentido. Então criei uma array 2D com todas as 'celulas' e pra cada celula um objeto que vai guardar informação sobre a ela (coordenadas, se ocupada ou não, etc). Assim o jogo pode acessar o que tem na celula usando simples coordenadas, do tipo tabuleiro[0][2]. 
 
+# Dia 4
+
+Separei a parte de movimentação das peças da parte visual, porque, bem, caos. Agora quando se dá o comando de mover as peças, o jogo faz update das coordendas da board para depois ler o conteudo da celula e desenhar a peça. Ficou infinitamente mais organizado
+desse jeito e mais facil de fazer as coisas, principalmente colisão que é algo importante no tetris (ou qualquer jogo que não seja texto). 
+
+A checagem de movimento está bem simples, ele só olha se a peça chegou nos cantos da board mas preciso colcar uma checagem para ver se a posição pra onde quero mexer é valida antes de deixar mexer.
