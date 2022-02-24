@@ -1,5 +1,10 @@
 class TetrinoGame {
     constructor() {
+        // Board could be customized here, insted of fixed values, it
+        // would use values from constructor, for example:
+        // newGame = TetrinoGame(10,20, 40) which would represent a board 10 tiles wide, 20 tiles
+        // long, with a base piece width of 40pixels. 
+
         this.x_pos = 0;
         this.y_pos = 0;
         this.width = 40;
@@ -26,7 +31,6 @@ class TetrinoGame {
     };
 
     gameBoardFill() {
-
         /*
         Why yTileValue = -40:
 
@@ -41,7 +45,6 @@ class TetrinoGame {
         let gameCoordValues = Object.values(this.gameCoords)
 
         for (let column = 0; column < gameCoordValues.length; column++) {
-            console.log(gameCoordValues[column])
             xTileValue = 0
             yTileValue += 40
 
@@ -52,9 +55,6 @@ class TetrinoGame {
                 xTileValue += 40
             }
         }
-
-        console.log(this.gameCoords)
-        console.log(this.gameCoords[0][1])
     }
 
     gameBoardClear() {
@@ -125,47 +125,23 @@ class TetrinoGame {
     moveElementUp(x, y, x_max, y_max, color, tetrino) {
         // Just for testing, pieces don't move up in tetris)
         this.gameBoardRefresh()
-
-        if (this.y_pos < 0) {
-            this.y_pos = 0
-            this.tetrinoBaseShape(x, this.y_pos, x_max, y_max, color)
-        } else {
-            this.tetrinoBaseShape(x, y, x_max, y_max, color)
-        }
-    };
+        this.tetrinoBaseShape(x, y, x_max, y_max, color)
+    }
 
     moveElementDown(x, y, x_max, y_max, color, tetrino) {
         this.gameBoardRefresh()
-
-        if (this.y_pos == 800) {
-            this.y_pos = 760
-            this.tetrinoBaseShape(x, this.y_pos, x_max, y_max, color)
-        } else {
-            this.tetrinoBaseShape(x, y, x_max, y_max, color)
-        }
+        this.tetrinoBaseShape(x, y, x_max, y_max, color)
     };
 
     moveElementLeft(x, y, x_max, y_max, color, tetrino) {
         this.gameBoardRefresh()
-
-        if (this.x_pos < 0) {
-            this.x_pos = 0
-            this.tetrinoBaseShape(this.x_pos, y, x_max, y_max, color)
-        } else {
-            this.tetrinoBaseShape(x, y, x_max, y_max, color)
-        }
-    };
+        this.tetrinoBaseShape(x, y, x_max, y_max, color)
+    }
 
     moveElementRight(x, y, x_max, y_max, color, tetrino) {
         this.gameBoardRefresh()
-
-        if (this.x_pos == 400) {
-            this.x_pos = 360
-            this.tetrinoBaseShape(this.x_pos, y, x_max, y_max, color)
-        } else {
-            this.tetrinoBaseShape(x, y, x_max, y_max, color)
-        }
-    };
+        this.tetrinoBaseShape(x, y, x_max, y_max, color)
+    }
 
     moveElementRotate() {
         // Rotates element
@@ -184,66 +160,83 @@ class TetrinoGame {
         it will check one cell and for horizontal, 4 cells. EAch piece will need to have coordinates
         for that. Those coordinates are based com this.x and this.y which marks the piece's left-top 
         most part of it
-        - Compares its current coordinates with the next space coordinates
+        - Compares its current coordinates with the next space coordinates, based on which key was pressed
         - If next space is valid, allow piece to move
         */
 
+        let currXpos = this.x_pos
+        let currYpos = this.y_pos
 
-        let currBoardXpos = this.x_pos
-        let currBoardYpos = this.y_pos
 
-        // Basic move 
+        // this.gameCoords[this.y_pos][this.x_pos])[2] == 'free'
 
-        // player presses arrowDown
-        // game sets x_pos to += 40
-        // >> function to check for valid move <<
-        // calls function that draws piece on this position. Needs to check if valid BEFORe setting this.x_pos for
-        // += 40
-
-        if (moveDirection == 'ArrowDown' && currYpos == 760) {
+        if (moveDirection == 'down' && currYpos == this.gameheight - 1) {
+            // just remembering this.gameheight -1 because array goes from 0 to length -1
             return false
-        } else if (moveDirection == 'ArrowDown' && this.gamecoords[x][y]) { }
-        // down, end of board
+        } else if (moveDirection == 'left' && currXpos == 0) {
+            return false
+        } else if (moveDirection == 'right' && currXpos == this.gamewidth - 1) {
+            return false
+        } else if (moveDirection == 'up' && currYpos == 0) {
+            return false
+        }
+        return true
     }
 
     moveTetrino(usrkey) {
 
-        if (usrkey.key == 'ArrowUp' || usrkey.key == 'w') {
-            this.y_pos -= 40
-            this.moveElementUp(this.x_pos, this.y_pos, this.width, this.height, "FF00FF")
+        if ((usrkey.key == 'ArrowUp' || usrkey.key == 'w') && (this.moveCheckPosition('up') == true)) {
+            this.y_pos--
 
-        } else if (usrkey.key == 'ArrowDown' || usrkey.key == 's') {
-            this.y_pos += 40
-            this.moveElementDown(this.x_pos, this.y_pos, this.width, this.height, "FF00FF")
+            let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
+            let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
 
-        } else if (usrkey.key == 'ArrowLeft' || usrkey.key == 'a') {
-            this.x_pos -= 40
-            this.moveElementLeft(this.x_pos, this.y_pos, this.width, this.height, "FF00FF")
+            this.moveElementUp(xCoordDraw, yCoordDraw, this.width, this.height, "FF00FF")
 
-        } else if (usrkey.key == 'ArrowRight' || usrkey.key == 'd') {
-            this.x_pos += 40
-            this.moveElementRight(this.x_pos, this.y_pos, this.width, this.height, "FF00FF")
+        } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (this.moveCheckPosition('down') == true)) {
+            this.y_pos++
+
+            let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
+            let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
+
+            this.moveElementDown(xCoordDraw, yCoordDraw, this.width, this.height, "FF00FF")
+
+        } else if ((usrkey.key == 'ArrowLeft' || usrkey.key == 'a') && (this.moveCheckPosition('left') == true)) {
+            this.x_pos--
+
+            let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
+            let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
+
+            this.moveElementLeft(xCoordDraw, yCoordDraw, this.width, this.height, "FF00FF")
+
+        } else if ((usrkey.key == 'ArrowRight' || usrkey.key == 'd') && (this.moveCheckPosition('right') == true)) {
+            this.x_pos++
+
+            let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
+            let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
+
+            this.moveElementRight(xCoordDraw, yCoordDraw, this.width, this.height, "FF00FF")
         }
 
         console.log(usrkey.key)
-        console.log(`Curr X position is: ${this.x_pos}`)
-        console.log(`Curr Y position is: ${this.y_pos}`)
-        // console.log(this.gameCoords)
-        console.log(this.gameCoords[0][2])
-
+        console.log(`Curr board X position is: ${this.x_pos}`)
+        console.log(`Curr board Y position is: ${this.y_pos}`)
+        console.log(`Curr draw X position is: ${Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]}`)
+        console.log(`Curr draw Y position is: ${Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]}`)
+        console.log(`Curr draw tile state is: ${Object.values(this.gameCoords[this.y_pos][this.x_pos])[2]}`)
+        // return coord x from big ass array. Read it as, get object on array pos 0,0, get first element of dict (which is the
+        // current position's x coord, for drawing)
     };
 
     // Run game
     loadAllListeners() {
         document.addEventListener("DOMContentLoaded", () => { this.tetrinoBaseShape(0, 0, 40, 40, "#33ccff") }, false);
-        // document.addEventListener("DOMContentLoaded", this.clearGamingArea, false);
         document.addEventListener('keydown', (key) => { this.moveTetrino(key) });
     };
 };
 
 
 newGame = new TetrinoGame()
-newGame.loadAllListeners()
 newGame.gameBoardCreate(10, 20)
 newGame.gameBoardFill()
-
+newGame.loadAllListeners()
