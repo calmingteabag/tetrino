@@ -9,7 +9,8 @@ class TetrinoGame {
         this.gamewidth = 10;
     };
 
-    createGameBoard(rowsize, colsize) {
+    // Board setup
+    gameBoardCreate(rowsize, colsize) {
         for (let column = 0; column < colsize; column++) {
             this.gameCoords.push([])
             this.gameCoords[column].push(new Array(this.gamewidth))
@@ -22,12 +23,9 @@ class TetrinoGame {
                 };
             };
         };
-
-
     };
 
-
-    fillBoard() {
+    gameBoardFill() {
 
         /*
         Why yTileValue = -40:
@@ -59,17 +57,15 @@ class TetrinoGame {
         console.log(this.gameCoords[0][1])
     }
 
-
-
-    clearGamingArea() {
+    gameBoardClear() {
         let gameCanvas = document.getElementById("gamecanvas")
         let gameContext = gameCanvas.getContext("2d")
 
         gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height)
     };
 
-    refreshGameArea() {
-        this.clearGamingArea()
+    gameBoardRefresh() {
+        this.gameBoardClear()
     };
 
     // Tetrino shapes
@@ -125,10 +121,10 @@ class TetrinoGame {
         this.tetrinoBaseShape(x_init + (2 * x_width), y_init + y_width, x_width, y_width, color)
     };
 
-    // Element movement
+    // Tetrino movement
     moveElementUp(x, y, x_max, y_max, color, tetrino) {
         // Just for testing, pieces don't move up in tetris)
-        this.refreshGameArea()
+        this.gameBoardRefresh()
 
         if (this.y_pos < 0) {
             this.y_pos = 0
@@ -139,7 +135,8 @@ class TetrinoGame {
     };
 
     moveElementDown(x, y, x_max, y_max, color, tetrino) {
-        this.refreshGameArea()
+        this.gameBoardRefresh()
+
         if (this.y_pos == 800) {
             this.y_pos = 760
             this.tetrinoBaseShape(x, this.y_pos, x_max, y_max, color)
@@ -149,7 +146,7 @@ class TetrinoGame {
     };
 
     moveElementLeft(x, y, x_max, y_max, color, tetrino) {
-        this.refreshGameArea()
+        this.gameBoardRefresh()
 
         if (this.x_pos < 0) {
             this.x_pos = 0
@@ -160,7 +157,7 @@ class TetrinoGame {
     };
 
     moveElementRight(x, y, x_max, y_max, color, tetrino) {
-        this.refreshGameArea()
+        this.gameBoardRefresh()
 
         if (this.x_pos == 400) {
             this.x_pos = 360
@@ -174,6 +171,40 @@ class TetrinoGame {
         // Rotates element
         // Some code magic here
     };
+
+    moveCheckPosition(moveDirection) {
+        /*
+        Checks if next piece position is valid (cell tagged with free) or not by
+        returning a bool
+        
+        The 'full' check would work generally this way:
+
+        - Gets current piece orientation
+        - Based on orientation and shape, get coordinates of pieces. Example, for "I" shape vertical,
+        it will check one cell and for horizontal, 4 cells. EAch piece will need to have coordinates
+        for that. Those coordinates are based com this.x and this.y which marks the piece's left-top 
+        most part of it
+        - Compares its current coordinates with the next space coordinates
+        - If next space is valid, allow piece to move
+        */
+
+
+        let currBoardXpos = this.x_pos
+        let currBoardYpos = this.y_pos
+
+        // Basic move 
+
+        // player presses arrowDown
+        // game sets x_pos to += 40
+        // >> function to check for valid move <<
+        // calls function that draws piece on this position. Needs to check if valid BEFORe setting this.x_pos for
+        // += 40
+
+        if (moveDirection == 'ArrowDown' && currYpos == 760) {
+            return false
+        } else if (moveDirection == 'ArrowDown' && this.gamecoords[x][y]) { }
+        // down, end of board
+    }
 
     moveTetrino(usrkey) {
 
@@ -198,10 +229,9 @@ class TetrinoGame {
         console.log(`Curr X position is: ${this.x_pos}`)
         console.log(`Curr Y position is: ${this.y_pos}`)
         // console.log(this.gameCoords)
+        console.log(this.gameCoords[0][2])
 
     };
-
-
 
     // Run game
     loadAllListeners() {
@@ -214,7 +244,6 @@ class TetrinoGame {
 
 newGame = new TetrinoGame()
 newGame.loadAllListeners()
-newGame.createGameBoard(10, 20)
-// newGame.fillBoard(40)
-newGame.fillBoard()
+newGame.gameBoardCreate(10, 20)
+newGame.gameBoardFill()
 
