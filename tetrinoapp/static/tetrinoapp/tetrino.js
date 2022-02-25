@@ -68,6 +68,48 @@ class TetrinoGame {
         this.gameBoardClear()
     };
 
+    // Game workflow
+    /* 
+    After the board is set up, need a control logic to deal, alongside movement,
+    with piece spawn, and piece 'marking' - aka, when pieces stay on place after
+    hitting bottom or another piece.
+
+    Logic workflow (assuming board is created)
+
+    - Spawn a random piece, should be at top center of board. Also 
+    there should be enough space for a full spawn (pieces not clipping top part).
+    - Losing condition should be trying to spawn a piece with spawn location already
+    occupied by a piece (meaning board is full to the top).
+    - The victory condition should be user reaching lv 99 or some crazy condition.
+    It's tetris after all.
+    - Pieces should fall automatically after spawning.
+    - If piece reaches bottom or an obstacle(an piece already in), 'put' the piece
+    in place.
+    - Spawn new piece.
+    */
+    tetrinoSpawn(x, y, x_end, y_end, color) {
+        // This creator function will be called by another control function
+
+        let pieceChoice = [
+            this.tetrinoShapeI,
+            this.tetrinoShapeS,
+            this.tetrinoShapeSqr,
+            this.tetrinoShapeL,
+            this.tetrinoShapeCross,]
+
+
+        let percent = Math.random();
+        let num = Math.floor(percent * (Math.floor(4) - Math.ceil(0) + 1))
+
+        let currPiece = pieceChoice[num]
+        console.log(currPiece)
+        return currPiece(0, 0, 40, 40)
+    }
+
+    tetrinoGame(x, y, x_end, y_end, color) {
+        return this.tetrinoSpawn(x, y, x_end, y_end, color)
+    }
+
     // Tetrino shapes
     tetrinoBaseShape(x_init, y_init, x_end, y_end, color) {
 
@@ -168,8 +210,6 @@ class TetrinoGame {
         let currYpos = this.y_pos
 
 
-        // this.gameCoords[this.y_pos][this.x_pos])[2] == 'free'
-
         if (moveDirection == 'down' && currYpos == this.gameheight - 1) {
             // just remembering this.gameheight -1 because array goes from 0 to length -1
             // need to add another comparator, 
@@ -226,13 +266,11 @@ class TetrinoGame {
         console.log(`Curr draw X position is: ${Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]}`)
         console.log(`Curr draw Y position is: ${Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]}`)
         console.log(`Curr draw tile state is: ${Object.values(this.gameCoords[this.y_pos][this.x_pos])[2]}`)
-        // return coord x from big ass array. Read it as, get object on array pos 0,0, get first element of dict (which is the
-        // current position's x coord, for drawing)
     };
 
     // Run game
     loadAllListeners() {
-        document.addEventListener("DOMContentLoaded", () => { this.tetrinoBaseShape(0, 0, 40, 40, "#33ccff") }, false);
+        document.addEventListener("DOMContentLoaded", () => { this.tetrinoGame(0, 0, 40, 40, "#33ccff") }, false);
         document.addEventListener('keydown', (key) => { this.moveTetrino(key) });
     };
 };

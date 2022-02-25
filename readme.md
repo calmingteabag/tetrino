@@ -24,3 +24,7 @@ Separei a parte de movimentação das peças da parte visual, porque, bem, caos.
 desse jeito e mais facil de fazer as coisas, principalmente colisão que é algo importante no tetris (ou qualquer jogo que não seja texto). 
 
 A checagem de movimento está bem simples, ele só olha se a peça chegou nos cantos da board mas preciso colcar uma checagem para ver se a posição pra onde quero mexer é valida antes de deixar mexer.
+
+## Dia 5
+
+Dia de dar com os burros na água. Spawn de peças funciona quando se chama elas manualmente no document.addEventListener, mas não consigo fazer a função de gerar uma peça randomicamente ler direito a função de constuir a peça na tela. Tentei várias formas, usando map/object com a chave retornando a função, mas descobri que em javascript ele retorna undefined.  Tambem tentei uma lista com os nomes das funções e depois tentando algo do tipo nomes[posição](parametros), ele chama a função da peça (que usa uma outra função) e essa retorna "Cannot read properties of undefined (reading 'tetrinoBaseShape')". What the hell.
