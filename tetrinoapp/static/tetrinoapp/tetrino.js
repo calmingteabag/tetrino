@@ -13,7 +13,7 @@ class TetrinoGame {
         this.gameCoords = [];
         this.gameheight = 20;
         this.gamewidth = 10;
-
+        this.currPiece = ''
     };
 
     // Board setup
@@ -89,29 +89,36 @@ class TetrinoGame {
     in place.
     - Spawn new piece.
     */
-    tetrinoSpawn(x, y, width, color) {
+    tetrinoSpawn() {
         // This creator function will be called by another control function
 
-        let pieceChoice = [
-            this.tetrinoShapeI,
-            this.tetrinoShapeS,
-            this.tetrinoShapeSqr,
-            this.tetrinoShapeL,
-            this.tetrinoShapeCross,
-        ]
+        // let pieceChoice = [
+        //     this.tetrinoShapeI,
+        //     this.tetrinoShapeS,
+        //     this.tetrinoShapeSqr,
+        //     this.tetrinoShapeL,
+        //     this.tetrinoShapeCross,
+        // ]
 
+
+        // let percent = Math.random();
+        // let num = Math.floor(percent * (Math.floor(4) - Math.ceil(0) + 1))
+
+        // console.log(x, y, width, color)
+        // return pieceChoice[num](x, y, width, color)
+        let pieceChoice = ['shapeI', 'shapeS', 'shapeSqr', 'shapeL', 'shapeCross',]
 
         let percent = Math.random();
         let num = Math.floor(percent * (Math.floor(4) - Math.ceil(0) + 1))
 
-        console.log(x, y, width, color)
-        return pieceChoice[num](x, y, width, color)
-
+        return pieceChoice[num]
     }
 
-    tetrinoGame(x, y, width, color) {
-        let currPiece = this.tetrinoSpawn(x, y, width, color)
-        return currPiece
+    tetrinoGame(key) {
+        if (this.currPiece == '') {
+            this.currPiece = this.tetrinoSpawn()
+        }
+        this.moveTetrino(key, this.currPiece)
     }
 
     // Tetrino shapes
@@ -222,26 +229,24 @@ class TetrinoGame {
     };
 
     // Tetrino movement
-    moveElementUp(x, y, width, color) {
-        // Just for testing, pieces don't move up in tetris)
-        this.gameBoardRefresh()
-        this.tetrinoTestShape(x, y, width, color)
-    }
+    moveElement(piece, x, y, width, color) {
 
-    moveElementDown(x, y, width, color) {
-        this.gameBoardRefresh()
+        if (piece == 'shapeI') {
+            this.tetrinoShapeI(x, y, width, color)
 
-        this.tetrinoTestShape(x, y, width, color)
-    };
+        } else if (piece == 'shapeS') {
+            this.tetrinoShapeS(x, y, width, color)
 
-    moveElementLeft(x, y, width, color) {
-        this.gameBoardRefresh()
-        this.tetrinoTestShape(x, y, width, color)
-    }
+        } else if (piece = 'shapeSqr') {
+            this.tetrinoShapeSqr(x, y, width, color)
 
-    moveElementRight(x, y, width, color) {
-        this.gameBoardRefresh()
-        this.tetrinoTestShape(x, y, width, color)
+        } else if (piece = 'shapeL') {
+            this.tetrinoShapeL(x, y, width, color)
+
+        } else if (piece = 'shapeCross') {
+            this.teterinoShapeCross(x, y, width, color)
+
+        }
     }
 
     moveElementRotate() {
@@ -284,39 +289,43 @@ class TetrinoGame {
         return true
     }
 
-    moveTetrino(usrkey) {
+    moveTetrino(usrkey, piece) {
 
         if ((usrkey.key == 'ArrowUp' || usrkey.key == 'w') && (this.moveCheckPosition('up') == true)) {
             this.y_pos--
 
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
+            this.gameBoardRefresh()
+            this.moveElement(piece, xCoordDraw, yCoordDraw, this.width, this.color)
 
-            this.moveElementUp(xCoordDraw, yCoordDraw, this.width, this.color)
 
         } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (this.moveCheckPosition('down') == true)) {
             this.y_pos++
 
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
+            this.gameBoardRefresh()
+            this.moveElement(piece, xCoordDraw, yCoordDraw, this.width, this.color)
 
-            this.moveElementDown(xCoordDraw, yCoordDraw, this.width, this.color)
 
         } else if ((usrkey.key == 'ArrowLeft' || usrkey.key == 'a') && (this.moveCheckPosition('left') == true)) {
             this.x_pos--
 
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
+            this.gameBoardRefresh()
+            this.moveElement(piece, xCoordDraw, yCoordDraw, this.width, this.color)
 
-            this.moveElementLeft(xCoordDraw, yCoordDraw, this.width, this.color)
 
         } else if ((usrkey.key == 'ArrowRight' || usrkey.key == 'd') && (this.moveCheckPosition('right') == true)) {
             this.x_pos++
 
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
+            this.gameBoardRefresh()
+            this.moveElement(piece, xCoordDraw, yCoordDraw, this.width, this.color)
 
-            this.moveElementRight(xCoordDraw, yCoordDraw, this.width, this.color)
         }
 
         console.log(usrkey.key)
@@ -407,8 +416,11 @@ class TetrinoGame {
     // Run game
     loadAllListeners() {
         // document.addEventListener("DOMContentLoaded", () => { this.tetrinoTestShape(0, 0, 40) }, false);
-        document.addEventListener("DOMContentLoaded", () => { this.tetrinoGame(this.x_pos, this.y_pos, this.width, this.color) }, false);
-        document.addEventListener('keydown', (key) => { this.moveTetrino(key) });
+        // document.addEventListener("DOMContentLoaded", () => { this.tetrinoGame(this.x_pos, this.y_pos, this.width, this.color) }, false);
+        // document.addEventListener('keydown', (key) => { this.moveTetrino(key) });
+        document.addEventListener('keydown', (key) => { this.tetrinoGame(key) });
+
+
     };
 };
 
