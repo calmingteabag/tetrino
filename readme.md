@@ -28,3 +28,7 @@ A checagem de movimento está bem simples, ele só olha se a peça chegou nos ca
 ## Dia 5
 
 Dia de dar com os burros na água. Spawn de peças funciona quando se chama elas manualmente no document.addEventListener, mas não consigo fazer a função de gerar uma peça randomicamente ler direito a função de constuir a peça na tela. Tentei várias formas, usando map/object com a chave retornando a função, mas descobri que em javascript ele retorna undefined.  Tambem tentei uma lista com os nomes das funções e depois tentando algo do tipo nomes[posição](parametros), ele chama a função da peça (que usa uma outra função) e essa retorna "Cannot read properties of undefined (reading 'tetrinoBaseShape')". What the hell.
+
+## Dia 6
+
+Invés de bater a cabeça mudei o metodo. Agora ao contrario de ter um metodo base e os outros metodos irem criando os tetrinos invocando esse metodo várias vezes, cada peça já é desenhada direto usando lineTo(). O spawn de peças funciona como deveria, sem as dores de cabeça de ontem sumiram, oh maravilha. Próximo passo é, o jogador mexer a peça que spawnar, porque o jogo spawna uma e mexe a peça padrão.
