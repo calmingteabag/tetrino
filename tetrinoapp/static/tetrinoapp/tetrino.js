@@ -9,9 +9,11 @@ class TetrinoGame {
         this.y_pos = 0;
         this.width = 40;
         this.height = 40;
+        this.color = 'green'
         this.gameCoords = [];
         this.gameheight = 20;
         this.gamewidth = 10;
+
     };
 
     // Board setup
@@ -87,7 +89,7 @@ class TetrinoGame {
     in place.
     - Spawn new piece.
     */
-    tetrinoSpawn(x, y, x_end, y_end, color) {
+    tetrinoSpawn(x, y, width, color) {
         // This creator function will be called by another control function
 
         let pieceChoice = [
@@ -95,23 +97,25 @@ class TetrinoGame {
             this.tetrinoShapeS,
             this.tetrinoShapeSqr,
             this.tetrinoShapeL,
-            this.tetrinoShapeCross,]
+            this.tetrinoShapeCross,
+        ]
 
 
         let percent = Math.random();
         let num = Math.floor(percent * (Math.floor(4) - Math.ceil(0) + 1))
 
-        let currPiece = pieceChoice[num]
-        console.log(currPiece)
-        return currPiece(0, 0, 40, 40)
+        console.log(x, y, width, color)
+        return pieceChoice[num](x, y, width, color)
+
     }
 
-    tetrinoGame(x, y, x_end, y_end, color) {
-        return this.tetrinoSpawn(x, y, x_end, y_end, color)
+    tetrinoGame(x, y, width, color) {
+        let currPiece = this.tetrinoSpawn(x, y, width, color)
+        return currPiece
     }
 
     // Tetrino shapes
-    tetrinoBaseShape(x_init, y_init, x_end, y_end, color) {
+    tetrinoBaseShape(x, y, width, color) {
 
         let gameCanvas = document.getElementById("gamecanvas")
         let gameContext = gameCanvas.getContext("2d")
@@ -120,7 +124,7 @@ class TetrinoGame {
         gameContext.beginPath()
         gameContext.lineWidth = 1
         gameContext.strokeStyle = color
-        gameContext.rect(x_init, y_init, x_end, y_end)
+        gameContext.rect(x, y, width, width)
         gameContext.stroke()
 
         // Fill Style
@@ -128,61 +132,116 @@ class TetrinoGame {
         // gameContext.fillRect(this.x_pos, this.y_pos, this.width, this.height)
     };
 
-    tetrinoShapeI(x_init, y_init, x_width, y_width, color) {
-        this.tetrinoBaseShape(x_init, y_init, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init, y_init + y_width, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init, y_init + (2 * y_width), x_width, y_width, color)
-        this.tetrinoBaseShape(x_init, y_init + (3 * y_width), x_width, y_width, color)
+    tetrinoShapeI(x, y, width, color) {
+        console.log('Shape I')
+        let gameCanvas = document.getElementById("gamecanvas")
+        let ctx = gameCanvas.getContext('2d')
+
+        ctx.beginPath()
+        ctx.lineWidth = 2
+        ctx.strokeStyle = color
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + (width * 4), y)
+        ctx.lineTo(x + (width * 4), y + width)
+        ctx.lineTo(x, y + width)
+        ctx.lineTo(x, y)
+        ctx.stroke()
     };
 
-    tetrinoShapeS(x_init, y_init, x_width, y_width, color) {
-        this.tetrinoBaseShape(x_init, y_init, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init + x_width, y_init, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init + x_width, y_init + y_width, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init + (2 * x_width), y_init + y_width, x_width, y_width, color)
+    tetrinoShapeS(x, y, width, color) {
+        console.log('Shape S')
+        let gameCanvas = document.getElementById("gamecanvas")
+        let ctx = gameCanvas.getContext('2d')
+
+        ctx.beginPath()
+        ctx.lineWidth = 2
+        ctx.strokeStyle = color
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + width, y)
+        ctx.lineTo(x + width, y + width)
+        ctx.lineTo(x + (width * 2), y + width)
+        ctx.lineTo(x + (width * 2), y + (width * 3))
+        ctx.lineTo(x + (width), y + (width * 3))
+        ctx.lineTo(x + (width), y + (width * 2))
+        ctx.lineTo(x, y + (width * 2))
+        ctx.lineTo(x, y)
+        ctx.stroke()
     };
 
-    tetrinoShapeSqr(x_init, y_init, x_width, y_width, color) {
-        this.tetrinoBaseShape(x_init, y_init, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init + x_width, y_init, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init, y_init + y_width, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init + x_width, y_init + y_width, x_width, y_width, color)
+    tetrinoShapeSqr(x, y, width, color) {
+        console.log('Shape Sqr')
+        let gameCanvas = document.getElementById("gamecanvas")
+        let ctx = gameCanvas.getContext('2d')
+
+        ctx.beginPath()
+        ctx.lineWidth = 2
+        ctx.strokeStyle = color
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + (width * 2), y)
+        ctx.lineTo(x + (width * 2), y + (width * 2))
+        ctx.lineTo(x, y + (width * 2))
+        ctx.lineTo(x, y)
+        ctx.stroke()
     };
 
-    tetrinoShapeL(x_init, y_init, x_width, y_width, color) {
-        this.tetrinoBaseShape(x_init, y_init, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init, y_init + y_width, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init, y_init + (2 * y_width), x_width, y_width, color)
-        this.tetrinoBaseShape(x_init + x_width, y_init + (2 * y_width), x_width, y_width, color)
+    tetrinoShapeL(x, y, width, color) {
+        console.log('Shape L')
+        let gameCanvas = document.getElementById("gamecanvas")
+        let ctx = gameCanvas.getContext('2d')
+
+        ctx.beginPath()
+        ctx.lineWidth = 2
+        ctx.strokeStyle = color
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + width, y)
+        ctx.lineTo(x + width, y + (width * 2))
+        ctx.lineTo(x + (width * 2), y + (width * 2))
+        ctx.lineTo(x + (width * 2), y + (width * 3))
+        ctx.lineTo(x, y + (width * 3))
+        ctx.stroke()
     };
 
-    tetrinoShapeCross(x_init, y_init, x_width, y_width, color) {
-        this.tetrinoBaseShape(x_init + x_width, y_init, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init, y_init + y_width, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init + x_width, y_init + y_width, x_width, y_width, color)
-        this.tetrinoBaseShape(x_init + (2 * x_width), y_init + y_width, x_width, y_width, color)
+    tetrinoShapeCross(x, y, width, color) {
+        console.log('Shape Cross')
+        let gameCanvas = document.getElementById("gamecanvas")
+        let ctx = gameCanvas.getContext('2d')
+
+        ctx.beginPath()
+        ctx.lineWidth = 2
+        ctx.strokeStyle = color
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + width, y)
+        ctx.lineTo(x + width, y + width)
+        ctx.lineTo(x + (width * 2), y + width)
+        ctx.lineTo(x + (width * 2), y + (width * 2))
+        ctx.lineTo(x + width, y + (width * 2))
+        ctx.lineTo(x + width, y + (width * 3))
+        ctx.lineTo(x, y + (width * 3))
+        ctx.lineTo(x, y)
+        ctx.stroke()
     };
 
     // Tetrino movement
-    moveElementUp(x, y, x_max, y_max, color, tetrino) {
+    moveElementUp(x, y, width, color) {
         // Just for testing, pieces don't move up in tetris)
         this.gameBoardRefresh()
-        this.tetrinoBaseShape(x, y, x_max, y_max, color)
+        this.tetrinoTestShape(x, y, width, color)
     }
 
-    moveElementDown(x, y, x_max, y_max, color, tetrino) {
+    moveElementDown(x, y, width, color) {
         this.gameBoardRefresh()
-        this.tetrinoBaseShape(x, y, x_max, y_max, color)
+
+        this.tetrinoTestShape(x, y, width, color)
     };
 
-    moveElementLeft(x, y, x_max, y_max, color, tetrino) {
+    moveElementLeft(x, y, width, color) {
         this.gameBoardRefresh()
-        this.tetrinoBaseShape(x, y, x_max, y_max, color)
+        this.tetrinoTestShape(x, y, width, color)
     }
 
-    moveElementRight(x, y, x_max, y_max, color, tetrino) {
+    moveElementRight(x, y, width, color) {
         this.gameBoardRefresh()
-        this.tetrinoBaseShape(x, y, x_max, y_max, color)
+        this.tetrinoTestShape(x, y, width, color)
     }
 
     moveElementRotate() {
@@ -233,7 +292,7 @@ class TetrinoGame {
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
 
-            this.moveElementUp(xCoordDraw, yCoordDraw, this.width, this.height, "FF00FF")
+            this.moveElementUp(xCoordDraw, yCoordDraw, this.width, this.color)
 
         } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (this.moveCheckPosition('down') == true)) {
             this.y_pos++
@@ -241,7 +300,7 @@ class TetrinoGame {
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
 
-            this.moveElementDown(xCoordDraw, yCoordDraw, this.width, this.height, "FF00FF")
+            this.moveElementDown(xCoordDraw, yCoordDraw, this.width, this.color)
 
         } else if ((usrkey.key == 'ArrowLeft' || usrkey.key == 'a') && (this.moveCheckPosition('left') == true)) {
             this.x_pos--
@@ -249,7 +308,7 @@ class TetrinoGame {
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
 
-            this.moveElementLeft(xCoordDraw, yCoordDraw, this.width, this.height, "FF00FF")
+            this.moveElementLeft(xCoordDraw, yCoordDraw, this.width, this.color)
 
         } else if ((usrkey.key == 'ArrowRight' || usrkey.key == 'd') && (this.moveCheckPosition('right') == true)) {
             this.x_pos++
@@ -257,7 +316,7 @@ class TetrinoGame {
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
 
-            this.moveElementRight(xCoordDraw, yCoordDraw, this.width, this.height, "FF00FF")
+            this.moveElementRight(xCoordDraw, yCoordDraw, this.width, this.color)
         }
 
         console.log(usrkey.key)
@@ -268,9 +327,87 @@ class TetrinoGame {
         console.log(`Curr draw tile state is: ${Object.values(this.gameCoords[this.y_pos][this.x_pos])[2]}`)
     };
 
+    tetrinoTestShape(x, y, width) {
+        let gameCanvas = document.getElementById("gamecanvas")
+        let ctx = gameCanvas.getContext("2d")
+
+        // // Square shape
+
+        // ctx.beginPath()
+        // ctx.lineWidth = 2
+        // ctx.strokeStyle = "red"
+        // ctx.moveTo(x, y)
+        // ctx.lineTo(x + (width * 2), y)
+        // ctx.lineTo(x + (width * 2), y + (width * 2))
+        // ctx.lineTo(x, y + (width * 2))
+        // ctx.lineTo(x, y)
+        // ctx.stroke()
+
+        // // "I" shape
+
+        // ctx.beginPath()
+        // ctx.lineWidth = 2
+        // ctx.strokeStyle = "red"
+        // ctx.moveTo(x, y)
+        // ctx.lineTo(x + (width * 4), y)
+        // ctx.lineTo(x + (width * 4), y + width)
+        // ctx.lineTo(x, y + width)
+        // ctx.lineTo(x, y)
+        // ctx.stroke()
+
+        // // "L" shape
+
+        ctx.beginPath()
+        ctx.lineWidth = 2
+        ctx.strokeStyle = "red"
+        ctx.moveTo(x, y)
+        ctx.lineTo(x + width, y)
+        ctx.lineTo(x + width, y + (width * 2))
+        ctx.lineTo(x + (width * 2), y + (width * 2))
+        ctx.lineTo(x + (width * 2), y + (width * 3))
+        ctx.lineTo(x, y + (width * 3))
+
+
+        ctx.lineTo(x, y)
+        ctx.stroke()
+
+        // "S" shape
+        // ctx.beginPath()
+        // ctx.lineWidth = 2
+        // ctx.strokeStyle = "red"
+        // ctx.moveTo(x, y)
+        // ctx.lineTo(x + width, y)
+        // ctx.lineTo(x + width, y + width)
+        // ctx.lineTo(x + (width * 2), y + width)
+        // ctx.lineTo(x + (width * 2), y + (width * 3))
+        // ctx.lineTo(x + (width), y + (width * 3))
+        // ctx.lineTo(x + (width), y + (width * 2))
+        // ctx.lineTo(x, y + (width * 2))
+        // ctx.lineTo(x, y)
+        // ctx.stroke()
+
+        // "Cross" shape
+        // ctx.beginPath()
+        // ctx.lineWidth = 2
+        // ctx.strokeStyle = "red"
+        // ctx.moveTo(x, y)
+        // ctx.lineTo(x + width, y)
+        // ctx.lineTo(x + width, y + width)
+        // ctx.lineTo(x + (width * 2), y + width)
+        // ctx.lineTo(x + (width * 2), y + (width * 2))
+        // ctx.lineTo(x + width, y + (width * 2))
+        // ctx.lineTo(x + width, y + (width * 3))
+        // ctx.lineTo(x, y + (width * 3))
+        // ctx.lineTo(x, y)
+        // ctx.stroke()
+
+
+    }
+
     // Run game
     loadAllListeners() {
-        document.addEventListener("DOMContentLoaded", () => { this.tetrinoGame(0, 0, 40, 40, "#33ccff") }, false);
+        // document.addEventListener("DOMContentLoaded", () => { this.tetrinoTestShape(0, 0, 40) }, false);
+        document.addEventListener("DOMContentLoaded", () => { this.tetrinoGame(this.x_pos, this.y_pos, this.width, this.color) }, false);
         document.addEventListener('keydown', (key) => { this.moveTetrino(key) });
     };
 };
