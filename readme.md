@@ -25,10 +25,14 @@ desse jeito e mais facil de fazer as coisas, principalmente colisão que é algo
 
 A checagem de movimento está bem simples, ele só olha se a peça chegou nos cantos da board mas preciso colcar uma checagem para ver se a posição pra onde quero mexer é valida antes de deixar mexer.
 
-## Dia 5
+### Dia 5
 
 Dia de dar com os burros na água. Spawn de peças funciona quando se chama elas manualmente no document.addEventListener, mas não consigo fazer a função de gerar uma peça randomicamente ler direito a função de constuir a peça na tela. Tentei várias formas, usando map/object com a chave retornando a função, mas descobri que em javascript ele retorna undefined.  Tambem tentei uma lista com os nomes das funções e depois tentando algo do tipo nomes[posição](parametros), ele chama a função da peça (que usa uma outra função) e essa retorna "Cannot read properties of undefined (reading 'tetrinoBaseShape')". What the hell.
 
-## Dia 6
+### Dia 6
 
-Invés de bater a cabeça mudei o metodo. Agora ao contrario de ter um metodo base e os outros metodos irem criando os tetrinos invocando esse metodo várias vezes, cada peça já é desenhada direto usando lineTo(). O spawn de peças funciona como deveria, sem as dores de cabeça de ontem sumiram, oh maravilha. Próximo passo é, o jogador mexer a peça que spawnar, porque o jogo spawna uma e mexe a peça padrão.
+Invés de bater a cabeça mudei o metodo. Agora ao contrario de ter um metodo base e os outros metodos irem criando os tetrinos invocando esse metodo várias vezes, cada peça já é desenhada direto usando lineTo(). O spawn de peças funciona como deveria, e as dores de cabeça de ontem sumiram, oh maravilha. Próximo passo é, o jogador mexer a peça que spawnar, porque o jogo spawna uma e mexe a peça padrão.
+
+### Dia 7
+
+E as coisas progrediram um pouco. Consegui visualizar como fazer o sistema de checar colisões, que estava me tirando o sono. Agora quando cada peça é gerada, junto com ela tambem vem as coordenadas em uma array, que são as que ela ocupa no canvas. Essas coordenadas são relativas, porque a peça precisa se mover no tabuleiro. A parte de colisão ficou amanhã, mas envolve olhar pra qual direção ela quer ir e fazer um loop nessas coordenadas, e ver se a posição que se quer ir + 1 é valida ou não.   
