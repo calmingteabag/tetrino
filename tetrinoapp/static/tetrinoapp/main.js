@@ -1,4 +1,30 @@
+
+
 class TetrinoGame {
+    /*
+    What gave me headaches was that the game actually need to have two coordinate system, one 'logic'
+    in the form of an 2x2 array in which each position is a tile and another that tells where in the 
+    canvas something needs to be drawn. The way I did is, that I knew pieces should move so I used
+    a single coordinate system that updated their values based on the tile size so for example if
+    the user wanted to move something downwards and tiles had a size of 40x40 pixels I just made the
+    program increment coordinates by 40. Tried doing this way because I feel that I had the experience
+    but actually didn't had.
+
+    It worked, but I soon realized it was just drawing and moving stuff on canvas and needed a way
+    to track where things are located on it so collisions and other things like line cleaning could
+    work. Went back into reseach mode and found a video of someone separating drawing from logic by
+    creating two 'coordinate' systems, one that tracked wheter a tile had a piece in it and another to 
+    tell where it should draw something using that specific cell as reference.
+    
+    So I created an 2x2 array representing the board and each element of this array is an object
+    that contains coordinates and a flag to tell if its occupied or not. Those coordinates tells where
+    it should start drawing a piece.
+
+    Now to move a piece the program just needs to update the array position by incrementing one on any
+    directions and the piece will be drawn based on that, using the object's values on that position
+    as arguments. Collisions also works because, before moving (aka incrementing by one), it can also
+    check of the next cell is a valid position or not.
+    */
     constructor() {
         // Board could be customized here, insted of fixed values, it
         // would use values from constructor, for example:
@@ -91,7 +117,7 @@ class TetrinoGame {
     - Spawn new piece.
     */
     tetrinoSpawn() {
-        // let pieceChoice = ['shapeI', 'shapeS', 'shapeSqr', 'shapeL', 'shapeCross',]
+        // Randomly generates a tetrino.
 
 
         let pieceChoice = {
@@ -145,7 +171,7 @@ class TetrinoGame {
     };
 
     tetrinoShapeI(x, y, width, color) {
-        console.log('Shape I')
+        // console.log('Shape I')
         let gameCanvas = document.getElementById("gamecanvas")
         let ctx = gameCanvas.getContext('2d')
 
@@ -161,7 +187,7 @@ class TetrinoGame {
     };
 
     tetrinoShapeS(x, y, width, color) {
-        console.log('Shape S')
+        // console.log('Shape S')
         let gameCanvas = document.getElementById("gamecanvas")
         let ctx = gameCanvas.getContext('2d')
 
@@ -181,7 +207,7 @@ class TetrinoGame {
     };
 
     tetrinoShapeSqr(x, y, width, color) {
-        console.log('Shape Sqr')
+        // console.log('Shape Sqr')
         let gameCanvas = document.getElementById("gamecanvas")
         let ctx = gameCanvas.getContext('2d')
 
@@ -197,7 +223,7 @@ class TetrinoGame {
     };
 
     tetrinoShapeL(x, y, width, color) {
-        console.log('Shape L')
+        // console.log('Shape L')
         let gameCanvas = document.getElementById("gamecanvas")
         let ctx = gameCanvas.getContext('2d')
 
@@ -215,7 +241,7 @@ class TetrinoGame {
     };
 
     tetrinoShapeCross(x, y, width, color) {
-        console.log('Shape Cross')
+        // console.log('Shape Cross')
         let gameCanvas = document.getElementById("gamecanvas")
         let ctx = gameCanvas.getContext('2d')
 
@@ -263,9 +289,9 @@ class TetrinoGame {
 
         let currXpos = this.x_pos
         let currYpos = this.y_pos
-
-        let coordArr = pieceCoord
-
+        let checkCoord = [[], [], [], []]
+        // console.log(pieceCoord)
+        // console.log(pieceCoord.length)
         /* Assuming coordarray of our piece reaches this place safe and sound:
 
         The coordinates we receive will be 'what spaces it occupies based on 
@@ -294,12 +320,42 @@ class TetrinoGame {
         or else, clipping may occur.
         */
 
-        if (moveDir == 'down' && currYpos == this.gameheight - 1) {
-            // just remembering this.gameheight -1 because array goes from 0 to length -1
-            // need to add another comparator, 
-            // Object.values(this.gameCoords[this.y_pos][this.x_pos])[2] == '' 
-            return false
+
+        // && currYpos == this.gameheight - 1
+        if (moveDir == 'down') {
+            // when player presses 'down' key, loop thorough piece's board coordinates
+            // and check all x coordinates if their position + 1 is a valid space (for
+            // now, its checking of board has ended). return false
+
+            // arr.push is transforming into a list of elements [1,2,3,4] but I want [[1,2][3.4]] instead
+
+            for (let elem of pieceCoord) {
+                let tempArr = []
+                tempArr.push(elem[0] + this.x_pos)
+                tempArr.push(elem[1] + this.y_pos)
+                console.log(tempArr)
+                checkCoord += tempArr
+            }
+
+
+            console.log(`here is ${checkCoord}`)
+
+            for (let coord of checkCoord) {
+                if (coord[0] + 1 > this.gameheight)
+                    // also need && Object.values(this.gameCoords[this.y_pos + 1][this.x_pos])[2]) == 'occupied'
+                    return false
+            }
+            // checkCoord = ''
+
+
         } else if (moveDir == 'left' && currXpos == 0) {
+            // [0,0][0,1][1,0][1,1] example piece coord
+            // iterate over all elements
+            // on an element, [0,0], add this.x_pos to the first value and this.y_pos to the second, add then
+            // to temp arr
+            // add this arr to checkcollision
+            // reset temp arr
+
             return false
         } else if (moveDir == 'right' && currXpos == this.gamewidth - 1) {
             return false
@@ -314,7 +370,8 @@ class TetrinoGame {
         // so this.moveElement was renamed to drawElement, because it just draws element in new position
 
         if ((usrkey.key == 'ArrowUp' || usrkey.key == 'w') && (this.moveCheckPosition('up', pieceCoord) == true)) {
-            console.log(piece)
+            // console.log(piece)
+            // console.log(pieceCoord)
             this.y_pos--
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
             let yCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[1]
@@ -322,8 +379,8 @@ class TetrinoGame {
             this.tetrinoDraw(piece, xCoordDraw, yCoordDraw, this.width, pieceColor)
 
         } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (this.moveCheckPosition('down', pieceCoord) == true)) {
-
-            console.log(piece)
+            // console.log(piece)
+            // console.log(pieceCoord)
             this.y_pos++
 
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
@@ -332,7 +389,8 @@ class TetrinoGame {
             this.tetrinoDraw(piece, xCoordDraw, yCoordDraw, this.width, pieceColor)
 
         } else if ((usrkey.key == 'ArrowLeft' || usrkey.key == 'a') && (this.moveCheckPosition('left', pieceCoord) == true)) {
-            console.log(piece)
+            // console.log(piece)
+            // console.log(pieceCoord)
             this.x_pos--
 
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
@@ -341,7 +399,8 @@ class TetrinoGame {
             this.tetrinoDraw(piece, xCoordDraw, yCoordDraw, this.width, pieceColor)
 
         } else if ((usrkey.key == 'ArrowRight' || usrkey.key == 'd') && (this.moveCheckPosition('right', pieceCoord) == true)) {
-            console.log(piece)
+            // console.log(piece)
+            // console.log(pieceCoord)
             this.x_pos++
 
             let xCoordDraw = Object.values(this.gameCoords[this.y_pos][this.x_pos])[0]
