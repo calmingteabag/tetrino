@@ -121,7 +121,7 @@ class TetrinoGame {
 
 
         let pieceChoice = {
-            'shapeI': [[[0, 0], [0, 1], [0, 2], [0, 3]], 'red'],
+            'shapeI': [[[0, 0], [1, 0], [2, 0], [3, 0]], 'red'],
             'shapeS': [[[0, 0], [0, 1], [1, 1], [1, 2]], 'green'],
             'shapeSqr': [[[0, 0], [0, 1], [1, 0], [1, 1]], 'yellow'],
             'shapeL': [[[0, 0], [0, 1], [0, 2], [1, 2]], 'orange'],
@@ -327,40 +327,64 @@ class TetrinoGame {
             // and check all x coordinates if their position + 1 is a valid space (for
             // now, its checking of board has ended). return false
 
-            // arr.push is transforming into a list of elements [1,2,3,4] but I want [[1,2][3.4]] instead
-
-            for (let elem of pieceCoord) {
-                let tempArr = []
-                tempArr.push(elem[0] + this.x_pos)
-                tempArr.push(elem[1] + this.y_pos)
-                console.log(tempArr)
-                checkCoord += tempArr
+            for (let coord = 0; coord < pieceCoord.length; coord++) {
+                checkCoord[coord].push(pieceCoord[coord][0] + this.x_pos)
+                checkCoord[coord].push(pieceCoord[coord][1] + this.y_pos)
             }
 
-
-            console.log(`here is ${checkCoord}`)
+            console.log(checkCoord)
 
             for (let coord of checkCoord) {
-                if (coord[0] + 1 > this.gameheight)
-                    // also need && Object.values(this.gameCoords[this.y_pos + 1][this.x_pos])[2]) == 'occupied'
+                if (coord[1] + 1 >= this.gameheight) {
                     return false
+                }
+                // also need && Object.values(this.gameCoords[this.y_pos + 1][this.x_pos])[2]) == 'occupied
             }
-            // checkCoord = ''
+
+        } else if (moveDir == 'left') {
+            for (let coord = 0; coord < pieceCoord.length; coord++) {
+                checkCoord[coord].push(pieceCoord[coord][0] + this.x_pos)
+                checkCoord[coord].push(pieceCoord[coord][1] + this.y_pos)
+            }
+
+            console.log(checkCoord)
+
+            for (let coord of checkCoord) {
+                if (coord[0] == 0) {
+                    return false
+                }
+                // also need && Object.values(this.gameCoords[this.y_pos + 1][this.x_pos])[2]) == 'occupied
+            }
 
 
-        } else if (moveDir == 'left' && currXpos == 0) {
-            // [0,0][0,1][1,0][1,1] example piece coord
-            // iterate over all elements
-            // on an element, [0,0], add this.x_pos to the first value and this.y_pos to the second, add then
-            // to temp arr
-            // add this arr to checkcollision
-            // reset temp arr
+        } else if (moveDir == 'right') {
+            for (let coord = 0; coord < pieceCoord.length; coord++) {
+                checkCoord[coord].push(pieceCoord[coord][0] + this.x_pos)
+                checkCoord[coord].push(pieceCoord[coord][1] + this.y_pos)
+            }
 
-            return false
-        } else if (moveDir == 'right' && currXpos == this.gamewidth - 1) {
-            return false
-        } else if (moveDir == 'up' && currYpos == 0) {
-            return false
+            console.log(checkCoord)
+
+            for (let coord of checkCoord) {
+                if (coord[0] + 1 >= this.gamewidth) {
+                    return false
+                }
+                // also need && Object.values(this.gameCoords[this.y_pos + 1][this.x_pos])[2]) == 'occupied
+            }
+        } else if (moveDir == 'up') {
+            for (let coord = 0; coord < pieceCoord.length; coord++) {
+                checkCoord[coord].push(pieceCoord[coord][0] + this.x_pos)
+                checkCoord[coord].push(pieceCoord[coord][1] + this.y_pos)
+            }
+
+            console.log(checkCoord)
+
+            for (let coord of checkCoord) {
+                if (coord[1] == 0) {
+                    return false
+                }
+                // also need && Object.values(this.gameCoords[this.y_pos + 1][this.x_pos])[2]) == 'occupied
+            }
         }
         return true
     }
@@ -426,7 +450,6 @@ class TetrinoGame {
         let gameCanvas = document.getElementById("gamecanvas")
         let ctx = gameCanvas.getContext("2d")
 
-
         ctx.beginPath()
         ctx.lineWidth = 3
         ctx.strokeStyle = color
@@ -436,18 +459,6 @@ class TetrinoGame {
         ctx.lineTo(x, y + (width * 2))
         ctx.lineTo(x, y)
         ctx.stroke()
-
-        // ctx.lineWidth = 5
-        // ctx.strokeStyle = 'green'
-        // ctx.moveTo(x + 2, y + 2)
-        // ctx.stroke()
-        // ctx.lineTo(x + 2 + (width * 2), y + 2)
-        // ctx.lineTo(x + 2 + ((width - 4) * 2), y + 2 + ((width - 4) * 2))
-        // ctx.lineTo(x + 2, y + 2 + ((width - 4) * 2))
-        // ctx.lineTo(x + 2, y + 2)
-
-
-
     }
 
     // Run game
