@@ -35,4 +35,14 @@ Invés de bater a cabeça mudei o metodo. Agora ao contrario de ter um metodo ba
 
 ### Dia 7
 
-E as coisas progrediram um pouco. Consegui visualizar como fazer o sistema de checar colisões, que estava me tirando o sono. Agora quando cada peça é gerada, junto com ela tambem vem as coordenadas em uma array, que são as que ela ocupa no canvas. Essas coordenadas são relativas, porque a peça precisa se mover no tabuleiro. A parte de colisão ficou amanhã, mas envolve olhar pra qual direção ela quer ir e fazer um loop nessas coordenadas, e ver se a posição que se quer ir + 1 é valida ou não.   
+E as coisas progrediram um pouco. Consegui visualizar como fazer o sistema de checar colisões, que estava me tirando o sono. Agora quando cada peça é gerada, junto com ela tambem vem as coordenadas em uma array, que são as que ela ocupa no canvas. Essas coordenadas são relativas, porque a peça precisa se mover no tabuleiro. A parte de colisão ficou amanhã, mas envolve olhar pra qual direção ela quer ir e fazer um loop nessas coordenadas, e ver se a posição que se quer ir + 1 é valida ou não. 
+
+### Dia 8
+
+Depois de uma pausa de carnaval, voltemos ao projeto. Não mencionei nos dias anteriores mas teve uma mudança até que grande no modo como o programa vê o jogo. O modo como eu fazia pra mover as peças e parecer que elas estão em um tabuleiro era incrementar a distancia que a peça ia ser desenhada em X, e esse X seria o tamanho do quadradinho (pense em um tabuleiro de xadrês). Funciona no questio mover, mas deixava a parte de colisões quase impossível, fora outros problemas, por exemplo, saber se o próximo espaço é valido pra mover ou não.
+
+De volta ao modo pesquisa, achei um video de uma pessoa que separa a parte de desenho das peças no canvas da lógica. Ele cria uma array 2x2 representando o tabuleiro e em cada array uma coordenada, representando onde o desenho tem que começar naquela celula. Cada tetrino tem um sistema de coordenadas próprio. Não entendi o proposito vendo, mas entendi na hora de implementar: Você tem um tetrino "I" que começa no [0][0] da array e está na posição horizontal. Então ele ocupa as coordenadas [0][0],[1][0],[2][0],[3][0]
+Ok, a array sabe onde ele está, mas como ele sabe onde desenhar? O jogo pega a coordenada [0][0] e olha as coordenadas onde ele tem que usar como base pra desenhar algo e faz o desenho no canvas. E assim com todas as coordenadas até desenhar o tetrino.
+
+E como as peças se movem? Simplesmente fazendo update da posição da array. Exemplo, se você tem algo na coordenada [x][y] da array e quer mover as coisas para direita, é só incrementar o x em 1.
+
