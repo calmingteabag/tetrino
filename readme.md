@@ -46,3 +46,6 @@ Ok, a array sabe onde ele está, mas como ele sabe onde desenhar? O jogo pega a 
 
 E como as peças se movem? Simplesmente fazendo update da posição da array. Exemplo, se você tem algo na coordenada [x][y] da array e quer mover as coisas para direita, é só incrementar o x em 1.
 
+## Dai 9 
+
+O esquema de rodar as peças começou a virar uma linguiça gigantesca com esse esquema de ficar passando as coordenadas pra lá e pra cá. Amanhã implemento, mas pensei numa forma melhor, que é o programa passar um loop nas coordenadas, olhar cada coordenada na array e ir desenhando cada qudradinho onde precisa, ao invés de ter uma função pra cada formato de peça.

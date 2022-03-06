@@ -354,33 +354,22 @@ class TetrinoGame {
         }
     }
     // Draw tetrinos
-    tetrinoDraw(width, color) {
+    tetrinoDraw(piece, x, y, width, color, orientation) {
 
-        // if (piece == 'shapeI') {
-        //     this.tetrinoShapeI(x, y, width, color, orientation)
+        if (piece == 'shapeI') {
+            this.tetrinoShapeI(x, y, width, color, orientation)
 
-        // } else if (piece == 'shapeS') {
-        //     this.tetrinoShapeS(x, y, width, color, orientation)
+        } else if (piece == 'shapeS') {
+            this.tetrinoShapeS(x, y, width, color, orientation)
 
-        // } else if (piece == 'shapeSqr') {
-        //     this.tetrinoShapeSqr(x, y, width, color, orientation)
+        } else if (piece == 'shapeSqr') {
+            this.tetrinoShapeSqr(x, y, width, color, orientation)
 
-        // } else if (piece == 'shapeL') {
-        //     this.tetrinoShapeL(x, y, width, color, orientation)
+        } else if (piece == 'shapeL') {
+            this.tetrinoShapeL(x, y, width, color, orientation)
 
-        // } else if (piece == 'shapeCross') {
-        //     this.tetrinoShapeCross(x, y, width, color, orientation)
-        // }
-
-        let currCoord = this.pieceCoord
-
-        for (let coord = 0; coord < currCoord.length; coord++) {
-            let xDrawCoord = currCoord[coord][0]
-            let yDrawCoord = currCoord[coord][1]
-
-
-            // tetrinoBaseShape(x, y, width, color) 
-            this.tetrinoBaseShape(xDrawCoord, yDrawCoord, width, color)
+        } else if (piece == 'shapeCross') {
+            this.tetrinoShapeCross(x, y, width, color, orientation)
         }
     }
 
