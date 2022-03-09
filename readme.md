@@ -46,6 +46,14 @@ Ok, a array sabe onde ele está, mas como ele sabe onde desenhar? O jogo pega a 
 
 E como as peças se movem? Simplesmente fazendo update da posição da array. Exemplo, se você tem algo na coordenada [x][y] da array e quer mover as coisas para direita, é só incrementar o x em 1.
 
-## Dai 9 
+## Dia 9 
 
 O esquema de rodar as peças começou a virar uma linguiça gigantesca com esse esquema de ficar passando as coordenadas pra lá e pra cá. Amanhã implemento, mas pensei numa forma melhor, que é o programa passar um loop nas coordenadas, olhar cada coordenada na array e ir desenhando cada qudradinho onde precisa, ao invés de ter uma função pra cada formato de peça.
+
+## Dia 10
+
+O esquema de desenhar os tetrinos por loop funcionou bem, mas depois de dar uma olhada no codigo, ficaram várias linguiças para trás.
+
+Primeiro deles era que as coordenadas da uma peça eram pensadas para ela ser gerada na horizontal, mas o jogo gerava na vertical o que por si só já deixa as coisas bem caoticas. Segundo é que fiquei um tempo absurdo com a idéia de plano cartesiano de escola na cabeça na hora de mover. O que acontecia então era que eu pensava "se eu aperto a tecla para subir, a peça mexe no eixo Y, então tenho que fazer esse valor mudar". Só que, quando se pensa em mover coisas em um tabuleiro [X_linhas][Y_colunas], o Y muda as colunas, ou seja, ao invés da peça andar para cima ou para baixo, ela anda para os lados.
+
+O esquema de rotacionar as peças, se tudo der certo e eu não linguiçar nada, vai usar um sistema de coordenadas de transformação. A coordenada da peça na posição atual entra, o programa soma com as coordenadas de transformação baseadas na posição que ela vai girar e ele desenha a peça na nova posição.
