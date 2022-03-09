@@ -114,9 +114,9 @@ class TetrinoGame {
 
         let pieceCoord = {
             // change [1] for [num] to enable random generation
-            piece: Object.keys(pieceChoice)[4],
-            coords: Object.values(pieceChoice)[4][0],
-            color: Object.values(pieceChoice)[4][1]
+            piece: Object.keys(pieceChoice)[num],
+            coords: Object.values(pieceChoice)[num][0],
+            color: Object.values(pieceChoice)[num][1]
         }
 
         return pieceCoord
@@ -264,91 +264,55 @@ class TetrinoGame {
         if (piece == 'shapeSqr') {
             // maybe...exclude this loop since squares don't rotate?
             let rotateCoord = coordSwitch.shapeSqr.toAnyDirection
+            this.switchArrCoord(rotateCoord)
 
-            for (let coord = 0; coord < rotateCoord.length; coord++) {
-                this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                this.pieceCoord[coord][1] += rotateCoord[coord][1]
-            }
         } else if (piece == 'shapeS') {
+
             if (position == 'north' || position == 'south') {
                 let rotateCoord = coordSwitch.shapeS.toNorth
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             } else {
                 let rotateCoord = coordSwitch.shapeS.toEast
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             }
         } else if (piece == 'shapeI') {
+
             if (position == 'north' || position == 'south') {
                 let rotateCoord = coordSwitch.shapeI.toNorth
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             } else {
                 let rotateCoord = coordSwitch.shapeI.toEast
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             }
         } else if (piece == 'shapeL') {
 
             if (position == 'north') {
                 let rotateCoord = coordSwitch.shapeL.toNorth
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             } else if (position == 'east') {
                 let rotateCoord = coordSwitch.shapeL.toEast
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             } else if (position == 'south') {
                 let rotateCoord = coordSwitch.shapeL.toSouth
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             } else if (position == 'west') {
                 let rotateCoord = coordSwitch.shapeL.toWest
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             }
         } else if (piece == 'shapeCross') {
+
             if (position == 'north') {
                 let rotateCoord = coordSwitch.shapeCross.toNorth
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             } else if (position == 'east') {
                 let rotateCoord = coordSwitch.shapeCross.toEast
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             } else if (position == 'south') {
                 let rotateCoord = coordSwitch.shapeCross.toSouth
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             } else if (position == 'west') {
                 let rotateCoord = coordSwitch.shapeCross.toWest
-                for (let coord = 0; coord < rotateCoord.length; coord++) {
-                    this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                    this.pieceCoord[coord][1] += rotateCoord[coord][1]
-                }
+                this.switchArrCoord(rotateCoord)
             }
         }
     }
