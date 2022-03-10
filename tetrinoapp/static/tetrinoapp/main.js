@@ -91,10 +91,24 @@ class TetrinoGame {
     gameBoardClear() {
         let gameCanvas = document.getElementById("gamecanvas")
         let gameContext = gameCanvas.getContext("2d")
+        let gameCoordValues = Object.values(this.gameCoords)
 
-        gameContext.clearRect(0, 0, gameCanvas.width, gameCanvas.height)
-    };
 
+        for (let row = 0; row < this.gameCoords.length; row++) {
+            for (let column = 0; column < this.gameCoords[row].length; column++) {
+
+                if (this.gameCoords[row][column].tileStatus == 'free') {
+
+                    let xCoordClear = this.gameCoords[row][column].tileYinit
+                    let yCoordClear = this.gameCoords[row][column].tileXinit
+                    gameContext.clearRect(xCoordClear, yCoordClear, this.width, this.width)
+                }
+            };
+
+        }
+
+        // gameContext.clearRect(80, 80, 80, 80)
+    }
     gameBoardRefresh() {
         this.gameBoardClear()
     };
@@ -174,7 +188,7 @@ class TetrinoGame {
             let status = Object.values(this.gameCoords[xCoord][yCoord])[2]
 
             this.tetrinoBaseShape(getXdraw, getYdraw, width, pieceColor)
-
+            console.log('Current Coordinates')
             console.log(xCoord, yCoord, getXdraw, getYdraw)
         }
 
@@ -188,7 +202,12 @@ class TetrinoGame {
         // collisions (end of board, occupied positions, etc)
         if (moveDir == 'down') {
             for (let coord of this.pieceCoord) {
+                let coordX = coord[0]
+                let coordY = coord[1]
+                let fillCheck = Object.values(this.gameCoords)[coordX][coordY]
+
                 if (coord[0] + 1 >= this.gameheight) {
+                    // vertical end of board
                     return false
                 }
             }
@@ -385,6 +404,24 @@ class TetrinoGame {
                 this.rotateCoord(piece, this.orientation)
                 this.tetrinoDraw(this.width, pieceColor)
             }
+        } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (this.moveCheckPosition('down', pieceCoord) == false)) {
+            // Acho que esquema é, se arrowdown e movecheck é falso (ou seja,
+            // fim da board) => loop as coordenadas, olha na board e marca essas
+            // posições como ocupadas. Depois reseta this.currPiece, this.pieceCoord e this.orientation (pra spawn nova peça)
+
+            for (let coords of this.pieceCoord) {
+                let xCoord = coords[0]
+                let yCoord = coords[1]
+                let currPosition = this.gameCoords[xCoord][yCoord]
+
+                currPosition.tileStatus = 'occupied'
+                console.log(currPosition.tileStatus)
+            }
+            console.log('end board')
+
+            this.currPiece = ''
+            this.pieceCoord = ''
+            this.orientation = ''
         }
     };
 

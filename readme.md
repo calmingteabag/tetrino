@@ -57,3 +57,9 @@ O esquema de desenhar os tetrinos por loop funcionou bem, mas depois de dar uma 
 Primeiro deles era que as coordenadas da uma peça eram pensadas para ela ser gerada na horizontal, mas o jogo gerava na vertical o que por si só já deixa as coisas bem caoticas. Segundo é que fiquei um tempo absurdo com a idéia de plano cartesiano de escola na cabeça na hora de mover. O que acontecia então era que eu pensava "se eu aperto a tecla para subir, a peça mexe no eixo Y, então tenho que fazer esse valor mudar". Só que, quando se pensa em mover coisas em um tabuleiro [X_linhas][Y_colunas], o Y muda as colunas, ou seja, ao invés da peça andar para cima ou para baixo, ela anda para os lados.
 
 O esquema de rotacionar as peças, se tudo der certo e eu não linguiçar nada, vai usar um sistema de coordenadas de transformação. A coordenada da peça na posição atual entra, o programa soma com as coordenadas de transformação baseadas na posição que ela vai girar e ele desenha a peça na nova posição.
+
+## Dia 11
+
+Comecei a trabalhar mais no jogo em si depois de terminar o spawn de peças. Por enquanto, quando a pela chega no fim do canvas, ou seja, no fim da array, o jogo marca as coordenadas da ultima posição como ocupadas, chama a função de limpar o canvas e spawna outra array. Essa função de limpar foi modificada - Antes ela limpava o canvas inteiro, agora, só as posições que não estão ocupadas.
+
+Agora preciso arrumar as colisões para as peças não sobreporem umas as outras.
