@@ -238,95 +238,50 @@ class TetrinoGame {
         return true
     }
 
-    switchArrCoord(pieceCoord) {
-        for (let coord = 0; coord < pieceCoord.length; coord++) {
-            this.pieceCoord[coord][0] += pieceCoord[coord][0]
-            this.pieceCoord[coord][1] += pieceCoord[coord][1]
-        }
-    }
 
-    rotateCoord(piece, position) {
-        // rotate piece on this.pieceCoord so collisions work properly
 
-        // the position it receives from moveTetrino = TO where it needs 
-        // to be rotated. So if position = 'north' it means the piece is on
-        // another position and needs to be ratated 'north'
+    rotateCoord(piece, direction) {
+        // rotate pieces based on transformation coordinates
+        // excludes the 'square' tetrino for obvious reasons
 
-        // Square shape keeps its orientation no matter what
-        // S and I shapes have only two positions
-        // Cross and L have 4 positions
+        // Still needs some checks to avoid cliping into borders
+        // (ex, vertical "I" tetrino on first column will clip
+        // the left border)
 
         let coordSwitch = {
             "shapeS": {
-                toNorth: [[-1, 1], [0, 0], [1, 1], [2, 0]],
-                toEast: [[1, -1], [0, 0], [-1, -1], [-2, 0]],
+                'north': [[-1, 1], [0, 0], [1, 1], [2, 0]],
+                'east': [[1, -1], [0, 0], [-1, -1], [-2, 0]],
+                'south': [[-1, 1], [0, 0], [1, 1], [2, 0]],
+                'west': [[1, -1], [0, 0], [-1, -1], [-2, 0]],
             },
             "shapeI": {
-                toNorth: [[-2, -2], [-1, -1], [0, 0], [1, 1]],
-                toEast: [[2, 2], [1, 1], [0, 0], [-1, -1]],
+                'north': [[-2, -2], [-1, -1], [0, 0], [1, 1]],
+                'east': [[2, 2], [1, 1], [0, 0], [-1, -1]],
+                'south': [[-2, -2], [-1, -1], [0, 0], [1, 1]],
+                'west': [[2, 2], [1, 1], [0, 0], [-1, -1]],
             },
             "shapeL": {
-                toNorth: [[-2, 2], [-1, 1], [0, 0], [1, 1]],
-                toEast: [[2, 2], [1, 1], [0, 0], [1, -1]],
-                toSouth: [[2, -2], [1, -1], [0, 0], [-1, -1]],
-                toWest: [[-2, -2], [-1, -1], [0, 0], [-1, 1]],
+                'north': [[-2, 2], [-1, 1], [0, 0], [1, 1]],
+                'east': [[2, 2], [1, 1], [0, 0], [1, -1]],
+                'south': [[2, -2], [1, -1], [0, 0], [-1, -1]],
+                'west': [[-2, -2], [-1, -1], [0, 0], [-1, 1]],
             },
             "shapeCross": {
-                toNorth: [[-1, 1], [-1, -1], [0, 0], [1, 1]],
-                toEast: [[0, 0], [1, 1], [0, 0], [0, 0]],
-                toSouth: [[1, -1], [0, 0], [0, 0], [0, 0]],
-                toWest: [[0, 0], [0, 0], [0, 0], [-1, -1]],
+                'north': [[-1, 1], [-1, -1], [0, 0], [1, 1]],
+                'east': [[0, 0], [1, 1], [0, 0], [0, 0]],
+                'south': [[1, -1], [0, 0], [0, 0], [0, 0]],
+                'west': [[0, 0], [0, 0], [0, 0], [-1, -1]],
             },
         }
 
-        /*
-        Ir works but holy fuck what a mess.
+        if (piece != 'shapeSqr') {
+            let rotateCoord = coordSwitch[`${piece}`][`${direction}`]
 
-        What I want to do is use piece and position to return those coordinates above.
-        First thing I tried wast
-
-        coordSwitch.piece.position but it returns undefined.
-
-        piece and position are received as strings from somewhere else
-        */
-
-
-        if (piece == 'shapeS' && (position == 'north' || position == 'south')) {
-            let rotateCoord = coordSwitch.shapeS.toNorth
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeS' && (position == 'east' || position == 'west')) {
-            let rotateCoord = coordSwitch.shapeS.toEast
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeI' && (position == 'north' || position == 'south')) {
-            let rotateCoord = coordSwitch.shapeI.toNorth
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeI' && (position == 'east' || position == 'west')) {
-            let rotateCoord = coordSwitch.shapeI.toEast
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeL' && position == 'north') {
-            let rotateCoord = coordSwitch.shapeL.toNorth
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeL' && position == 'east') {
-            let rotateCoord = coordSwitch.shapeL.toEast
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeL' && position == 'south') {
-            let rotateCoord = coordSwitch.shapeL.toSouth
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeL' && position == 'west') {
-            let rotateCoord = coordSwitch.shapeL.toWest
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeCross' && position == 'north') {
-            let rotateCoord = coordSwitch.shapeCross.toNorth
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeCross' && position == 'east') {
-            let rotateCoord = coordSwitch.shapeCross.toEast
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeCross' && position == 'south') {
-            let rotateCoord = coordSwitch.shapeCross.toSouth
-            this.switchArrCoord(rotateCoord)
-        } else if (piece == 'shapeCross' && position == 'west') {
-            let rotateCoord = coordSwitch.shapeCross.toWest
-            this.switchArrCoord(rotateCoord)
+            for (let coord = 0; coord < rotateCoord.length; coord++) {
+                this.pieceCoord[coord][0] += rotateCoord[coord][0]
+                this.pieceCoord[coord][1] += rotateCoord[coord][1]
+            }
         }
     }
 

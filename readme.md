@@ -66,4 +66,6 @@ Agora preciso arrumar as colisões para as peças não sobreporem umas as outras
 
 ### Dia 12
 
-Depois de um tempo torrando um pouco a cabeça, finalizei finalmente o esquema para as peças irem se acumulando na tela a medida que elas encostam no fim do canvas ou em cima de alguma peça. 
+Depois de um tempo torrando um pouco a cabeça, finalizei finalmente o esquema para as peças irem se acumulando na tela a medida que elas encostam no fim do canvas ou em cima de alguma peça. Tambem arrumei o metodo que fazia as peças rodarem que estava no modo linguiça, ou seja, com vários if-elses.
+
+O que preciso fazer agora é uma condicional pra ver se a peça está na primeira coluna ou na última antes de rodar, porque elas retornam erro quando tentam girar nessas posições (a lógica do jogo foi feita para funcionar na área da array, afinal.)
