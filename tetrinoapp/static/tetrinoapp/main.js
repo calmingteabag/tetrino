@@ -54,6 +54,8 @@ class TetrinoGame {
             // when piece moves up or down, it means it changes which ROWs
             // it occupies. And in this games, rows goes from 0 to 19
             columnTileValue = 0
+            // rows should take into account line width
+            // starting from 0 width, it should increment 2x line width + its own width
             rowTileValue += this.width
 
             for (let column = 0; column < gameCoordValues[row].length; column++) {
@@ -91,8 +93,6 @@ class TetrinoGame {
     gameBoardClear() {
         let gameCanvas = document.getElementById("gamecanvas")
         let gameContext = gameCanvas.getContext("2d")
-        let gameCoordValues = Object.values(this.gameCoords)
-
 
         for (let row = 0; row < this.gameCoords.length; row++) {
             for (let column = 0; column < this.gameCoords[row].length; column++) {
@@ -157,16 +157,11 @@ class TetrinoGame {
         let gameCanvas = document.getElementById("gamecanvas")
         let gameContext = gameCanvas.getContext("2d")
 
-        // Line Style
-        gameContext.beginPath()
-        gameContext.lineWidth = 6
-        gameContext.strokeStyle = color
-        gameContext.rect(y, x, width, width)
-        gameContext.stroke()
-
-        // Fill Style
-        // gameContext.fillStyle = color
-        // gameContext.fillRect(x, y, width, width)
+        gameContext.fillStyle = color
+        gameContext.fillRect(y, x, width, width)
+        gameContext.lineWidth = 5
+        gameContext.strokeStyle = 'grey'
+        gameContext.strokeRect(y, x, width, width)
     };
 
     tetrinoDraw(width, pieceColor) {
@@ -183,15 +178,15 @@ class TetrinoGame {
             let xCoord = this.pieceCoord[coord][0]
             let yCoord = this.pieceCoord[coord][1]
 
-            let getXdraw = Object.values(this.gameCoords[xCoord][yCoord])[1]
-            let getYdraw = Object.values(this.gameCoords[xCoord][yCoord])[0]
-            let status = Object.values(this.gameCoords[xCoord][yCoord])[2]
+            let currObj = this.gameCoords[xCoord][yCoord]
+            let xDraw = currObj.tileYinit
+            let yDraw = currObj.tileXinit
+            let status = currObj.tileStatus
 
-            this.tetrinoBaseShape(getXdraw, getYdraw, width, pieceColor)
+            this.tetrinoBaseShape(xDraw, yDraw, width, pieceColor)
             console.log('Current Coordinates')
-            console.log(xCoord, yCoord, getXdraw, getYdraw)
+            console.log(xCoord, yCoord, xDraw, yDraw)
         }
-
     }
 
     // ########################
@@ -201,27 +196,34 @@ class TetrinoGame {
         // Loops through each coordinate of a tetrino and check for
         // collisions (end of board, occupied positions, etc)
         if (moveDir == 'down') {
-            for (let coord of this.pieceCoord) {
-                let coordX = coord[0]
-                let coordY = coord[1]
-                let fillCheck = Object.values(this.gameCoords)[coordX][coordY]
 
-                if (coord[0] + 1 >= this.gameheight) {
-                    // vertical end of board
+            for (let coord = 0; coord < this.pieceCoord.length; coord++) {
+                let xCoord = this.pieceCoord[coord][0]
+                let yCoord = this.pieceCoord[coord][1]
+
+                if (xCoord + 1 >= this.gameheight || this.gameCoords[xCoord + 1][yCoord].tileStatus == 'occupied') {
                     return false
                 }
             }
 
         } else if (moveDir == 'left') {
-            for (let coord of this.pieceCoord) {
-                if (coord[1] == 0) {
+
+            for (let coord = 0; coord < this.pieceCoord.length; coord++) {
+                let xCoord = this.pieceCoord[coord][0]
+                let yCoord = this.pieceCoord[coord][1]
+
+                if (yCoord == 0 || this.gameCoords[xCoord][yCoord - 1].tileStatus == 'occupied') {
                     return false
                 }
             }
 
         } else if (moveDir == 'right') {
-            for (let coord of this.pieceCoord) {
-                if (coord[1] + 1 >= this.gamewidth) {
+
+            for (let coord = 0; coord < this.pieceCoord.length; coord++) {
+                let xCoord = this.pieceCoord[coord][0]
+                let yCoord = this.pieceCoord[coord][1]
+
+                if (yCoord + 1 >= this.gamewidth || this.gameCoords[xCoord][yCoord + 1].tileStatus == 'occupied') {
                     return false
                 }
             }
@@ -255,24 +257,21 @@ class TetrinoGame {
         // Cross and L have 4 positions
 
         let coordSwitch = {
-            shapeSqr: {
-                toAnyDirection: [[0, 0], [0, 0], [0, 0], [0, 0]],
-            },
-            shapeS: {
+            "shapeS": {
                 toNorth: [[-1, 1], [0, 0], [1, 1], [2, 0]],
                 toEast: [[1, -1], [0, 0], [-1, -1], [-2, 0]],
             },
-            shapeI: {
+            "shapeI": {
                 toNorth: [[-2, -2], [-1, -1], [0, 0], [1, 1]],
                 toEast: [[2, 2], [1, 1], [0, 0], [-1, -1]],
             },
-            shapeL: {
+            "shapeL": {
                 toNorth: [[-2, 2], [-1, 1], [0, 0], [1, 1]],
                 toEast: [[2, 2], [1, 1], [0, 0], [1, -1]],
                 toSouth: [[2, -2], [1, -1], [0, 0], [-1, -1]],
                 toWest: [[-2, -2], [-1, -1], [0, 0], [-1, 1]],
             },
-            shapeCross: {
+            "shapeCross": {
                 toNorth: [[-1, 1], [-1, -1], [0, 0], [1, 1]],
                 toEast: [[0, 0], [1, 1], [0, 0], [0, 0]],
                 toSouth: [[1, -1], [0, 0], [0, 0], [0, 0]],
@@ -280,59 +279,54 @@ class TetrinoGame {
             },
         }
 
-        if (piece == 'shapeSqr') {
-            // maybe...exclude this loop since squares don't rotate?
-            let rotateCoord = coordSwitch.shapeSqr.toAnyDirection
+        /*
+        Ir works but holy fuck what a mess.
+
+        What I want to do is use piece and position to return those coordinates above.
+        First thing I tried wast
+
+        coordSwitch.piece.position but it returns undefined.
+
+        piece and position are received as strings from somewhere else
+        */
+
+
+        if (piece == 'shapeS' && (position == 'north' || position == 'south')) {
+            let rotateCoord = coordSwitch.shapeS.toNorth
             this.switchArrCoord(rotateCoord)
-
-        } else if (piece == 'shapeS') {
-
-            if (position == 'north' || position == 'south') {
-                let rotateCoord = coordSwitch.shapeS.toNorth
-                this.switchArrCoord(rotateCoord)
-            } else {
-                let rotateCoord = coordSwitch.shapeS.toEast
-                this.switchArrCoord(rotateCoord)
-            }
-        } else if (piece == 'shapeI') {
-
-            if (position == 'north' || position == 'south') {
-                let rotateCoord = coordSwitch.shapeI.toNorth
-                this.switchArrCoord(rotateCoord)
-            } else {
-                let rotateCoord = coordSwitch.shapeI.toEast
-                this.switchArrCoord(rotateCoord)
-            }
-        } else if (piece == 'shapeL') {
-
-            if (position == 'north') {
-                let rotateCoord = coordSwitch.shapeL.toNorth
-                this.switchArrCoord(rotateCoord)
-            } else if (position == 'east') {
-                let rotateCoord = coordSwitch.shapeL.toEast
-                this.switchArrCoord(rotateCoord)
-            } else if (position == 'south') {
-                let rotateCoord = coordSwitch.shapeL.toSouth
-                this.switchArrCoord(rotateCoord)
-            } else if (position == 'west') {
-                let rotateCoord = coordSwitch.shapeL.toWest
-                this.switchArrCoord(rotateCoord)
-            }
-        } else if (piece == 'shapeCross') {
-
-            if (position == 'north') {
-                let rotateCoord = coordSwitch.shapeCross.toNorth
-                this.switchArrCoord(rotateCoord)
-            } else if (position == 'east') {
-                let rotateCoord = coordSwitch.shapeCross.toEast
-                this.switchArrCoord(rotateCoord)
-            } else if (position == 'south') {
-                let rotateCoord = coordSwitch.shapeCross.toSouth
-                this.switchArrCoord(rotateCoord)
-            } else if (position == 'west') {
-                let rotateCoord = coordSwitch.shapeCross.toWest
-                this.switchArrCoord(rotateCoord)
-            }
+        } else if (piece == 'shapeS' && (position == 'east' || position == 'west')) {
+            let rotateCoord = coordSwitch.shapeS.toEast
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeI' && (position == 'north' || position == 'south')) {
+            let rotateCoord = coordSwitch.shapeI.toNorth
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeI' && (position == 'east' || position == 'west')) {
+            let rotateCoord = coordSwitch.shapeI.toEast
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeL' && position == 'north') {
+            let rotateCoord = coordSwitch.shapeL.toNorth
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeL' && position == 'east') {
+            let rotateCoord = coordSwitch.shapeL.toEast
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeL' && position == 'south') {
+            let rotateCoord = coordSwitch.shapeL.toSouth
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeL' && position == 'west') {
+            let rotateCoord = coordSwitch.shapeL.toWest
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeCross' && position == 'north') {
+            let rotateCoord = coordSwitch.shapeCross.toNorth
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeCross' && position == 'east') {
+            let rotateCoord = coordSwitch.shapeCross.toEast
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeCross' && position == 'south') {
+            let rotateCoord = coordSwitch.shapeCross.toSouth
+            this.switchArrCoord(rotateCoord)
+        } else if (piece == 'shapeCross' && position == 'west') {
+            let rotateCoord = coordSwitch.shapeCross.toWest
+            this.switchArrCoord(rotateCoord)
         }
     }
 

@@ -46,11 +46,11 @@ Ok, a array sabe onde ele está, mas como ele sabe onde desenhar? O jogo pega a 
 
 E como as peças se movem? Simplesmente fazendo update da posição da array. Exemplo, se você tem algo na coordenada [x][y] da array e quer mover as coisas para direita, é só incrementar o x em 1.
 
-## Dia 9 
+### Dia 9 
 
 O esquema de rodar as peças começou a virar uma linguiça gigantesca com esse esquema de ficar passando as coordenadas pra lá e pra cá. Amanhã implemento, mas pensei numa forma melhor, que é o programa passar um loop nas coordenadas, olhar cada coordenada na array e ir desenhando cada qudradinho onde precisa, ao invés de ter uma função pra cada formato de peça.
 
-## Dia 10
+### Dia 10
 
 O esquema de desenhar os tetrinos por loop funcionou bem, mas depois de dar uma olhada no codigo, ficaram várias linguiças para trás.
 
@@ -58,8 +58,12 @@ Primeiro deles era que as coordenadas da uma peça eram pensadas para ela ser ge
 
 O esquema de rotacionar as peças, se tudo der certo e eu não linguiçar nada, vai usar um sistema de coordenadas de transformação. A coordenada da peça na posição atual entra, o programa soma com as coordenadas de transformação baseadas na posição que ela vai girar e ele desenha a peça na nova posição.
 
-## Dia 11
+### Dia 11
 
 Comecei a trabalhar mais no jogo em si depois de terminar o spawn de peças. Por enquanto, quando a pela chega no fim do canvas, ou seja, no fim da array, o jogo marca as coordenadas da ultima posição como ocupadas, chama a função de limpar o canvas e spawna outra array. Essa função de limpar foi modificada - Antes ela limpava o canvas inteiro, agora, só as posições que não estão ocupadas.
 
 Agora preciso arrumar as colisões para as peças não sobreporem umas as outras.
+
+### Dia 12
+
+Depois de um tempo torrando um pouco a cabeça, finalizei finalmente o esquema para as peças irem se acumulando na tela a medida que elas encostam no fim do canvas ou em cima de alguma peça. 
