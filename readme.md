@@ -69,3 +69,7 @@ Agora preciso arrumar as colisões para as peças não sobreporem umas as outras
 Depois de um tempo torrando um pouco a cabeça, finalizei finalmente o esquema para as peças irem se acumulando na tela a medida que elas encostam no fim do canvas ou em cima de alguma peça. Tambem arrumei o metodo que fazia as peças rodarem que estava no modo linguiça, ou seja, com vários if-elses.
 
 O que preciso fazer agora é uma condicional pra ver se a peça está na primeira coluna ou na última antes de rodar, porque elas retornam erro quando tentam girar nessas posições (a lógica do jogo foi feita para funcionar na área da array, afinal.)
+
+### Dia 13
+
+Terminei, em partes a rotação. Ela funciona como deveria, mas a forma como ficou o codigo deixou ele meio lingucento, principalmente a parte de checagem de rotação, com uma tonelada de for loops. Absolutamente gambiarra, que preciso ver como corrigir. Em outras noticias, o jogo parece funcionar bem, 'só' ficou faltando a parte do jogo marcar as linhas cheias, deletar o que existe e puxar o resto das peças para baixo, e o esquema para as peças 'cairem' pela board.
