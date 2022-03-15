@@ -73,3 +73,7 @@ O que preciso fazer agora é uma condicional pra ver se a peça está na primeir
 ### Dia 13
 
 Terminei, em partes a rotação. Ela funciona como deveria, mas a forma como ficou o codigo deixou ele meio lingucento, principalmente a parte de checagem de rotação, com uma tonelada de for loops. Absolutamente gambiarra, que preciso ver como corrigir. Em outras noticias, o jogo parece funcionar bem, 'só' ficou faltando a parte do jogo marcar as linhas cheias, deletar o que existe e puxar o resto das peças para baixo, e o esquema para as peças 'cairem' pela board.
+
+### Dia 14
+
+Depois de um teste rapido, descobri que a rotação não funciona como deveria, as peças estavam clipando coisas que não deveriam. Passei o dia rachando o cerebro, para variar, entre resolver o problema e dar um jeito na linguiça de codigo. A linguiça deixou de ser linguiça mas ainda é uma salsisha. A parte de rotação é o que me tira o sono, mas pelo menos consegui resolver alguns problemas de clipping, restou checar os limites (peças encostando nas bordas).
