@@ -287,18 +287,17 @@ class TetrinoGame {
 
         // let currCoords = coords
 
-
         // if (position == 'left') {
         //     for (let coord = 0; coord < currCoords.length; coord++) {
         //         // updates coords with shift coords 
         //         currCoords[coord][1] += shiftValue
-        //         let xCoord = currCoords[coord][0]
-        //         let yCoord = currCoords[coord][1]
+        //         for
 
-        //         if (this.gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
+
         //             return false
         //         }
         //     }
+        // }
 
         // } else if (position == 'right') {
         //     for (let coord = 0; coord < currCoords.length; coord++) {
@@ -389,18 +388,18 @@ class TetrinoGame {
 
             let rotateCheck = coordCheck[`${piece}`][`${direction}`]
 
-            // Apply new coordinates this.pieceCoord
+            // Apply trasnsformation coordinates
             for (let coord = 0; coord < rotateCheck.length; coord++) {
                 this.pieceCoord[coord][0] += rotateCheck[coord][0]
                 this.pieceCoord[coord][1] += rotateCheck[coord][1]
             }
 
-
+            // Check for occupied tiles
             for (let coord of this.pieceCoord) {
                 let xCoord = coord[0]
                 let yCoord = coord[1]
                 if (this.gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
-                    // if piece is rotating towars places already occupied
+                    // if piece is rotating towards places already occupied
 
                     for (let coord = 0; coord < rotateCheck.length; coord++) {
                         this.pieceCoord[coord][0] -= rotateCheck[coord][0]
