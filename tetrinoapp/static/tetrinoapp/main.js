@@ -151,6 +151,17 @@ class TetrinoGame {
         this.moveTetrino(key, this.currPiece, this.pieceCoord, this.pieceColor, this.orientation)
     }
 
+    tetrinoGameAuto() {
+        if (this.currPiece == '') {
+            let pieceData = this.tetrinoSpawn()
+
+            this.currPiece = pieceData.piece
+            this.pieceCoord = pieceData.coords
+            this.pieceColor = pieceData.color
+            this.orientation = 'north'
+        }
+    }
+
     // ####################
     // ### Tetrino Draw ###
     // ####################
@@ -274,78 +285,25 @@ class TetrinoGame {
 
         if (piece != 'shapeSqr') {
             let rotateCoord = coordSwitch[`${piece}`][`${direction}`]
+            console.log(rotateCoord)
 
             for (let coord = 0; coord < rotateCoord.length; coord++) {
                 this.pieceCoord[coord][0] += rotateCoord[coord][0]
                 this.pieceCoord[coord][1] += rotateCoord[coord][1]
             }
+
+            for (let coord of this.pieceCoord) {
+                if (coord[1] < 0) {
+                    this.shiftPosition(this.pieceCoord, 1, 'left')
+                } else if (coord[1] > this.gamewidth.length - 1) {
+                    this.shiftPostion(this.pieceCoord, 3, 'right')
+                }
+            }
         }
     }
 
-
-    checkShiftPosition(coords, shiftValue, position) {
-
-        // let currCoords = coords
-
-        // if (position == 'left') {
-        //     for (let coord = 0; coord < currCoords.length; coord++) {
-        //         // updates coords with shift coords 
-        //         currCoords[coord][1] += shiftValue
-        //         for
-
-
-        //             return false
-        //         }
-        //     }
-        // }
-
-        // } else if (position == 'right') {
-        //     for (let coord = 0; coord < currCoords.length; coord++) {
-        //         // updates coords with shift coords 
-        //         currCoords[coord][1] -= shiftValue
-        //         let xCoord = currCoords[coord][0]
-        //         let yCoord = currCoords[coord][1]
-
-        //         if (this.gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
-        //             return false
-        //         }
-        //     }
-
-        // } else if (position == 'down') {
-        //     for (let coord of currCoords) {
-        //         coord[0] -= shiftValue
-        //     }
-
-        //     for (let coord = 0; coord < currCoords.length; coord++) {
-        //         // updates coords with shift coords 
-        //         currCoords[coord][0] -= shiftValue
-        //         let xCoord = currCoords[coord][0]
-        //         let yCoord = currCoords[coord][1]
-
-        //         if (this.gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
-        //             return false
-        //         }
-        //     }
-        // }
-        return true
-    }
-
-    rotateCheckPosition(piece, direction) {
-
-        let coordCheck = {
-            /*  
-            Similar to coordswitch, but we are not applying transformations
-            but checking if a specific group of coordinates based on
-            piece type and current coordinates is free. 
-            
-            For example, we receive 'shapeCross' and 'north'. It means piece 
-            is actually on 'west' and WANTS TO rotate north. Based on diagram,
-            the position where piece 4 should occupy needs to be checkedo it 
-            gets piece 4's coordinates (by doing this.piececoord[4] or anything
-            similar), add to the coordinate on table below check this coordinate 
-            on game array. if its free, return true, false otherwise.
-            */
-
+    rotateCoordReverse(piece, direction) {
+        let coordSwitch = {
             "shapeS": {
                 'north': [[-1, 1], [0, 0], [1, 1], [2, 0]],
                 'east': [[1, -1], [0, 0], [-1, -1], [-2, 0]],
@@ -369,60 +327,35 @@ class TetrinoGame {
                 'east': [[0, 0], [1, 1], [0, 0], [0, 0]],
                 'south': [[1, -1], [0, 0], [0, 0], [0, 0]],
                 'west': [[0, 0], [0, 0], [0, 0], [-1, -1]],
-            }
+            },
         }
 
         if (piece != 'shapeSqr') {
-            /*  
-            Depending on piece position(edges of board), after 
-            applying coordinates to check for valid positions,
-            some of those would end up being negative values. The
-            game would try to use those to check game array, thus
-            returning an error since there is no negative values
-            on a n array.
+            let rotateCoord = coordSwitch[`${piece}`][`${direction}`]
 
-            Before checking of any of those coordinates are valid spaces 
-            (not occupied), we need to shift positions in case our piece
-            is on those positions (Edges)
-            */
-
-            let rotateCheck = coordCheck[`${piece}`][`${direction}`]
-
-            // Apply trasnsformation coordinates
-            for (let coord = 0; coord < rotateCheck.length; coord++) {
-                this.pieceCoord[coord][0] += rotateCheck[coord][0]
-                this.pieceCoord[coord][1] += rotateCheck[coord][1]
+            for (let coord = 0; coord < rotateCoord.length; coord++) {
+                this.pieceCoord[coord][0] -= rotateCoord[coord][0]
+                this.pieceCoord[coord][1] -= rotateCoord[coord][1]
             }
+        }
+    }
 
-            // Check for occupied tiles
-            for (let coord of this.pieceCoord) {
-                let xCoord = coord[0]
-                let yCoord = coord[1]
+    rotateCheckPosition(piece, direction) {
+        if (piece != 'shapeSqr') {
+            this.rotateCoord(piece, direction)
+
+            for (let coords of this.pieceCoord) {
+                let xCoord = coords[0]
+                let yCoord = coords[1]
+
                 if (this.gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
-                    // if piece is rotating towards places already occupied
-
-                    for (let coord = 0; coord < rotateCheck.length; coord++) {
-                        this.pieceCoord[coord][0] -= rotateCheck[coord][0]
-                        this.pieceCoord[coord][1] -= rotateCheck[coord][1]
-                    }
+                    this.rotateCoordReverse(piece, direction)
                     return false
 
-                    // It rotating piece doesn't end up into occupied places, but shifting is needed
-                } else if ((coord[1] < 0 && this.checkShiftPosition(this.pieceCoord, 1, 'left') == false) ||
-                    (coord[1] < this.gamewidth - 1 && this.checkShiftPosition(this.pieceCoord, 1, 'right') == false) ||
-                    (coord[0] > this.gameheight - 1 && this.checkShiftPosition(this.pieceCoord, 1, 'down') == false)) {
-
-                    for (let coord = 0; coord < rotateCheck.length; coord++) {
-                        this.pieceCoord[coord][0] -= rotateCheck[coord][0]
-                        this.pieceCoord[coord][1] -= rotateCheck[coord][1]
-                    }
-                    return false
                 }
+
             }
-            for (let coord = 0; coord < rotateCheck.length; coord++) {
-                this.pieceCoord[coord][0] -= rotateCheck[coord][0]
-                this.pieceCoord[coord][1] -= rotateCheck[coord][1]
-            }
+            this.rotateCoordReverse(piece, direction)
             return true
         }
     }
@@ -443,8 +376,37 @@ class TetrinoGame {
                 coord[0] -= space
             }
         }
+    }
 
-        // this.tetrinoDraw(this.width, pieceColor)
+    shiftPositionReverse(coords, space, position) {
+        let currCoords = coords
+
+        if (position == 'left') {
+            for (let coord of currCoords) {
+                coord[1] -= space
+            }
+        } else if (position == 'right') {
+            for (let coord of currCoords) {
+                coord[1] += space
+            }
+        } else if (position == 'down') {
+            for (let coord of currCoords) {
+                coord[0] += space
+            }
+        }
+    }
+
+    shiftTetrinoHandler(pieceCoords) {
+
+        for (let coords of pieceCoords) {
+            if (coords[1] == 0) {
+                this.shiftPosition(this.pieceCoord, 1, 'left')
+            } else if (coords[1] == this.gamewidth.length - 1) {
+                this.shiftPosition(this.pieceCoord, 1, 'right')
+            } else if (coords[0] > this.gameheight.length - 1) {
+                this.shiftPosition(this.pieceCoord, 1, 'down')
+            }
+        }
     }
 
     moveTetrino(usrkey, piece, pieceCoord, pieceColor) {
@@ -457,6 +419,7 @@ class TetrinoGame {
             for (let coord of this.pieceCoord) {
                 coord[0]--
             }
+            console.log('Current Position:', this.pieceCoord)
             this.gameBoardRefresh()
             this.tetrinoDraw(this.width, pieceColor)
 
@@ -465,6 +428,7 @@ class TetrinoGame {
             for (let coord of this.pieceCoord) {
                 coord[0]++
             }
+            console.log('Current Position:', this.pieceCoord)
             this.gameBoardRefresh()
             this.tetrinoDraw(this.width, pieceColor)
 
@@ -473,6 +437,7 @@ class TetrinoGame {
             for (let coord of this.pieceCoord) {
                 coord[1]--
             }
+            console.log('Current Position:', this.pieceCoord)
             this.gameBoardRefresh()
             this.tetrinoDraw(this.width, pieceColor)
 
@@ -481,10 +446,12 @@ class TetrinoGame {
             for (let coord of this.pieceCoord) {
                 coord[1]++
             }
+            console.log('Current Position:', this.pieceCoord)
             this.gameBoardRefresh()
             this.tetrinoDraw(this.width, pieceColor)
 
         } else if (usrkey.key == 'r') {
+
             // rotate
             if (this.orientation == 'north' && this.rotateCheckPosition(piece, 'east') == true) {
                 this.orientation = 'east'
@@ -541,12 +508,42 @@ class TetrinoGame {
         }
     };
 
+    async autoMoveHandler() {
+
+        this.tetrinoGameAuto()
+        this.tetrinoDraw(this.width, this.pieceColor)
+
+        await new Promise((resolve, reject) => setTimeout(resolve, 500))
+        console.log(this.pieceCoord)
+
+        if (this.moveCheckPosition('down', this.pieceCoord) == true) {
+            for (let coord of this.pieceCoord) {
+                coord[0]++
+            }
+        } else if (this.moveCheckPosition('down', this.pieceCoord) == false) {
+            for (let coords of this.pieceCoord) {
+                let xCoord = coords[0]
+                let yCoord = coords[1]
+                let currPosition = this.gameCoords[xCoord][yCoord]
+                currPosition.tileStatus = 'occupied'
+            }
+
+            this.currPiece = ''
+            this.pieceCoord = ''
+            this.orientation = ''
+        }
+
+        this.gameBoardRefresh()
+        this.autoMoveHandler()
+    }
+
     // ###################
     // ### Game Run ######
     // ###################
     loadAllListeners() {
         // document.addEventListener("DOMContentLoaded", () => { this.tetrinoTestShape(40, 40, 40, 'red') }, false);
         document.addEventListener('keydown', (key) => { this.tetrinoGame(key) });
+        document.addEventListener('DOMContentLoaded', () => { this.autoMoveHandler() })
     };
 };
 
