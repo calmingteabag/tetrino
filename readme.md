@@ -77,3 +77,11 @@ Terminei, em partes a rotação. Ela funciona como deveria, mas a forma como fic
 ### Dia 14
 
 Depois de um teste rapido, descobri que a rotação não funciona como deveria, as peças estavam clipando coisas que não deveriam. Passei o dia rachando o cerebro, para variar, entre resolver o problema e dar um jeito na linguiça de codigo. A linguiça deixou de ser linguiça mas ainda é uma salsisha. A parte de rotação é o que me tira o sono, mas pelo menos consegui resolver alguns problemas de clipping, restou checar os limites (peças encostando nas bordas).
+
+### Dia 15
+
+Dei uma pausa no esquema de rotação das peças porque ela está me dando uma dor de cabeça de proporções épicas. O grande "problema" do tetris é que ela não permite rodar em certas situações, mas permite em outras, que faz as coisas ficarem bem chatinhas. Ele ainda falha na hora de rodar a peça quando ela está encostada no lado direito do canvas, por algum motivo que não entendo ainda.
+
+Resolvi trabalhar na parte que faz as peças cairem automaticamente e foi relativamente tranquilo. Agora sim, ver as peças caindo faz o jogo se parecer com tetris.
+
+Proximo passo, que eu acho que vai me dar dor de cabeça igual a rotação, é o esquema do jogo ler quando se completa uma linha com os quadrados, o jogo deletar a linha e empurrar todas as peças para baixo. Única coisa que tenho agora é uma vaga noção de como fazer.
