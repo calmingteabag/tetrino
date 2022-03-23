@@ -85,3 +85,7 @@ Dei uma pausa no esquema de rotação das peças porque ela está me dando uma d
 Resolvi trabalhar na parte que faz as peças cairem automaticamente e foi relativamente tranquilo. Agora sim, ver as peças caindo faz o jogo se parecer com tetris.
 
 Proximo passo, que eu acho que vai me dar dor de cabeça igual a rotação, é o esquema do jogo ler quando se completa uma linha com os quadrados, o jogo deletar a linha e empurrar todas as peças para baixo. Única coisa que tenho agora é uma vaga noção de como fazer.
+
+### Dia 16
+
+Consegui planejar e implementar a parte que faz o jogo deletar as linhas quando elas ficam cheias. Está bem longe de ser o modo mais eficiente do mundo, mas em se tratando de tetris e não um jogo open world 3D, ele cumpre a função. Tambem já consegui visualizar o esquema do jogo mover as peças todas para baixo, que vou tentar implementar amanhã.

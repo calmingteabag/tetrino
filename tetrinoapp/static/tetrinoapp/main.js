@@ -12,6 +12,7 @@ class TetrinoGame {
         this.currPiece = ''
         this.pieceCoord = ''
         this.orientation = ''
+        this.pieceColor = ''
     };
 
     // ###################
@@ -19,6 +20,7 @@ class TetrinoGame {
     // ###################
 
     gameBoardCreate(rowsize, colsize) {
+
         for (let column = 0; column < colsize; column++) {
             this.gameCoords.push([])
             this.gameCoords[column].push(new Array(this.gamewidth))
@@ -28,6 +30,7 @@ class TetrinoGame {
                     'tileXinit': 0,
                     'tileYinit': 0,
                     'tileStatus': 'free',
+                    'tileColor': '',
                 };
             };
         };
@@ -105,11 +108,11 @@ class TetrinoGame {
                     let yCoordClear = this.gameCoords[row][column].tileXinit
                     gameContext.clearRect(xCoordClear, yCoordClear, this.width, this.width)
                 }
-            };
+            }
         }
-
-        // gameContext.clearRect(80, 80, 80, 80)
     }
+
+
 
     gameBoardRefresh() {
         this.gameBoardClear()
@@ -508,13 +511,76 @@ class TetrinoGame {
         }
     };
 
+    clearRow(array) {
+        // "Clears" a row by setting status to 'free'
+        // Doing so will make gameBoardClear clear the
+        // specific row
+        for (let item of array) {
+            item.tileStatus = 'free'
+            item.tileColor = ''
+        }
+    }
+
+    moveDownBoardPieces(moveRows) {
+        // moves everything down after line cleaning
+
+        let board = this.gameCoords
+
+        for (let row = board.length - 1; row > 0; row--) {
+            for (let element = 0; element < board[row].length; element++) {
+                console.log(board[row][element].tileStatus)
+                if (board[row][element].tileStatus == 'occupied') {
+                    let currColor = board[row][element].tileColor
+
+                    board[row][element].tileStatus = 'free'
+                    board[row + moveRows][element].tileStatus = 'occupied'
+                    board[row + moveRows][element].tileColor = currColor
+                    board[row][element].tileColor = ''
+                }
+            }
+        }
+    }
+
+    gameScoreCheck() {
+        // checks array for score
+        // will iterate over every row and count how many tiles
+        // are marked with 'occupied'. When full, calls clearRow (for now)
+
+        // Need a way to make it clean more than one line each time and count
+        // the how many of them where cleaned in a single pass
+
+        let cleanedRows = 0
+
+        for (let row = 0; row < this.gameCoords.length; row++) {
+            console.log(this.gameCoords[row])
+            let rowFillCount = 0
+
+            for (let element = 0; element < this.gameCoords[row].length; element++) {
+                if (this.gameCoords[row][element].tileStatus == 'occupied') {
+                    rowFillCount++
+                }
+            }
+
+            if (rowFillCount == 10) {
+                cleanedRows++
+                console.log('fullrow')
+                this.clearRow(this.gameCoords[row])
+                this.moveDownBoardPieces(cleanedRows)
+            }
+        }
+        console.log(cleanedRows)
+    }
+
     async autoMoveHandler() {
+        // Automatically moves pieces downwards. If it hits
+        // something (end of board or another piece), it will
+        // 'mark' current piece on the board and check for
+        // score (aka, filled rows)
 
         this.tetrinoGameAuto()
         this.tetrinoDraw(this.width, this.pieceColor)
 
         await new Promise((resolve, reject) => setTimeout(resolve, 500))
-        console.log(this.pieceCoord)
 
         if (this.moveCheckPosition('down', this.pieceCoord) == true) {
             for (let coord of this.pieceCoord) {
@@ -526,11 +592,14 @@ class TetrinoGame {
                 let yCoord = coords[1]
                 let currPosition = this.gameCoords[xCoord][yCoord]
                 currPosition.tileStatus = 'occupied'
+                currPosition.tileColor = this.pieceColor
             }
 
+            this.gameScoreCheck()
             this.currPiece = ''
             this.pieceCoord = ''
             this.orientation = ''
+            this.pieceColor = ''
         }
 
         this.gameBoardRefresh()
