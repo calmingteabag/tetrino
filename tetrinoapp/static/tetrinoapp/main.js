@@ -501,13 +501,16 @@ class TetrinoGame {
                 let currPosition = this.gameCoords[xCoord][yCoord]
 
                 currPosition.tileStatus = 'occupied'
+                currPosition.tileColor = this.pieceColor
                 console.log(currPosition.tileStatus)
             }
             console.log('end board')
 
+            this.gameScoreCheck()
             this.currPiece = ''
             this.pieceCoord = ''
             this.orientation = ''
+            this.pieceColor = ''
         }
     };
 
@@ -533,8 +536,8 @@ class TetrinoGame {
                     let currColor = board[row][element].tileColor
 
                     board[row][element].tileStatus = 'free'
-                    board[row + moveRows][element].tileStatus = 'occupied'
-                    board[row + moveRows][element].tileColor = currColor
+                    board[row + 1][element].tileStatus = 'occupied'
+                    board[row + 1][element].tileColor = currColor
                     board[row][element].tileColor = ''
                 }
             }
@@ -565,7 +568,7 @@ class TetrinoGame {
                 cleanedRows++
                 console.log('fullrow')
                 this.clearRow(this.gameCoords[row])
-                this.moveDownBoardPieces(cleanedRows)
+                // this.moveDownBoardPieces(cleanedRows)
             }
         }
         console.log(cleanedRows)

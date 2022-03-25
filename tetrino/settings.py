@@ -146,3 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SECURE_HSTS_PRELOAD = True
 
 # CELERY_TASK_TRACK_STARTED = True
+
+if DEBUG:
+    import mimetypes
+    mimetypes.add_type("application/javascript", ".js")
