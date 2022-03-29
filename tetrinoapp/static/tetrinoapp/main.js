@@ -36,8 +36,6 @@ class TetrinoGame {
         };
     };
 
-
-
     gameBoardFill() {
         /*
         Fills Board with objects containing coordinates for drawing and an occupied/free flag for each
@@ -139,6 +137,7 @@ class TetrinoGame {
         return pieceCoord
     }
 
+
     tetrinoGame(key) {
 
         if (this.currPiece == '') {
@@ -149,6 +148,7 @@ class TetrinoGame {
             this.pieceColor = pieceData.color
             this.orientation = 'north'
         }
+
         this.moveTetrino(key, this.currPiece, this.pieceCoord, this.pieceColor, this.orientation)
     }
 
@@ -519,58 +519,45 @@ class TetrinoGame {
         }
     }
 
-    rowRedraw(row) {
-        for (let elem of row) {
-            let xDraw = elem.tileXinit
-            let yDraw = elem.tileYinit
-            let width = this.width
-            let pieceColor = elem.tileColor
-            console.log(xDraw, yDraw, width, pieceColor)
-            this.tetrinoBaseShape(xDraw, yDraw, width, pieceColor)
-        }
-    }
-    moveDownBoardPieces(lastFullRow) {
+    moveDownBoardPieces(arrayOfRows) {
         // moves everything down after line cleaning
 
-        // it SHOULD iterate over entire game board above cleaned
-        // line and for each element, copy its values (color and status)
-        // to the bottom position, and clean current element
+        // Did a bit of change. Now it receives an array of numbers representing
+        // which rows are full and needed to be processed.
+
+        for (let row of arrayOfRows) {
+
+        }
 
         let board = this.gameCoords
         console.log(`Last 'row' moveDownBoardPieces received: ${lastFullRow}`)
 
         for (let row = lastFullRow - 1; row > 0; row--) {
             console.log(`Current row to process: ${row}`)
-            console.log(board[row])
+            for (let element = 0; element < board[row].length; element++) {
+                let copyElement = JSON.parse(JSON.stringify(board[row][element]))
+                let copyStatus = copyElement.tileStatus
+                let copyColor = copyElement.tileColor
 
-            let copyRow = JSON.parse(JSON.stringify(this.gameCoords[row]))
-            for (let i of copyRow) {
-                console.log(`This is current row copy's element ${i.tileStatus}`)
+                board[row + 1][element].tileStatus = copyStatus
+                board[row + 1][element].tileColor = copyColor
+                board[row][element].tileStatus = 'free'
+                board[row][element].tileColor = ''
+
+                console.log(copyElement.tileStatus)
+                console.log(board[row][element].tileStatus)
             }
-            let copyNextRow = JSON.parse(JSON.stringify(this.gameCoords[row + 1]))
-            for (let i of copyNextRow) {
-                console.log(`This is row + 1 copy's element ${i}`)
-            }
-
-
-
-            // this.gameCoords[row] = copyNextRow
-            // this.gameCoords[row + 1] = copyRow
-            // console.log(copyRow)
-            // this.rowRedraw(this.gameCoords[row + 1])
-
         }
     }
 
-    async gameScoreCheck() {
+    gameScoreCheck() {
         // checks array for score
         // will iterate over every row and count how many tiles
         // are marked with 'occupied'. When full, calls clearRow (for now)
 
-        // Need a way to make it clean more than one line each time and count
-        // the how many of them where cleaned in a single pass
 
-        let cleanedRows = 0
+        let cleanedRowCount = 0
+        let cleanRows = []
 
         for (let row = 0; row < this.gameCoords.length; row++) {
             // console.log(this.gameCoords[row])
@@ -583,28 +570,18 @@ class TetrinoGame {
             }
 
             if (rowFillCount == 10) {
-                cleanedRows++
+                cleanedRowCount++
                 console.log(`gameScoreCheck: Current row ${row} is full`)
-
-                this.clearRow(this.gameCoords[row])
-                this.moveDownBoardPieces(row)
-
+                cleanRows.push(row)
+                this.moveDownBoardPieces(cleanRows)
             }
         }
-        console.log(cleanedRows)
+        console.log(cleanedRowCount)
+        console.log(cleanRows)
+
     }
 
-    async autoMoveHandler() {
-        // Automatically moves pieces downwards. If it hits
-        // something (end of board or another piece), it will
-        // 'mark' current piece on the board and check for
-        // score (aka, filled rows)
-
-        this.tetrinoGameAuto()
-        this.tetrinoDraw(this.width, this.pieceColor)
-
-        await new Promise((resolve) => setTimeout(resolve, 500))
-
+    movePiece() {
         if (this.moveCheckPosition('down', this.pieceCoord) == true) {
             for (let coord of this.pieceCoord) {
                 coord[0]++
@@ -625,6 +602,19 @@ class TetrinoGame {
             this.pieceColor = ''
         }
 
+    }
+
+    async autoMoveHandler() {
+        // Automatically moves pieces downwards. If it hits
+        // something (end of board or another piece), it will
+        // 'mark' current piece on the board and check for
+        // score (aka, filled rows)
+
+        this.tetrinoGameAuto()
+        this.tetrinoDraw(this.width, this.pieceColor)
+
+        await new Promise((resolve) => setTimeout(resolve, 500))
+        this.movePiece()
         this.gameBoardRefresh()
         this.autoMoveHandler()
     }
@@ -638,40 +628,26 @@ class TetrinoGame {
         document.addEventListener('DOMContentLoaded', () => { this.autoMoveHandler() })
     };
 
-    // promises test
-    // testStuff() {
-    //     console.log("This is testStuff() function being executed, HORRAY")
-    // }
+    promiseFunction(value) {
+        return new Promise((resolve, reject) => {
+            if (value == 'logger') {
+                resolve(console.log('returning an console.log'))
+            } else if (value == "2") {
+                resolve('returning string')
+            } else {
+                reject('value is not 1 or 2')
+            }
 
-    // testPromises(rowsize, colsize) {
-    //     return new Promise((resolve, reject) => {
-    //         if (rowsize == 10 && colsize == 20) {
-    //             console.log('Promise resolved')
-    //             resolve(this.testStuff())
-    //         } else {
-    //             reject('unacceptable values, it should be 10 and 20')
-    //         }
-    //     })
-    // };
+        })
+    }
 
-    // processReq(response) {
-    //     return new Promise((resolve, reject) => {
-    //         console.log('Process response')
-    //         resolve(`Abobrinha + ${response}`)
-    //     })
-    // }
-
-    // async await test
-    // async testF(first, second) {
-    //     try {
-    //         const response = await this.testPromises(first, second)
-    //         console.log('response received')
-    //         const processRes = await this.processReq(response)
-    //         console.log(processRes)
-    //     } catch (errmsg) {
-    //         console.log(errmsg)
-    //     }
-    // }
+    async promiseFunctionConsume(value) {
+        try {
+            const result = await this.promiseFunction(value)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 };
 
 
