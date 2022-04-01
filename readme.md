@@ -89,3 +89,7 @@ Proximo passo, que eu acho que vai me dar dor de cabeça igual a rotação, é o
 ### Dia 16
 
 Consegui planejar e implementar a parte que faz o jogo deletar as linhas quando elas ficam cheias. Está bem longe de ser o modo mais eficiente do mundo, mas em se tratando de tetris e não um jogo open world 3D, ele cumpre a função. Tambem já consegui visualizar o esquema do jogo mover as peças todas para baixo, que vou tentar implementar amanhã.
+
+### Dia 20
+
+Pulei alguns dias porque resolvi tentar mudar o programa, dividindo as coisas em arquivos separados para ficar melhor organizado que um arquivão unico e enorme de 600+ linhas. Aprendi batendo a cabeça que quando um metodo ou função tem que ler algo de outra função, esse 'algo' é somente leitura. Li que existem meios para conseguir modificar, mas achei melhor mudar algumas coisas, por exemplo, passar alguns this.atributo para localStorage, assim ele fica acessivel 'globalmente'. Outra maneira era simplesmente usar variáveis globais, que não é recomendado.
