@@ -4,3 +4,6 @@ migrations/
 notas_dev.md
 test.js
 game_flow.md
+node_modules/
+package-lock.json
+package.json

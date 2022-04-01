@@ -1,3 +1,7 @@
+import { someFunction } from "./testfile.js";
+
+console.log(someFunction('sss'))
+
 class TetrinoGame {
     constructor() {
         // Board could be customized here, insted of fixed values, it
@@ -96,8 +100,8 @@ class TetrinoGame {
 
     gameBoardRefresh() {
 
-        let gameCanvas = document.getElementById("gamecanvas")
-        let gameContext = gameCanvas.getContext("2d")
+        const gameCanvas = document.getElementById("gamecanvas")
+        const gameContext = gameCanvas.getContext("2d")
 
         for (let row = 0; row < this.gameCoords.length; row++) {
             for (let column = 0; column < this.gameCoords[row].length; column++) {
@@ -116,7 +120,7 @@ class TetrinoGame {
 
     tetrinoSpawn() {
         // Randomly generates a tetrino
-        let pieceChoice = {
+        const pieceChoice = {
             'shapeSqr': [[[3, 3], [4, 3], [3, 4], [4, 4]], 'yellow'],
             'shapeS': [[[3, 3], [4, 3], [4, 4], [5, 4]], 'green'],
             'shapeI': [[[3, 3], [4, 3], [5, 3], [6, 3]], 'red'],
@@ -168,8 +172,8 @@ class TetrinoGame {
     // ####################
     tetrinoBaseShape(y, x, width, color) {
 
-        let gameCanvas = document.getElementById("gamecanvas")
-        let gameContext = gameCanvas.getContext("2d")
+        const gameCanvas = document.getElementById("gamecanvas")
+        const gameContext = gameCanvas.getContext("2d")
 
         gameContext.fillStyle = color
         gameContext.fillRect(y, x, width, width)
@@ -195,7 +199,6 @@ class TetrinoGame {
             let currObj = this.gameCoords[xCoord][yCoord]
             let xDraw = currObj.tileYinit
             let yDraw = currObj.tileXinit
-            let status = currObj.tileStatus
 
             this.tetrinoBaseShape(xDraw, yDraw, width, pieceColor)
             // console.log('Current Coordinates')
@@ -253,11 +256,11 @@ class TetrinoGame {
         return true
     }
 
-    rotateCoord(piece, direction) {
+    rotateCoord(piece, direction, reverse) {
         // rotate pieces based on transformation coordinates
         // excludes the 'square' tetrino for obvious reasons
 
-        let coordSwitch = {
+        const rotateCoords = {
             "shapeS": {
                 'north': [[-1, 1], [0, 0], [1, 1], [2, 0]],
                 'east': [[1, -1], [0, 0], [-1, -1], [-2, 0]],
@@ -284,13 +287,13 @@ class TetrinoGame {
             },
         }
 
-        if (piece != 'shapeSqr') {
-            let rotateCoord = coordSwitch[`${piece}`][`${direction}`]
-            console.log(rotateCoord)
+        if (piece != 'shapeSqr' && reverse == false) {
+            let rotateDirection = rotateCoords[`${piece}`][`${direction}`]
+            console.log(rotateDirection)
 
-            for (let coord = 0; coord < rotateCoord.length; coord++) {
-                this.pieceCoord[coord][0] += rotateCoord[coord][0]
-                this.pieceCoord[coord][1] += rotateCoord[coord][1]
+            for (let coord = 0; coord < rotateDirection.length; coord++) {
+                this.pieceCoord[coord][0] += rotateDirection[coord][0]
+                this.pieceCoord[coord][1] += rotateDirection[coord][1]
             }
 
             for (let coord of this.pieceCoord) {
@@ -300,97 +303,58 @@ class TetrinoGame {
                     this.shiftPostion(this.pieceCoord, 3, 'right')
                 }
             }
-        }
-    }
 
-    rotateCoordReverse(piece, direction) {
-        let coordSwitch = {
-            "shapeS": {
-                'north': [[-1, 1], [0, 0], [1, 1], [2, 0]],
-                'east': [[1, -1], [0, 0], [-1, -1], [-2, 0]],
-                'south': [[-1, 1], [0, 0], [1, 1], [2, 0]],
-                'west': [[1, -1], [0, 0], [-1, -1], [-2, 0]],
-            },
-            "shapeI": {
-                'north': [[-2, -2], [-1, -1], [0, 0], [1, 1]],
-                'east': [[2, 2], [1, 1], [0, 0], [-1, -1]],
-                'south': [[-2, -2], [-1, -1], [0, 0], [1, 1]],
-                'west': [[2, 2], [1, 1], [0, 0], [-1, -1]],
-            },
-            "shapeL": {
-                'north': [[-2, 2], [-1, 1], [0, 0], [1, 1]],
-                'east': [[2, 2], [1, 1], [0, 0], [1, -1]],
-                'south': [[2, -2], [1, -1], [0, 0], [-1, -1]],
-                'west': [[-2, -2], [-1, -1], [0, 0], [-1, 1]],
-            },
-            "shapeCross": {
-                'north': [[-1, 1], [-1, -1], [0, 0], [1, 1]],
-                'east': [[0, 0], [1, 1], [0, 0], [0, 0]],
-                'south': [[1, -1], [0, 0], [0, 0], [0, 0]],
-                'west': [[0, 0], [0, 0], [0, 0], [-1, -1]],
-            },
-        }
+        } else if (piece != 'shapeSqr' && reverse == true) {
+            let rotateCoordReverse = rotateCoords[`${piece}`][`${direction}`]
 
-        if (piece != 'shapeSqr') {
-            let rotateCoord = coordSwitch[`${piece}`][`${direction}`]
-
-            for (let coord = 0; coord < rotateCoord.length; coord++) {
-                this.pieceCoord[coord][0] -= rotateCoord[coord][0]
-                this.pieceCoord[coord][1] -= rotateCoord[coord][1]
+            for (let coord = 0; coord < rotateCoordReverse.length; coord++) {
+                this.pieceCoord[coord][0] -= rotateCoordReverse[coord][0]
+                this.pieceCoord[coord][1] -= rotateCoordReverse[coord][1]
             }
         }
     }
 
     rotateCheckPosition(piece, direction) {
         if (piece != 'shapeSqr') {
-            this.rotateCoord(piece, direction)
+            this.rotateCoord(piece, direction, false)
 
             for (let coords of this.pieceCoord) {
                 let xCoord = coords[0]
                 let yCoord = coords[1]
 
                 if (this.gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
-                    this.rotateCoordReverse(piece, direction)
+                    this.rotateCoord(piece, direction, true)
                     return false
-
                 }
-
             }
-            this.rotateCoordReverse(piece, direction)
+            this.rotateCoord(piece, direction, true)
             return true
         }
     }
 
-    shiftPosition(coords, space, position) {
-        let currCoords = coords
+    shiftPosition(coords, space, position, reverse) {
 
-        if (position == 'left') {
-            for (let coord of currCoords) {
-                coord[1] += space
+        if (position == 'left' && reverse == false) {
+            for (let values of coords) {
+                values[1] += space
             }
-        } else if (position == 'right') {
+        } else if (position == 'right' && reverse == false) {
+            for (let values of coords) {
+                values[1] -= space
+            }
+        } else if (position == 'down' && reverse == false) {
+            for (let values of coords) {
+                values[0] -= space
+            }
+        } else if (position == 'left' && reverse == true) {
             for (let coord of currCoords) {
                 coord[1] -= space
             }
-        } else if (position == 'down') {
-            for (let coord of currCoords) {
-                coord[0] -= space
-            }
-        }
-    }
-
-    shiftPositionReverse(coords, space, position) {
-        let currCoords = coords
-
-        if (position == 'left') {
-            for (let coord of currCoords) {
-                coord[1] -= space
-            }
-        } else if (position == 'right') {
+        } else if (position == 'right' && reverse == true) {
             for (let coord of currCoords) {
                 coord[1] += space
             }
-        } else if (position == 'down') {
+        } else if (position == 'down' && reverse == true) {
             for (let coord of currCoords) {
                 coord[0] += space
             }
@@ -459,7 +423,7 @@ class TetrinoGame {
                 this.gameBoardRefresh()
                 console.log(this.orientation)
 
-                this.rotateCoord(piece, this.orientation)
+                this.rotateCoord(piece, this.orientation, false)
                 this.tetrinoDraw(this.width, pieceColor)
 
             } else if (this.orientation == 'east' && this.rotateCheckPosition(piece, 'south') == true) {
@@ -467,7 +431,7 @@ class TetrinoGame {
                 this.gameBoardRefresh()
                 console.log(this.orientation)
 
-                this.rotateCoord(piece, this.orientation)
+                this.rotateCoord(piece, this.orientation, false)
                 this.tetrinoDraw(this.width, pieceColor)
 
             } else if (this.orientation == 'south' && this.rotateCheckPosition(piece, 'west') == true) {
@@ -475,7 +439,7 @@ class TetrinoGame {
                 this.gameBoardRefresh()
                 console.log(this.orientation)
 
-                this.rotateCoord(piece, this.orientation)
+                this.rotateCoord(piece, this.orientation, false)
                 this.tetrinoDraw(this.width, pieceColor)
 
             } else if (this.orientation == 'west' && this.rotateCheckPosition(piece, 'north') == true) {
@@ -483,7 +447,7 @@ class TetrinoGame {
                 this.gameBoardRefresh()
                 console.log(this.orientation)
 
-                this.rotateCoord(piece, this.orientation)
+                this.rotateCoord(piece, this.orientation, false)
                 this.tetrinoDraw(this.width, pieceColor)
 
             } else {
@@ -511,9 +475,9 @@ class TetrinoGame {
         }
     };
 
-    clearRow(array) {
+    clearRow(gameBoard, row) {
 
-        for (let item of array) {
+        for (let item of gameBoard[row]) {
             item.tileStatus = 'free'
             item.tileColor = ''
         }
@@ -524,38 +488,42 @@ class TetrinoGame {
 
         // Did a bit of change. Now it receives an array of numbers representing
         // which rows are full and needed to be processed.
-
-        for (let row of arrayOfRows) {
-
-        }
-
         let board = this.gameCoords
         console.log(`Last 'row' moveDownBoardPieces received: ${lastFullRow}`)
 
-        for (let row = lastFullRow - 1; row > 0; row--) {
-            console.log(`Current row to process: ${row}`)
-            for (let element = 0; element < board[row].length; element++) {
-                let copyElement = JSON.parse(JSON.stringify(board[row][element]))
-                let copyStatus = copyElement.tileStatus
-                let copyColor = copyElement.tileColor
+        for (let filledRow of arrayOfRows) {
+            // iterate over received array to
+            // 1 - clear current line
+            // 2 - move everything above that line down
+            this.clearRow(this.gameCoords, filledRow)
+            for (let row = filledRow - 1; row > 0; moveRows++) {
 
-                board[row + 1][element].tileStatus = copyStatus
-                board[row + 1][element].tileColor = copyColor
-                board[row][element].tileStatus = 'free'
-                board[row][element].tileColor = ''
-
-                console.log(copyElement.tileStatus)
-                console.log(board[row][element].tileStatus)
             }
+
         }
+
+        // for (let row = lastFullRow - 1; row > 0; row--) {
+        //     console.log(`Current row to process: ${row}`)
+        //     for (let element = 0; element < board[row].length; element++) {
+        //         let copyElement = JSON.parse(JSON.stringify(board[row][element]))
+        //         let copyStatus = copyElement.tileStatus
+        //         let copyColor = copyElement.tileColor
+
+        //         board[row + 1][element].tileStatus = copyStatus
+        //         board[row + 1][element].tileColor = copyColor
+        //         board[row][element].tileStatus = 'free'
+        //         board[row][element].tileColor = ''
+
+        //         console.log(copyElement.tileStatus)
+        //         console.log(board[row][element].tileStatus)
+        //     }
+        // }
     }
 
     gameScoreCheck() {
         // checks array for score
         // will iterate over every row and count how many tiles
         // are marked with 'occupied'. When full, calls clearRow (for now)
-
-
         let cleanedRowCount = 0
         let cleanRows = []
 
@@ -601,7 +569,6 @@ class TetrinoGame {
             this.orientation = ''
             this.pieceColor = ''
         }
-
     }
 
     async autoMoveHandler() {
@@ -628,30 +595,30 @@ class TetrinoGame {
         document.addEventListener('DOMContentLoaded', () => { this.autoMoveHandler() })
     };
 
-    promiseFunction(value) {
-        return new Promise((resolve, reject) => {
-            if (value == 'logger') {
-                resolve(console.log('returning an console.log'))
-            } else if (value == "2") {
-                resolve('returning string')
-            } else {
-                reject('value is not 1 or 2')
-            }
+    // promiseFunction(value) {
+    //     return new Promise((resolve, reject) => {
+    //         if (value == 'logger') {
+    //             resolve(console.log('returning an console.log'))
+    //         } else if (value == "2") {
+    //             resolve('returning string')
+    //         } else {
+    //             reject('value is not 1 or 2')
+    //         }
 
-        })
-    }
+    //     })
+    // }
 
-    async promiseFunctionConsume(value) {
-        try {
-            const result = await this.promiseFunction(value)
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    // async promiseFunctionConsume(value) {
+    //     try {
+    //         const result = await this.promiseFunction(value)
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 };
 
 
-newGame = new TetrinoGame()
+let newGame = new TetrinoGame()
 newGame.gameBoardCreate(10, 20)
 newGame.gameBoardFill()
 newGame.loadAllListeners()
