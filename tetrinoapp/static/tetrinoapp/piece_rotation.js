@@ -1,3 +1,5 @@
+import { shiftPosition } from "./piece_movement.js"
+
 const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
     // rotate pieces based on transformation coordinates
     // excludes the 'square' tetrino for obvious reasons
@@ -58,12 +60,33 @@ const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
 
 const rotateCheckPosition = (piece, direction, pieceCoords, gameCoords, gameWidth) => {
     if (piece != 'shapeSqr') {
-        rotateCoord(piece, direction, pieceCoords, gameWidth, false)
+
+        let checkCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
+        rotateCoord(piece, direction, checkCoords, gameWidth, false)
+        /*  
+        First, to check if rotation position is valid, we need to apply rotation
+        coordinates to current piece. Maybe we should make a copy of pieceCoords
+        instead of applying it on the actual piece coordinates.
+        */
 
         for (let coords of pieceCoords) {
             let xCoord = coords[0]
             let yCoord = coords[1]
+            /* 
+            After appling rotation coordinates, a loop to check if any piece lands
+            on an invalid position. This is where I think I messed up.
 
+            Just to remember, our call stack goes as follows:
+
+            > User presses 'r' key
+            > rotateCheckPosition is called first
+            > if passes, processMove is called
+            > processMove calls rotateCoord to execute movement
+
+
+            */
+
+            console.log(gameCoords[xCoord][yCoord])
             if (gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
                 rotateCoord(piece, direction, pieceCoords, gameWidth, true)
                 return false

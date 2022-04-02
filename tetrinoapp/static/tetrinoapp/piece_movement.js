@@ -46,7 +46,6 @@ const moveCheckPosition = (moveDir, pieceCoords, gameCoords, gameWidth, gameHeig
     return true
 }
 
-
 const shiftPosition = (coords, space, position, reverse) => {
 
     if (position == 'left' && reverse == false) {
@@ -76,7 +75,6 @@ const shiftPosition = (coords, space, position, reverse) => {
     }
 }
 
-
 const shiftTetrinoHandler = (pieceCoords) => {
 
     for (let coords of pieceCoords) {
@@ -90,95 +88,90 @@ const shiftTetrinoHandler = (pieceCoords) => {
     }
 }
 
+const processMove = (pieceCoords, pieceColor, gameCoords, tileWidth, wantRotate, rotateDirection, piece, gameWidth) => {
+    if (wantRotate == false) {
+        let currPieceCoords = JSON.stringify(pieceCoords)
+        sessionStorage.setItem('pieceCoords', currPieceCoords)
+        // first thing it does is set sessionStorage to the last coordinate received. 
+        // For example, if it is called by moveTetrino, it is  after a loop ran
+        // through previous set of coordinates. This new set (After the loop) needs
+        // to be updated on sessionStorage, or else pieces will keep moving to previous
+        // positions after key presses.
 
-const moveTetrino = (usrkey, piece, pieceCoords, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight) => {
+        console.log('Current Position:', pieceCoords)
+        gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
+        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+    } else if (wantRotate == true) {
+        // set current direction to rotate
+        sessionStorage.setItem('pieceOrientation', rotateDirection)
+
+        // rotate piece
+        rotateCoord(piece, rotateDirection, pieceCoords, gameWidth, false)
+
+
+        // set new coords to storage
+        let currPieceCoords = JSON.stringify(pieceCoords)
+        sessionStorage.setItem('pieceCoords', currPieceCoords)
+
+        // refresh and redraw after everything is updated
+        gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
+        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+
+    }
+}
+
+const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight) => {
     // Moves tetrino based on pressed key
     // gameBoardRefresh() needs to be called because without cleaning
     // the canvas, tetrinos will left a trail of positions it occupies 
     // while moving)
-    if ((usrkey.key == 'ArrowUp' || usrkey.key == 'w')) {
 
-        for (let coord of pieceCoords) {
+    let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
+
+    if ((usrkey.key == 'ArrowUp' || usrkey.key == 'w')) {
+        for (let coord of currPieceCoords) {
             coord[0]--
         }
-        console.log('Current Position:', pieceCoords)
-        gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
 
-    } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', pieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
-
-        for (let coord of pieceCoords) {
+    } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
+        for (let coord of currPieceCoords) {
             coord[0]++
         }
-        console.log('Current Position:', pieceCoords)
-        gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
 
-    } else if ((usrkey.key == 'ArrowLeft' || usrkey.key == 'a') && (moveCheckPosition('left', pieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
-
-        for (let coord of pieceCoords) {
+    } else if ((usrkey.key == 'ArrowLeft' || usrkey.key == 'a') && (moveCheckPosition('left', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
+        for (let coord of currPieceCoords) {
             coord[1]--
         }
-        console.log('Current Position:', pieceCoords)
-        gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
 
-    } else if ((usrkey.key == 'ArrowRight' || usrkey.key == 'd') && (moveCheckPosition('right', pieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
-
-        for (let coord of pieceCoords) {
+    } else if ((usrkey.key == 'ArrowRight' || usrkey.key == 'd') && (moveCheckPosition('right', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
+        for (let coord of currPieceCoords) {
             coord[1]++
         }
-        console.log('Current Position:', pieceCoords)
-        gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
 
     } else if (usrkey.key == 'r' || usrkey.key == 'R') {
+        let pieceFacing = sessionStorage.getItem('pieceOrientation')
 
-        // rotate
-        console.log(piece)
+        if (pieceFacing == 'north' && rotateCheckPosition(piece, 'east', currPieceCoords, gameCoords, gameWidth) == true) {
+            processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'east', piece, gameWidth)
 
-        let pieceFacing = localStorage.getItem('pieceOrientation')
+        } else if (pieceFacing == 'east' && rotateCheckPosition(piece, 'south', currPieceCoords, gameCoords, gameWidth) == true) {
+            processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'south', piece, gameWidth)
 
-        if (pieceFacing == 'north' && rotateCheckPosition(piece, 'east', pieceCoords, gameCoords, gameWidth) == true) {
-            localStorage.setItem('pieceOrientation', 'east')
-            gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-            console.log(pieceFacing)
+        } else if (pieceFacing == 'south' && rotateCheckPosition(piece, 'west', currPieceCoords, gameCoords, gameWidth) == true) {
+            processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'west', piece, gameWidth)
 
-            rotateCoord(piece, pieceFacing, pieceCoords, gameWidth, false)
-            tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+        } else if (pieceFacing == 'west' && rotateCheckPosition(piece, 'north', currPieceCoords, gameCoords, gameWidth) == true) {
+            processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'north', piece, gameWidth)
 
-        } else if (pieceFacing == 'east' && rotateCheckPosition(piece, 'south', pieceCoords, gameCoords, gameWidth) == true) {
-            localStorage.setItem('pieceOrientation', 'south')
-            gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-            console.log(pieceFacing)
-
-            rotateCoord(piece, pieceFacing, pieceCoords, gameWidth, false)
-            tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
-
-        } else if (pieceFacing == 'south' && rotateCheckPosition(piece, 'west', pieceCoords, gameCoords, gameWidth) == true) {
-            localStorage.setItem('pieceOrientation', 'west')
-            gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-            console.log(pieceFacing)
-
-            rotateCoord(piece, pieceFacing, pieceCoords, gameWidth, false)
-            tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
-
-        } else if (pieceFacing == 'west' && rotateCheckPosition(piece, 'north', pieceCoords, gameCoords, gameWidth) == true) {
-            localStorage.setItem('pieceOrientation', 'north')
-            gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-            console.log(pieceFacing)
-
-            rotateCoord(piece, pieceFacing, pieceCoords, gameWidth, false)
-            tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
-
-        } else {
-            gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-            tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
         }
 
-    } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', pieceCoords, gameCoords, gameWidth, gameHeight) == false)) {
+    } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == false)) {
 
-        for (let coords of pieceCoords) {
+        for (let coords of currPieceCoords) {
             let xCoord = coords[0]
             let yCoord = coords[1]
             let currPosition = gameCoords[xCoord][yCoord]
@@ -189,20 +182,28 @@ const moveTetrino = (usrkey, piece, pieceCoords, pieceColor, gameCoords, tileWid
         }
 
         // gameScoreCheck()
-        pieceCoords = ''
-        localStorage.setItem('currentPiece', '')
-        localStorage.setItem('pieceColor', '')
-        localStorage.setItem('pieceOrientation', '')
+        currPieceCoords = ''
+        sessionStorage.setItem('currentPiece', '')
+        sessionStorage.setItem('pieceColor', '')
+        sessionStorage.setItem('pieceOrientation', '')
     }
 };
 
-const autoMovePiece = (pieceCoords, pieceColor, gameCoords, gameWidth, gameHeight) => {
-    if (moveCheckPosition('down', pieceCoords, gameCoords, gameWidth, gameHeight) == true) {
-        for (let coord of pieceCoords) {
+const autoMovePiece = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth) => {
+    let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
+    // currPieceCoords to get updated coordinates
+
+    if (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == true) {
+        for (let coord of currPieceCoords) {
             coord[0]++
         }
-    } else if (moveCheckPosition('down', pieceCoords, gameCoords, gameWidth, gameHeight) == false) {
-        for (let coords of pieceCoords) {
+        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        // processMove will update with currentCoordinates
+
+    } else if (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == false) {
+        // next tile (downwards) is occupied, mark currPieceCoordinate atribute (color) on gameCoords and set
+        // positions to 'occupied' so next pieces will see it as occupied too.
+        for (let coords of currPieceCoords) {
             let xCoord = coords[0]
             let yCoord = coords[1]
             let currPosition = gameCoords[xCoord][yCoord]
@@ -211,10 +212,10 @@ const autoMovePiece = (pieceCoords, pieceColor, gameCoords, gameWidth, gameHeigh
         }
 
         // this.gameScoreCheck()
-        pieceCoords = ''
-        localStorage.setItem('currentPiece', '')
-        localStorage.setItem('pieceColor', '')
-        localStorage.setItem('pieceOrientation', '')
+        currPieceCoords = ''
+        sessionStorage.setItem('currentPiece', '')
+        sessionStorage.setItem('pieceColor', '')
+        sessionStorage.setItem('pieceOrientation', '')
     }
 }
 

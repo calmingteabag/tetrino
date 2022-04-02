@@ -70,50 +70,56 @@ class TetrinoGame {
     }
 
     gameLocalVarCreate() {
-        const localStorageValues = new Map([
+        const sessionStorageValues = new Map([
+            ['gameState', 'running'],
             ['currentPiece', ''],
             ['pieceOrientation', ''],
-            ['pieceColor', '']
+            ['pieceColor', ''],
+            ['pieceCoords', ''],
         ])
 
-        for (let values of localStorageValues) {
-            localStorage.setItem(values[0], values[1])
+        for (let values of sessionStorageValues) {
+            sessionStorage.setItem(values[0], values[1])
         }
     }
 
     // Game Processing (Run, Cleaning, Checks)
     pieceGeneratorManual(key) {
 
-        if (localStorage.getItem('currentPiece') == '') {
+        if (sessionStorage.getItem('currentPiece') == '') {
             let pieceData = tetrinoSpawn()
-            this.pieceCoord = pieceData.coords
-            localStorage.setItem('currentPiece', pieceData.piece)
-            localStorage.setItem('pieceColor', pieceData.color)
-            localStorage.setItem('pieceOrientation', 'north')
+            let stringPiece = JSON.stringify(pieceData.coords)
+
+            sessionStorage.setItem('pieceCoords', stringPiece)
+            sessionStorage.setItem('currentPiece', pieceData.piece)
+            sessionStorage.setItem('pieceColor', pieceData.color)
+            sessionStorage.setItem('pieceOrientation', 'north')
         }
 
         moveTetrino(
             key,
-            localStorage.getItem('currentPiece'),
-            this.pieceCoord,
-            localStorage.getItem('pieceColor'),
+            sessionStorage.getItem('currentPiece'),
+            // JSON.parse(sessionStorage.getItem('pieceCoords')),
+            sessionStorage.getItem('pieceColor'),
             this.gameCoords,
             this.width,
             this.gamewidth,
             this.gameheight,
-            localStorage.getItem('pieceOrientation'),
+            sessionStorage.getItem('pieceOrientation'),
         )
     }
 
     pieceGeneratorAuto() {
-        let currPiece = localStorage.getItem('currentPiece')
+        let currPiece = sessionStorage.getItem('currentPiece')
 
         if (currPiece == '') {
             let pieceData = tetrinoSpawn()
-            this.pieceCoord = pieceData.coords
-            localStorage.setItem('currentPiece', pieceData.piece)
-            localStorage.setItem('pieceColor', pieceData.color)
-            localStorage.setItem('pieceOrientation', 'north')
+            let stringPiece = JSON.stringify(pieceData.coords)
+
+            sessionStorage.setItem('pieceCoords', stringPiece)
+            sessionStorage.setItem('currentPiece', pieceData.piece)
+            sessionStorage.setItem('pieceColor', pieceData.color)
+            sessionStorage.setItem('pieceOrientation', 'north')
         }
     }
 
@@ -123,15 +129,15 @@ class TetrinoGame {
         // it will 'mark' current piece on the board and check for
         // score (aka, filled rows)
         this.pieceGeneratorAuto()
-        let currPiece = localStorage.getItem('currentPiece')
-        let pieceOrientation = localStorage.getItem('pieceOrientation')
-        let pieceColor = localStorage.getItem('pieceColor')
-        console.log(currPiece, pieceOrientation, pieceColor)
+        let currPiece = sessionStorage.getItem('currentPiece')
+        let pieceOrientation = sessionStorage.getItem('pieceOrientation')
+        let pieceColor = sessionStorage.getItem('pieceColor')
+        let currPieceCoord = JSON.parse(sessionStorage.getItem('pieceCoords'))
 
-        tetrinoDraw(this.width, pieceColor, this.pieceCoord, this.gameCoords, currPiece, pieceOrientation)
+        tetrinoDraw(this.width, pieceColor, currPieceCoord, this.gameCoords, currPiece, pieceOrientation)
 
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        autoMovePiece(this.pieceCoord, pieceColor, this.gameCoords, this.gamewidth, this.gameheight)
+        autoMovePiece(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width)
         gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.width)
         this.gameRun()
     }
