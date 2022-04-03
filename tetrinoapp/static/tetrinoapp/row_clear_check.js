@@ -1,3 +1,14 @@
+/* 
+This module is responsible for the row cleaning that occurs
+when all tiles on a row is filled with tetrinos.
+
+It's still messy and I'm trying to figure out how to do it. Basic 
+idea is to call a main function on this module always after a piece 
+encounters an occupied tile below (so, after movedown check returns
+false)
+
+*/
+
 const clearRow = (gameBoard, row) => {
 
     for (let item of gameBoard[row]) {
