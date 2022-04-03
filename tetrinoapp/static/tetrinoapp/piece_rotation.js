@@ -1,4 +1,19 @@
-import { shiftPosition } from "./piece_movement.js"
+/* 
+This module is responsible for rotating pieces.
+
+Rotation is done by applying a set of "transformation" coordinates to the
+current piece's coordinates based on which direction it will face. There is a 
+function elsewhere that refreshes the board after each movement (mainly to avoid 
+pieces leaving trails on board) and by the time it is called, spwned piece will 
+be drawm as if it has 'rotated'.
+
+Functions:
+
+rotateCoord is our main function for this module
+rotateCheckPosition will check if rotation ended in valid positions
+*/
+
+import { shiftPosition } from "./piece_shift.js"
 
 const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
     // rotate pieces based on transformation coordinates
@@ -58,43 +73,74 @@ const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
     }
 }
 
-const rotateCheckPosition = (piece, direction, pieceCoords, gameCoords, gameWidth) => {
+const rotateCheckPosition = (piece, direction, gameCoords, gameWidth) => {
     if (piece != 'shapeSqr') {
-
-        let checkCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
-        rotateCoord(piece, direction, checkCoords, gameWidth, false)
         /*  
         First, to check if rotation position is valid, we need to apply rotation
         coordinates to current piece. Maybe we should make a copy of pieceCoords
         instead of applying it on the actual piece coordinates.
+         
+        After appling rotation coordinates, a loop is ran to check if 
+        any piece lands on an invalid position. This is where I think I 
+        messed up.
+
+        Just to remember, our call stack goes as follows:
+
+        > User presses 'r' key
+        > rotateCheckPosition is called first
+        > if passes, processMove is called
+        > processMove calls rotateCoord to execute movement
+
+        rotateCheckPosition needs to do all the checks before allowing 
+        rotation. We have two approaches, check for occupancy first then
+        for clipping or clipping first.
+
+        If we go for occupancy first we run into an issue of a piece block
+        landing out of our board making our loop break since, for example,
+        our piece coordinates will pass a '-1' coordinate to our game board
+        and our board range starts from 0.
+
+        So we have to go for clipping instead
         */
 
-        for (let coords of pieceCoords) {
-            let xCoord = coords[0]
-            let yCoord = coords[1]
-            /* 
-            After appling rotation coordinates, a loop to check if any piece lands
-            on an invalid position. This is where I think I messed up.
+        let checkCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
+        console.log(`Original coords: ${checkCoords}`)
+        rotateCoord(piece, direction, checkCoords, gameWidth, false)
+        console.log(`Coords after rot ${checkCoords}`)
 
-            Just to remember, our call stack goes as follows:
+        for (let clippingCoords of checkCoords) {
+            // clipping check
 
-            > User presses 'r' key
-            > rotateCheckPosition is called first
-            > if passes, processMove is called
-            > processMove calls rotateCoord to execute movement
+            if (clippingCoords[1] < 0) {
+                // clipping left wall
+                shiftPosition(checkCoords, 1, 'left', false)
+                break
 
+            } else if (clippingCoords[1] > (gameWidth.length - 1)) {
+                // clipping right wall
+                shiftPosition(checkCoords, 3, 'right', false)
+                break
+            }
+        }
 
-            */
+        for (let newCoord of checkCoords) {
+            let rowCoord = newCoord[0]
+            let columnCoord = newCoord[1]
 
-            console.log(gameCoords[xCoord][yCoord])
-            if (gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
-                rotateCoord(piece, direction, pieceCoords, gameWidth, true)
+            if (gameCoords[rowCoord][columnCoord].tileStatus == 'occupied') {
                 return false
             }
         }
-        rotateCoord(piece, direction, pieceCoords, gameWidth, true)
+
         return true
     }
 }
 
+// if (gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
+//     rotateCoord(piece, direction, pieceCoords, gameWidth, true)
+//     return false
+// }
+
+// rotateCoord(piece, direction, pieceCoords, gameWidth, true)
+// return true
 export { rotateCoord, rotateCheckPosition }

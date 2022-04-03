@@ -1,3 +1,15 @@
+/* 
+This module is responsible for moving pieces horizontally or vertically. 
+
+It consists of four functions:
+
+- moveTetrino, main function, will move based on pressed 
+key (currently 'WASD' + R (rotate) and arrow keys)
+- moveChekPosition, checks if movement is valid
+- moveTetrinoAuto, to emulate original tetris's pieces 'falling'
+- moveTetrinoProcess, auxiliary function to declutter moveTetrino
+*/
+
 import { gameBoardRefresh } from "./game_handling.js"
 import { tetrinoDraw } from "./piece_creation.js"
 import { rotateCheckPosition, rotateCoord } from "./piece_rotation.js"
@@ -46,49 +58,7 @@ const moveCheckPosition = (moveDir, pieceCoords, gameCoords, gameWidth, gameHeig
     return true
 }
 
-const shiftPosition = (coords, space, position, reverse) => {
-
-    if (position == 'left' && reverse == false) {
-        for (let values of coords) {
-            values[1] += space
-        }
-    } else if (position == 'right' && reverse == false) {
-        for (let values of coords) {
-            values[1] -= space
-        }
-    } else if (position == 'down' && reverse == false) {
-        for (let values of coords) {
-            values[0] -= space
-        }
-    } else if (position == 'left' && reverse == true) {
-        for (let coord of currCoords) {
-            coord[1] -= space
-        }
-    } else if (position == 'right' && reverse == true) {
-        for (let coord of currCoords) {
-            coord[1] += space
-        }
-    } else if (position == 'down' && reverse == true) {
-        for (let coord of currCoords) {
-            coord[0] += space
-        }
-    }
-}
-
-const shiftTetrinoHandler = (pieceCoords) => {
-
-    for (let coords of pieceCoords) {
-        if (coords[1] == 0) {
-            shiftPosition(pieceCoords, 1, 'left')
-        } else if (coords[1] == this.gamewidth.length - 1) {
-            shiftPosition(pieceCoords, 1, 'right')
-        } else if (coords[0] > this.gameheight.length - 1) {
-            shiftPosition(pieceCoords, 1, 'down')
-        }
-    }
-}
-
-const processMove = (pieceCoords, pieceColor, gameCoords, tileWidth, wantRotate, rotateDirection, piece, gameWidth) => {
+const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, wantRotate, rotateDirection, piece, gameWidth) => {
     if (wantRotate == false) {
         let currPieceCoords = JSON.stringify(pieceCoords)
         sessionStorage.setItem('pieceCoords', currPieceCoords)
@@ -121,10 +91,12 @@ const processMove = (pieceCoords, pieceColor, gameCoords, tileWidth, wantRotate,
 }
 
 const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight) => {
-    // Moves tetrino based on pressed key
-    // gameBoardRefresh() needs to be called because without cleaning
-    // the canvas, tetrinos will left a trail of positions it occupies 
-    // while moving)
+    /* 
+    Moves tetrino based on pressed key
+    gameBoardRefresh() needs to be called because without cleaning
+    the canvas, tetrinos will left a trail of positions it occupies 
+    while moving) 
+    */
 
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
 
@@ -132,41 +104,40 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
         for (let coord of currPieceCoords) {
             coord[0]--
         }
-        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
 
     } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
         for (let coord of currPieceCoords) {
             coord[0]++
         }
-        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
 
     } else if ((usrkey.key == 'ArrowLeft' || usrkey.key == 'a') && (moveCheckPosition('left', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
         for (let coord of currPieceCoords) {
             coord[1]--
         }
-        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
 
     } else if ((usrkey.key == 'ArrowRight' || usrkey.key == 'd') && (moveCheckPosition('right', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
         for (let coord of currPieceCoords) {
             coord[1]++
         }
-        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
 
     } else if (usrkey.key == 'r' || usrkey.key == 'R') {
         let pieceFacing = sessionStorage.getItem('pieceOrientation')
 
-        if (pieceFacing == 'north' && rotateCheckPosition(piece, 'east', currPieceCoords, gameCoords, gameWidth) == true) {
-            processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'east', piece, gameWidth)
+        if (pieceFacing == 'north' && rotateCheckPosition(piece, 'east', gameCoords, gameWidth) == true) {
+            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'east', piece, gameWidth)
 
-        } else if (pieceFacing == 'east' && rotateCheckPosition(piece, 'south', currPieceCoords, gameCoords, gameWidth) == true) {
-            processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'south', piece, gameWidth)
+        } else if (pieceFacing == 'east' && rotateCheckPosition(piece, 'south', gameCoords, gameWidth) == true) {
+            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'south', piece, gameWidth)
 
-        } else if (pieceFacing == 'south' && rotateCheckPosition(piece, 'west', currPieceCoords, gameCoords, gameWidth) == true) {
-            processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'west', piece, gameWidth)
+        } else if (pieceFacing == 'south' && rotateCheckPosition(piece, 'west', gameCoords, gameWidth) == true) {
+            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'west', piece, gameWidth)
 
-        } else if (pieceFacing == 'west' && rotateCheckPosition(piece, 'north', currPieceCoords, gameCoords, gameWidth) == true) {
-            processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'north', piece, gameWidth)
-
+        } else if (pieceFacing == 'west' && rotateCheckPosition(piece, 'north', gameCoords, gameWidth) == true) {
+            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'north', piece, gameWidth)
         }
 
     } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == false)) {
@@ -189,7 +160,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
     }
 };
 
-const autoMovePiece = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth) => {
+const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth) => {
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
     // currPieceCoords to get updated coordinates
 
@@ -197,8 +168,8 @@ const autoMovePiece = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth)
         for (let coord of currPieceCoords) {
             coord[0]++
         }
-        processMove(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
-        // processMove will update with currentCoordinates
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        // moveTetrinoProcess will update with currentCoordinates
 
     } else if (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == false) {
         // next tile (downwards) is occupied, mark currPieceCoordinate atribute (color) on gameCoords and set
@@ -219,4 +190,4 @@ const autoMovePiece = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth)
     }
 }
 
-export { moveCheckPosition, shiftPosition, shiftTetrinoHandler, moveTetrino, autoMovePiece }
+export { moveCheckPosition, shiftPosition, shiftTetrinoHandler, moveTetrino, moveTetrinoAuto }

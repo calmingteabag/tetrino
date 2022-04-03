@@ -1,5 +1,5 @@
 import { tetrinoSpawn, tetrinoBaseShape, tetrinoDraw } from "./piece_creation.js";
-import { moveCheckPosition, moveTetrino, autoMovePiece } from "./piece_movement.js";
+import { moveCheckPosition, moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
 import { gameBoardRefresh } from "./game_handling.js"
 
 class TetrinoGame {
@@ -137,7 +137,7 @@ class TetrinoGame {
         tetrinoDraw(this.width, pieceColor, currPieceCoord, this.gameCoords, currPiece, pieceOrientation)
 
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        autoMovePiece(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width)
+        moveTetrinoAuto(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width)
         gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.width)
         this.gameRun()
     }

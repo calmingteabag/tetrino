@@ -1,3 +1,22 @@
+/* 
+This module deals with tetrinos (the pieces)
+
+The way I did this game was to separate 'logic' tetrinos from
+'canvas' tetrinos. When it generates a 'logic' tetrino, four 'coordinates'
+are given to the piece, each representing a position on the game
+array. Based on those coordinates, a function is called to draw an square
+(tile) on each of those coordinates, so we have an illusion of a single
+tetrino being drawn.
+
+Functions:
+
+- tetrinoSpawn, generates the 'logic' tetrinos
+- tetrinoBaseShape, have instructions for a single 'tile'
+- tetrinoDraw, will use tetrinoSpawn coordinates and tetrinoBaseShape to
+create the full tetrino on canvas
+
+*/
+
 const tetrinoSpawn = () => {
     // Randomly generates a tetrino
     const pieceChoice = {
