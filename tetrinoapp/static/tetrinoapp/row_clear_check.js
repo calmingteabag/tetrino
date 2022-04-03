@@ -9,7 +9,7 @@ false)
 
 */
 
-const clearRow = (gameBoard, row) => {
+const rowFillClear = (gameBoard, row) => {
 
     for (let item of gameBoard[row]) {
         item.tileStatus = 'free'
@@ -17,68 +17,80 @@ const clearRow = (gameBoard, row) => {
     }
 }
 
-const moveDownBoardPieces = (arrayOfRows) => {
-    // moves everything down after line cleaning
+const rowFillProcess = (gameCoords, filledRows) => {
+    /* 
+    Now it's where things get funny D8
+    What we need to do:
 
-    // Did a bit of change. Now it receives an array of numbers representing
-    // which rows are full and needed to be processed.
-    let board = this.gameCoords
-    console.log(`Last 'row' moveDownBoardPieces received: ${lastFullRow}`)
+    Starting on the line ABOVE current filledRows's row:
 
-    for (let filledRow of arrayOfRows) {
-        // iterate over received array to
-        // 1 - clear current line
-        // 2 - move everything above that line down
-        this.clearRow(this.gameCoords, filledRow)
-        for (let row = filledRow - 1; row > 0; moveRows++) {
+        - copy current object's status and color
+        - find a way to 'paste it' on the row below
+        - clear current row by setting status to 'free' and color to ''
 
+    Sounds easy, but arrays don't deal well with it. It works great unti after
+    line cleaning
+    */
+    console.log(`Received full rows: ${filledRows}`)
+    let copyGameCoords = JSON.parse(JSON.stringify(gameCoords))
+    console.log(copyGameCoords)
+
+    for (let currProcessingRow of filledRows) {
+        console.log(`Last 'row' moveDownBoardPieces received: ${currProcessingRow}`)
+        // clear current row
+        rowFillClear(gameCoords, currProcessingRow)
+
+
+
+        // then try moving everything down
+        for (let row = currProcessingRow - 1; row > 0; row--) {
+            // we are reverse iterating (bottom to top of array)
+            // not to self that this board shouldn't be modified
+            console.log(`Current row to process: ${currProcessingRow}`)
+
+            for (let element = 0; element < gameCoords[row].length; element++) {
+                let copyStatus = gameCoords[row][element].tileStatus
+                let copyColor = gameCoords[row][element].tileColor
+
+                copyGameCoords[row + 1][element].tileStatus = copyStatus
+                copyGameCoords[row + 1][element].tileStatus = copyColor
+            }
         }
-
     }
-
-    // for (let row = lastFullRow - 1; row > 0; row--) {
-    //     console.log(`Current row to process: ${row}`)
-    //     for (let element = 0; element < board[row].length; element++) {
-    //         let copyElement = JSON.parse(JSON.stringify(board[row][element]))
-    //         let copyStatus = copyElement.tileStatus
-    //         let copyColor = copyElement.tileColor
-
-    //         board[row + 1][element].tileStatus = copyStatus
-    //         board[row + 1][element].tileColor = copyColor
-    //         board[row][element].tileStatus = 'free'
-    //         board[row][element].tileColor = ''
-
-    //         console.log(copyElement.tileStatus)
-    //         console.log(board[row][element].tileStatus)
-    //     }
-    // }
+    console.log(copyGameCoords)
 }
 
-const gameScoreCheck = () => {
-    // checks array for score
-    // will iterate over every row and count how many tiles
-    // are marked with 'occupied'. When full, calls clearRow (for now)
-    let cleanedRowCount = 0
-    let cleanRows = []
+const rowFillCheck = (gameCoords) => {
+    /* 
+    It's our main function that is called after moveDownCheck returns false
+ 
+    It will iterate backwards (from bottom to top) and will count each tile
+    marked as 'occupied' on a row to increment a counter. If this counter on
+    a row reaches 10, it means the current row is full, so rowFillProcess is
+    called to further process it.
+    */
 
-    for (let row = 0; row < this.gameCoords.length; row++) {
-        // console.log(this.gameCoords[row])
+    let filledRows = []
+    let cleanedRowCount = 0
+
+    for (let row = 0; row < gameCoords.length; row++) {
         let rowFillCount = 0
 
-        for (let element = 0; element < this.gameCoords[row].length; element++) {
-            if (this.gameCoords[row][element].tileStatus == 'occupied') {
+        for (let element = 0; element < gameCoords[row].length; element++) {
+            if (gameCoords[row][element].tileStatus == 'occupied') {
                 rowFillCount++
             }
         }
 
         if (rowFillCount == 10) {
             cleanedRowCount++
+            filledRows.push(row)
             console.log(`gameScoreCheck: Current row ${row} is full`)
-            cleanRows.push(row)
-            this.moveDownBoardPieces(cleanRows)
+            rowFillProcess(gameCoords, filledRows)
         }
     }
     console.log(cleanedRowCount)
-    console.log(cleanRows)
-
+    console.log(filledRows)
 }
+
+export { rowFillCheck }

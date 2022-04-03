@@ -13,7 +13,7 @@ key (currently 'WASD' + R (rotate) and arrow keys)
 import { gameBoardRefresh } from "./game_handling.js"
 import { tetrinoDraw } from "./piece_creation.js"
 import { rotateCheckPosition, rotateCoord } from "./piece_rotation.js"
-
+import { rowFillCheck } from "./row_clear_check.js";
 
 const moveCheckPosition = (moveDir, pieceCoords, gameCoords, gameWidth, gameHeight) => {
     // Loops through each coordinate of a tetrino and check for
@@ -152,7 +152,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
             console.log(currPosition.tileStatus)
         }
 
-        // gameScoreCheck()
+        rowFillCheck(gameCoords)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')
@@ -182,7 +182,7 @@ const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidt
             currPosition.tileColor = pieceColor
         }
 
-        // this.gameScoreCheck()
+        rowFillCheck(gameCoords)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')

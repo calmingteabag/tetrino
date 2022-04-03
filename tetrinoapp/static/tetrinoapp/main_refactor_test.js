@@ -1,6 +1,6 @@
 import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
 import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
-import { gameBoardRefresh } from "./game_handling.js"
+import { gameBoardRefresh } from "./game_handling.js";
 
 class TetrinoGame {
     constructor() {
@@ -38,9 +38,9 @@ class TetrinoGame {
         /*
         Fills Board with objects containing coordinates for drawing and an occupied/free flag for each
         coordinate.
-
+ 
         Why yTileValue = -40:
-
+ 
         Rows are updated on inner loop and their indexes are reset when game changes columns. Since the very 
         first run already sets yTileValue to +40, making our first set of coordinates wrong (all y coords will 
         start at 40 insted of 0) I offset initial value to compensate.
