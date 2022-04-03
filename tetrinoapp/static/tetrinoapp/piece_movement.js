@@ -68,7 +68,7 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
         // to be updated on sessionStorage, or else pieces will keep moving to previous
         // positions after key presses.
 
-        console.log('Current Position:', pieceCoords)
+        // console.log('Current Position:', pieceCoords)
         gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
         tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
     } else if (wantRotate == true) {
@@ -190,4 +190,4 @@ const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidt
     }
 }
 
-export { moveCheckPosition, shiftPosition, shiftTetrinoHandler, moveTetrino, moveTetrinoAuto }
+export { moveCheckPosition, moveTetrino, moveTetrinoAuto }

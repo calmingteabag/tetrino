@@ -48,7 +48,7 @@ const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
 
     if (piece != 'shapeSqr' && reverse == false) {
         let rotateDirection = rotateCoords[`${piece}`][`${direction}`]
-        console.log(rotateDirection)
+        // console.log(rotateDirection)
 
         for (let coord = 0; coord < rotateDirection.length; coord++) {
             pieceCoords[coord][0] += rotateDirection[coord][0]
@@ -58,8 +58,8 @@ const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
         for (let coord of pieceCoords) {
             if (coord[1] < 0) {
                 shiftPosition(pieceCoords, 1, 'left', false)
-            } else if (coord[1] > gameWidth.length - 1) {
-                shiftPosition(pieceCoords, 3, 'right', false)
+            } else if (coord[1] > (gameWidth - 1)) {
+                shiftPosition(pieceCoords, 2, 'right', false)
             }
         }
 
@@ -106,7 +106,7 @@ const rotateCheckPosition = (piece, direction, gameCoords, gameWidth) => {
         let checkCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
         console.log(`Original coords: ${checkCoords}`)
         rotateCoord(piece, direction, checkCoords, gameWidth, false)
-        console.log(`Coords after rot ${checkCoords}`)
+        console.log(`Coords after rotation ${checkCoords}`)
 
         for (let clippingCoords of checkCoords) {
             // clipping check
@@ -114,18 +114,25 @@ const rotateCheckPosition = (piece, direction, gameCoords, gameWidth) => {
             if (clippingCoords[1] < 0) {
                 // clipping left wall
                 shiftPosition(checkCoords, 1, 'left', false)
+                // console.log(`Coords after shift ${checkCoords}`)
                 break
 
-            } else if (clippingCoords[1] > (gameWidth.length - 1)) {
+            } else if (clippingCoords[1] > (gameWidth - 1)) {
                 // clipping right wall
-                shiftPosition(checkCoords, 3, 'right', false)
+                shiftPosition(checkCoords, 1, 'right', false)
+                // console.log(`Coords after shift ${checkCoords}`)
                 break
             }
         }
 
+        console.log(`Coords after rotation and shift ${checkCoords}`)
+
+
         for (let newCoord of checkCoords) {
             let rowCoord = newCoord[0]
             let columnCoord = newCoord[1]
+            console.log(rowCoord, columnCoord)
+            console.log(gameCoords[rowCoord][columnCoord])
 
             if (gameCoords[rowCoord][columnCoord].tileStatus == 'occupied') {
                 return false
@@ -136,11 +143,4 @@ const rotateCheckPosition = (piece, direction, gameCoords, gameWidth) => {
     }
 }
 
-// if (gameCoords[xCoord][yCoord].tileStatus == 'occupied') {
-//     rotateCoord(piece, direction, pieceCoords, gameWidth, true)
-//     return false
-// }
-
-// rotateCoord(piece, direction, pieceCoords, gameWidth, true)
-// return true
 export { rotateCoord, rotateCheckPosition }

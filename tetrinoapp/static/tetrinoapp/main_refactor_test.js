@@ -1,5 +1,5 @@
-import { tetrinoSpawn, tetrinoBaseShape, tetrinoDraw } from "./piece_creation.js";
-import { moveCheckPosition, moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
+import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
+import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
 import { gameBoardRefresh } from "./game_handling.js"
 
 class TetrinoGame {
