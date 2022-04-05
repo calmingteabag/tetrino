@@ -104,9 +104,9 @@ const rotateCheckPosition = (piece, direction, gameCoords, gameWidth) => {
         */
 
         let checkCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
-        console.log(`Original coords: ${checkCoords}`)
+        // console.log(`Original coords: ${checkCoords}`)
         rotateCoord(piece, direction, checkCoords, gameWidth, false)
-        console.log(`Coords after rotation ${checkCoords}`)
+        // console.log(`Coords after rotation ${checkCoords}`)
 
         for (let clippingCoords of checkCoords) {
             // clipping check
@@ -125,14 +125,14 @@ const rotateCheckPosition = (piece, direction, gameCoords, gameWidth) => {
             }
         }
 
-        console.log(`Coords after rotation and shift ${checkCoords}`)
+        // console.log(`Coords after rotation and shift ${checkCoords}`)
 
 
         for (let newCoord of checkCoords) {
             let rowCoord = newCoord[0]
             let columnCoord = newCoord[1]
-            console.log(rowCoord, columnCoord)
-            console.log(gameCoords[rowCoord][columnCoord])
+            // console.log(rowCoord, columnCoord)
+            // console.log(gameCoords[rowCoord][columnCoord])
 
             if (gameCoords[rowCoord][columnCoord].tileStatus == 'occupied') {
                 return false

@@ -90,7 +90,7 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
     }
 }
 
-const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight) => {
+const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext) => {
     /* 
     Moves tetrino based on pressed key
     gameBoardRefresh() needs to be called because without cleaning
@@ -149,10 +149,10 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
 
             currPosition.tileStatus = 'occupied'
             currPosition.tileColor = pieceColor
-            console.log(currPosition.tileStatus)
+            // console.log(currPosition.tileStatus)
         }
 
-        rowFillCheck(gameCoords)
+        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')
@@ -160,7 +160,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
     }
 };
 
-const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth) => {
+const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth, canvasName, canvasContext) => {
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
     // currPieceCoords to get updated coordinates
 
@@ -182,7 +182,7 @@ const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidt
             currPosition.tileColor = pieceColor
         }
 
-        rowFillCheck(gameCoords)
+        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')

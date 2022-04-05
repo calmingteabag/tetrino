@@ -3,7 +3,7 @@ import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
 import { gameBoardRefresh } from "./game_handling.js";
 
 class TetrinoGame {
-    constructor() {
+    constructor(canvasName, canvasContext) {
         // Board could be customized here, insted of fixed values, it
         // would use values from constructor, for example:
         // newGame = TetrinoGame(10,20, 40) which would represent a board 10 tiles wide, 20 tiles
@@ -14,6 +14,8 @@ class TetrinoGame {
         this.gameheight = 20; // board height
         this.gamewidth = 10; // board width
         this.pieceCoord = ''
+        this.canvasName = canvasName
+        this.canvasContext = canvasContext
     };
 
     // Game setup
@@ -106,6 +108,8 @@ class TetrinoGame {
             this.gamewidth,
             this.gameheight,
             sessionStorage.getItem('pieceOrientation'),
+            this.canvasName,
+            this.canvasContext,
         )
     }
 
@@ -137,7 +141,7 @@ class TetrinoGame {
         tetrinoDraw(this.width, pieceColor, currPieceCoord, this.gameCoords, currPiece, pieceOrientation)
 
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        moveTetrinoAuto(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width)
+        moveTetrinoAuto(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width, this.canvasName, this.canvasContext)
         gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.width)
         this.gameRun()
     }
@@ -150,7 +154,7 @@ class TetrinoGame {
     };
 };
 
-let newGame = new TetrinoGame()
+let newGame = new TetrinoGame("gamecanvas", "2d")
 newGame.gameBoardCreate(10, 20)
 newGame.gameBoardFill()
 newGame.loadAllListeners()

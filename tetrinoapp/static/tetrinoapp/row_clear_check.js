@@ -1,3 +1,4 @@
+import { tetrinoBaseShape } from "./piece_creation.js"
 /* 
 This module is responsible for the row cleaning that occurs
 when all tiles on a row is filled with tetrinos.
@@ -6,7 +7,6 @@ It's still messy and I'm trying to figure out how to do it. Basic
 idea is to call a main function on this module always after a piece 
 encounters an occupied tile below (so, after movedown check returns
 false)
-
 */
 
 const rowFillClear = (gameBoard, row) => {
@@ -17,50 +17,39 @@ const rowFillClear = (gameBoard, row) => {
     }
 }
 
-const rowFillProcess = (gameCoords, filledRows) => {
+const rowFillProcess = (gameCoords, filledRow) => {
     /* 
-    Now it's where things get funny D8
-    What we need to do:
+    Bugando se foi quem um dia só me fez codar
+    Bugando estará ao lembrar de um input
+    Quem um dia não soube testar
 
-    Starting on the line ABOVE current filledRows's row:
-
-        - copy current object's status and color
-        - find a way to 'paste it' on the row below
-        - clear current row by setting status to 'free' and color to ''
-
-    Sounds easy, but arrays don't deal well with it. It works great unti after
-    line cleaning
+    A reclamação vai estar com ident aonde for~~
     */
-    console.log(`Received full rows: ${filledRows}`)
-    let copyGameCoords = JSON.parse(JSON.stringify(gameCoords))
-    console.log(copyGameCoords)
+    rowFillClear(gameCoords, filledRow)
 
-    for (let currProcessingRow of filledRows) {
-        console.log(`Last 'row' moveDownBoardPieces received: ${currProcessingRow}`)
-        // clear current row
-        rowFillClear(gameCoords, currProcessingRow)
+    for (let row = filledRow - 1; row > 0; row--) {
+        for (let element = 0; element < gameCoords[row].length; element++) {
+            let elemCopy = JSON.parse(JSON.stringify(gameCoords[row][element]))
 
+            gameCoords[row + 1][element].tileStatus = elemCopy.tileStatus
+            gameCoords[row + 1][element].tileColor = elemCopy.tileColor
+        }
+    }
+}
 
-
-        // then try moving everything down
-        for (let row = currProcessingRow - 1; row > 0; row--) {
-            // we are reverse iterating (bottom to top of array)
-            // not to self that this board shouldn't be modified
-            console.log(`Current row to process: ${currProcessingRow}`)
-
-            for (let element = 0; element < gameCoords[row].length; element++) {
-                let copyStatus = gameCoords[row][element].tileStatus
-                let copyColor = gameCoords[row][element].tileColor
-
-                copyGameCoords[row + 1][element].tileStatus = copyStatus
-                copyGameCoords[row + 1][element].tileStatus = copyColor
+const reloadBoard = (gameCoords, canvasName, canvasContext, tileWidth) => {
+    for (let row = 0; row < gameCoords.length; row++) {
+        for (let element = 0; element < gameCoords[row].length; element++) {
+            if (gameCoords[row][element].tileStatus == 'occupied') {
+                let xDraw = gameCoords[row][element].tileYinit
+                let yDraw = gameCoords[row][element].tileXinit
+                let color = gameCoords[row][element].tileColor
+                tetrinoBaseShape(xDraw, yDraw, tileWidth, color, canvasName, canvasContext)
             }
         }
     }
-    console.log(copyGameCoords)
 }
-
-const rowFillCheck = (gameCoords) => {
+const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth) => {
     /* 
     It's our main function that is called after moveDownCheck returns false
  
@@ -70,8 +59,7 @@ const rowFillCheck = (gameCoords) => {
     called to further process it.
     */
 
-    let filledRows = []
-    let cleanedRowCount = 0
+    let cleanedRowCount = 0 // will be sent to future score function
 
     for (let row = 0; row < gameCoords.length; row++) {
         let rowFillCount = 0
@@ -84,13 +72,14 @@ const rowFillCheck = (gameCoords) => {
 
         if (rowFillCount == 10) {
             cleanedRowCount++
-            filledRows.push(row)
             console.log(`gameScoreCheck: Current row ${row} is full`)
-            rowFillProcess(gameCoords, filledRows)
+            console.log('sending it to rowFillProcess')
+            rowFillProcess(gameCoords, row)
+            reloadBoard(gameCoords, canvasName, canvasContext, tileWidth)
         }
     }
-    console.log(cleanedRowCount)
-    console.log(filledRows)
+
+    // call some score function here with cleanedRowCount as parameter
 }
 
 export { rowFillCheck }
