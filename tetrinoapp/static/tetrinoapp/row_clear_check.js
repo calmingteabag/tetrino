@@ -1,4 +1,5 @@
 import { tetrinoBaseShape } from "./piece_creation.js"
+import { gameScore } from "./game_score.js"
 /* 
 This module is responsible for the row cleaning that occurs
 when all tiles on a row is filled with tetrinos.
@@ -78,8 +79,8 @@ const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth) => {
             reloadBoard(gameCoords, canvasName, canvasContext, tileWidth)
         }
     }
-
-    // call some score function here with cleanedRowCount as parameter
+    // calls score
+    gameScore(cleanedRowCount)
 }
 
 export { rowFillCheck }

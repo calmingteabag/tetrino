@@ -58,7 +58,7 @@ const moveCheckPosition = (moveDir, pieceCoords, gameCoords, gameWidth, gameHeig
     return true
 }
 
-const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, wantRotate, rotateDirection, piece, gameWidth) => {
+const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, wantRotate, rotateDirection, piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle) => {
     if (wantRotate == false) {
         let currPieceCoords = JSON.stringify(pieceCoords)
         sessionStorage.setItem('pieceCoords', currPieceCoords)
@@ -70,7 +70,7 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
 
         // console.log('Current Position:', pieceCoords)
         gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle)
     } else if (wantRotate == true) {
         // set current direction to rotate
         sessionStorage.setItem('pieceOrientation', rotateDirection)
@@ -85,12 +85,12 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
 
         // refresh and redraw after everything is updated
         gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
-        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords)
+        tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle)
 
     }
 }
 
-const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext) => {
+const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext, lineWidth, strokeStyle) => {
     /* 
     Moves tetrino based on pressed key
     gameBoardRefresh() needs to be called because without cleaning
@@ -104,40 +104,40 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
         for (let coord of currPieceCoords) {
             coord[0]--
         }
-        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false, 'none', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
 
     } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
         for (let coord of currPieceCoords) {
             coord[0]++
         }
-        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false, 'none', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
 
     } else if ((usrkey.key == 'ArrowLeft' || usrkey.key == 'a') && (moveCheckPosition('left', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
         for (let coord of currPieceCoords) {
             coord[1]--
         }
-        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false, 'none', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
 
     } else if ((usrkey.key == 'ArrowRight' || usrkey.key == 'd') && (moveCheckPosition('right', currPieceCoords, gameCoords, gameWidth, gameHeight) == true)) {
         for (let coord of currPieceCoords) {
             coord[1]++
         }
-        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false, 'none', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
 
     } else if (usrkey.key == 'r' || usrkey.key == 'R') {
         let pieceFacing = sessionStorage.getItem('pieceOrientation')
 
         if (pieceFacing == 'north' && rotateCheckPosition(piece, 'east', gameCoords, gameWidth) == true) {
-            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'east', piece, gameWidth)
+            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'east', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
 
         } else if (pieceFacing == 'east' && rotateCheckPosition(piece, 'south', gameCoords, gameWidth) == true) {
-            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'south', piece, gameWidth)
+            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'south', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
 
         } else if (pieceFacing == 'south' && rotateCheckPosition(piece, 'west', gameCoords, gameWidth) == true) {
-            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'west', piece, gameWidth)
+            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'west', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
 
         } else if (pieceFacing == 'west' && rotateCheckPosition(piece, 'north', gameCoords, gameWidth) == true) {
-            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'north', piece, gameWidth)
+            moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, true, 'north', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
         }
 
     } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == false)) {
@@ -149,7 +149,6 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
 
             currPosition.tileStatus = 'occupied'
             currPosition.tileColor = pieceColor
-            // console.log(currPosition.tileStatus)
         }
 
         rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth)
@@ -160,7 +159,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
     }
 };
 
-const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth, canvasName, canvasContext) => {
+const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth, canvasName, canvasContext, piece, lineWidth, strokeStyle) => {
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
     // currPieceCoords to get updated coordinates
 
@@ -168,7 +167,7 @@ const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidt
         for (let coord of currPieceCoords) {
             coord[0]++
         }
-        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false)
+        moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false, 'none', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
         // moveTetrinoProcess will update with currentCoordinates
 
     } else if (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == false) {

@@ -3,7 +3,7 @@ import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
 import { gameBoardRefresh } from "./game_handling.js";
 
 class TetrinoGame {
-    constructor(canvasName, canvasContext) {
+    constructor(canvasName, canvasContext, lineWidth, strokeStyle) {
         // Board could be customized here, insted of fixed values, it
         // would use values from constructor, for example:
         // newGame = TetrinoGame(10,20, 40) which would represent a board 10 tiles wide, 20 tiles
@@ -16,9 +16,10 @@ class TetrinoGame {
         this.pieceCoord = ''
         this.canvasName = canvasName
         this.canvasContext = canvasContext
+        this.lineWidth = lineWidth
+        this.strokeStyle = strokeStyle
     };
 
-    // Game setup
     gameBoardCreate(rowsize, colsize) {
 
         for (let column = 0; column < colsize; column++) {
@@ -75,7 +76,6 @@ class TetrinoGame {
         const sessionStorageValues = new Map([
             ['gameState', 'running'],
             ['currentPiece', ''],
-            ['pieceOrientation', ''],
             ['pieceColor', ''],
             ['pieceCoords', ''],
         ])
@@ -85,10 +85,8 @@ class TetrinoGame {
         }
     }
 
-    // Game Processing (Run, Cleaning, Checks)
-    pieceGeneratorManual(key) {
-
-        if (sessionStorage.getItem('currentPiece') == '') {
+    gameProcess(key, isManual) {
+        if (isManual && sessionStorage.getItem('currentPiece') == '') {
             let pieceData = tetrinoSpawn()
             let stringPiece = JSON.stringify(pieceData.coords)
 
@@ -96,27 +94,22 @@ class TetrinoGame {
             sessionStorage.setItem('currentPiece', pieceData.piece)
             sessionStorage.setItem('pieceColor', pieceData.color)
             sessionStorage.setItem('pieceOrientation', 'north')
-        }
 
-        moveTetrino(
-            key,
-            sessionStorage.getItem('currentPiece'),
-            // JSON.parse(sessionStorage.getItem('pieceCoords')),
-            sessionStorage.getItem('pieceColor'),
-            this.gameCoords,
-            this.width,
-            this.gamewidth,
-            this.gameheight,
-            sessionStorage.getItem('pieceOrientation'),
-            this.canvasName,
-            this.canvasContext,
-        )
-    }
-
-    pieceGeneratorAuto() {
-        let currPiece = sessionStorage.getItem('currentPiece')
-
-        if (currPiece == '') {
+        } else if (isManual && sessionStorage.getItem('currentPiece') != '') {
+            moveTetrino(
+                key,
+                sessionStorage.getItem('currentPiece'),
+                sessionStorage.getItem('pieceColor'),
+                this.gameCoords,
+                this.width,
+                this.gamewidth,
+                this.gameheight,
+                this.canvasName,
+                this.canvasContext,
+                this.lineWidth,
+                this.strokeStyle,
+            )
+        } else if (!isManual && sessionStorage.getItem('currentPiece') == '') {
             let pieceData = tetrinoSpawn()
             let stringPiece = JSON.stringify(pieceData.coords)
 
@@ -132,29 +125,30 @@ class TetrinoGame {
         // If it hits something (end of board or another piece), 
         // it will 'mark' current piece on the board and check for
         // score (aka, filled rows)
-        this.pieceGeneratorAuto()
+
+        this.gameProcess('null', false)
+
         let currPiece = sessionStorage.getItem('currentPiece')
-        let pieceOrientation = sessionStorage.getItem('pieceOrientation')
+
         let pieceColor = sessionStorage.getItem('pieceColor')
         let currPieceCoord = JSON.parse(sessionStorage.getItem('pieceCoords'))
 
-        tetrinoDraw(this.width, pieceColor, currPieceCoord, this.gameCoords, currPiece, pieceOrientation)
-
+        tetrinoDraw(this.width, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeStyle)
         await new Promise((resolve) => setTimeout(resolve, 1000))
-        moveTetrinoAuto(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width, this.canvasName, this.canvasContext)
+        moveTetrinoAuto(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width, this.canvasName, this.canvasContext, currPiece, this.lineWidth, this.strokeStyle)
         gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.width)
         this.gameRun()
     }
 
-    // Load "Runners"
+    // Load "Listeners"
     loadAllListeners() {
-        document.addEventListener('DOMContentLoaded', () => { this.gameLocalVarCreate() })
-        document.addEventListener('keydown', (key) => { this.pieceGeneratorManual(key) });
-        document.addEventListener('DOMContentLoaded', () => { this.gameRun() })
+        document.addEventListener('DOMContentLoaded', () => { this.gameLocalVarCreate() }, false)
+        document.addEventListener('keydown', (key) => { this.gameProcess(key, true) }, false);
+        document.addEventListener('DOMContentLoaded', () => { this.gameRun() }, false)
     };
 };
 
-let newGame = new TetrinoGame("gamecanvas", "2d")
+let newGame = new TetrinoGame("gamecanvas", "2d", 5, "grey")
 newGame.gameBoardCreate(10, 20)
 newGame.gameBoardFill()
 newGame.loadAllListeners()

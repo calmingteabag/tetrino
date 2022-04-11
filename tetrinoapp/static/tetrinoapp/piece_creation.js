@@ -40,19 +40,19 @@ const tetrinoSpawn = () => {
     return pieceCoord
 }
 
-const tetrinoBaseShape = (y, x, width, color, canvasName, getContextName) => {
+const tetrinoBaseShape = (yDraw, xDraw, width, color, canvasName, canvasContext, lineWidth, strokeStyle) => {
 
     const gameCanvas = document.getElementById(canvasName)
-    const gameContext = gameCanvas.getContext(getContextName)
+    const gameContext = gameCanvas.getContext(canvasContext)
 
     gameContext.fillStyle = color
-    gameContext.fillRect(y, x, width, width)
-    gameContext.lineWidth = 5
-    gameContext.strokeStyle = 'grey'
-    gameContext.strokeRect(y, x, width, width)
+    gameContext.fillRect(yDraw, xDraw, width, width)
+    gameContext.lineWidth = lineWidth
+    gameContext.strokeStyle = strokeStyle
+    gameContext.strokeRect(yDraw, xDraw, width, width)
 };
 
-const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords) => {
+const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle) => {
     // After generating a tetrino, it needs to be drawn on canvas.
     // It draws each 'square' of the tetrino separately by looping though 
     // its coordinates. Each coordinate is reference to a object's position
@@ -71,7 +71,7 @@ const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords) => {
         let xDraw = currObj.tileYinit
         let yDraw = currObj.tileXinit
 
-        tetrinoBaseShape(xDraw, yDraw, currWidth, pieceColor, "gamecanvas", "2d")
+        tetrinoBaseShape(xDraw, yDraw, currWidth, pieceColor, canvasName, canvasContext, lineWidth, strokeStyle)
         // console.log('Current Coordinates')
         // console.log(xCoord, yCoord, xDraw, yDraw)
     }
