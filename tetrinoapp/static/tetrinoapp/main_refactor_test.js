@@ -78,6 +78,7 @@ class TetrinoGame {
             ['currentPiece', ''],
             ['pieceColor', ''],
             ['pieceCoords', ''],
+            ['allowMove', 'true']
         ])
 
         for (let values of sessionStorageValues) {
@@ -86,7 +87,10 @@ class TetrinoGame {
     }
 
     gameProcess(key, isManual) {
-        if (isManual && sessionStorage.getItem('currentPiece') == '') {
+        let allowMoveStatus = sessionStorage.getItem('allowMove')
+
+        if ((isManual && sessionStorage.getItem('currentPiece') == '') &&
+            allowMoveStatus == 'true') {
             let pieceData = tetrinoSpawn()
             let stringPiece = JSON.stringify(pieceData.coords)
 
@@ -95,7 +99,9 @@ class TetrinoGame {
             sessionStorage.setItem('pieceColor', pieceData.color)
             sessionStorage.setItem('pieceOrientation', 'north')
 
-        } else if (isManual && sessionStorage.getItem('currentPiece') != '') {
+        } else if ((isManual && sessionStorage.getItem('currentPiece') != '') &&
+            allowMoveStatus == 'true') {
+            console.log('move is allowed')
             moveTetrino(
                 key,
                 sessionStorage.getItem('currentPiece'),
@@ -109,7 +115,8 @@ class TetrinoGame {
                 this.lineWidth,
                 this.strokeStyle,
             )
-        } else if (!isManual && sessionStorage.getItem('currentPiece') == '') {
+        } else if ((!isManual && sessionStorage.getItem('currentPiece') == '') && (allowMoveStatus == 'true')) {
+            console.log('move is allowed')
             let pieceData = tetrinoSpawn()
             let stringPiece = JSON.stringify(pieceData.coords)
 
@@ -117,6 +124,8 @@ class TetrinoGame {
             sessionStorage.setItem('currentPiece', pieceData.piece)
             sessionStorage.setItem('pieceColor', pieceData.color)
             sessionStorage.setItem('pieceOrientation', 'north')
+        } else {
+            console.log('movemnt locked, game processing')
         }
     }
 
@@ -127,18 +136,22 @@ class TetrinoGame {
         // score (aka, filled rows)
 
         this.gameProcess('null', false)
-
         let currPiece = sessionStorage.getItem('currentPiece')
-
         let pieceColor = sessionStorage.getItem('pieceColor')
         let currPieceCoord = JSON.parse(sessionStorage.getItem('pieceCoords'))
+        let gameRunStat = sessionStorage.getItem('allowMove')
 
-        tetrinoDraw(this.width, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeStyle)
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        moveTetrinoAuto(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width, this.canvasName, this.canvasContext, currPiece, this.lineWidth, this.strokeStyle)
-        gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.width)
-        this.gameRun()
+        if (gameRunStat == 'true') {
+            tetrinoDraw(this.width, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeStyle)
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+            moveTetrinoAuto(pieceColor, this.gameCoords, this.gamewidth, this.gameheight, this.width, this.canvasName, this.canvasContext, currPiece, this.lineWidth, this.strokeStyle)
+            gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.width)
+            this.gameRun()
+        } else {
+            console.log('WAIT')
+        }
     }
+
 
     // Load "Listeners"
     loadAllListeners() {

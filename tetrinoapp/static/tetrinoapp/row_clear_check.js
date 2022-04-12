@@ -50,6 +50,7 @@ const reloadBoard = (gameCoords, canvasName, canvasContext, tileWidth) => {
         }
     }
 }
+
 const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth) => {
     /* 
     It's our main function that is called after moveDownCheck returns false
@@ -59,7 +60,7 @@ const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth) => {
     a row reaches 10, it means the current row is full, so rowFillProcess is
     called to further process it.
     */
-
+    sessionStorage.setItem('allowMove', 'false')
     let cleanedRowCount = 0 // will be sent to future score function
 
     for (let row = 0; row < gameCoords.length; row++) {
@@ -79,8 +80,8 @@ const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth) => {
             reloadBoard(gameCoords, canvasName, canvasContext, tileWidth)
         }
     }
-    // calls score
-    gameScore(cleanedRowCount)
+    gameScore(cleanedRowCount, "game_score", "line_score")
+    sessionStorage.setItem('allowMove', 'true')
 }
 
 export { rowFillCheck }

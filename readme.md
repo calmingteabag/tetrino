@@ -97,3 +97,9 @@ Pulei alguns dias porque resolvi tentar mudar o programa, dividindo as coisas em
 ### Dia 23
 
 Finalmente consegui terminar toda funcionalidade do jogo. Pense num trampo. Mas está feito, e agora o jogo está lindo (está feio, mas lindo na parte de programação). Preciso agora terminar a parte de refatoração e arrumar alguns bugs chatos. No mais, nem acredito que cheguei até aqui...
+
+### Dia 29
+
+Após pausa de alguns dias, retomei os trabalhos e avancei bastante na parte de refatoração. O que me incomodava, além do fato de ter um programa de 600+ linhas em um arquivo só ser "indebugavel", era que eu passava o valor das variáveis direto nas funções/métodos ao invés de usar parametros quando se chama a função. O jogo funciona mas, por exemplo, se eu decido que preciso mudar o tamanho de algo, esse algo tem que ser mudado em todos os lugares, deixando o debug insanamente dificil.
+
+No mais, terminei a parte bruta da pontuação. Nada super complexo, só um sistema que conta a pontuação conforme as linhs são limpas e outro para contar quantas linhas são limpas.
