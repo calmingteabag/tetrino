@@ -19,13 +19,6 @@ const rowFillClear = (gameBoard, row) => {
 }
 
 const rowFillProcess = (gameCoords, filledRow) => {
-    /* 
-    Bugando se foi quem um dia só me fez codar
-    Bugando estará ao lembrar de um input
-    Quem um dia não soube testar
-
-    A reclamação vai estar com ident aonde for~~
-    */
     rowFillClear(gameCoords, filledRow)
 
     for (let row = filledRow - 1; row > 0; row--) {
@@ -51,7 +44,7 @@ const reloadBoard = (gameCoords, canvasName, canvasContext, tileWidth) => {
     }
 }
 
-const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth) => {
+const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth, gameWidth) => {
     /* 
     It's our main function that is called after moveDownCheck returns false
  
@@ -72,7 +65,7 @@ const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth) => {
             }
         }
 
-        if (rowFillCount == 10) {
+        if (rowFillCount == gameWidth) {
             cleanedRowCount++
             console.log(`gameScoreCheck: Current row ${row} is full`)
             console.log('sending it to rowFillProcess')

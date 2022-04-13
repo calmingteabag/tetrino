@@ -151,7 +151,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
             currPosition.tileColor = pieceColor
         }
 
-        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth)
+        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')
