@@ -80,7 +80,7 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
     }
 }
 
-const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext, lineWidth, strokeStyle) => {
+const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext, lineWidth, strokeStyle, scoreDOMId, lineDOMId, levelDOMId) => {
 
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
 
@@ -136,7 +136,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
             currPosition.tileColor = pieceColor
         }
 
-        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth)
+        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')
@@ -145,7 +145,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
     }
 };
 
-const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth, canvasName, canvasContext, piece, lineWidth, strokeStyle) => {
+const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth, canvasName, canvasContext, piece, lineWidth, strokeStyle, scoreDOMId, lineDOMId, levelDOMId) => {
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
 
     if (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == true) {
@@ -165,7 +165,7 @@ const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidt
             currPosition.tileColor = pieceColor
         }
 
-        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth)
+        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')

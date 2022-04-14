@@ -3,17 +3,19 @@ import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
 import { gameBoardRefresh, gameLocalVarCreate } from "./game_handling.js";
 
 class TetrinoGame {
-    constructor(canvasName, canvasContext, lineWidth, strokeStyle, tileWidth, gameHeight, gameWidth) {
+    constructor(canvasName, canvasContext, lineWidth, strokeColor, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId) {
 
         this.tileWidth = tileWidth;
         this.gameCoords = []; // board
         this.gameHeight = gameHeight; // board height
         this.gameWidth = gameWidth; // board width
-        this.pieceCoord = ''
         this.canvasName = canvasName
         this.canvasContext = canvasContext
         this.lineWidth = lineWidth
-        this.strokeStyle = strokeStyle
+        this.strokeColor = strokeColor
+        this.scoreDOMId = scoreDOMId
+        this.lineDOMId = lineDOMId
+        this.levelDOMId = levelDOMId
     };
 
     gameBoardCreate(rowsize, colsize) {
@@ -94,7 +96,10 @@ class TetrinoGame {
                 this.canvasName,
                 this.canvasContext,
                 this.lineWidth,
-                this.strokeStyle,
+                this.strokeColor,
+                this.scoreDOMId,
+                this.lineDOMId,
+                this.levelDOMId,
             )
         } else if ((!isManual && sessionStorage.getItem('currentPiece') == '') && (allowMoveStatus == 'true')) {
 
@@ -118,9 +123,23 @@ class TetrinoGame {
         let gameRunStat = sessionStorage.getItem('allowMove')
 
         if (gameRunStat == 'true') {
-            tetrinoDraw(this.tileWidth, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeStyle)
+            tetrinoDraw(this.tileWidth, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeColor)
             await new Promise((resolve) => setTimeout(resolve, 1000))
-            moveTetrinoAuto(pieceColor, this.gameCoords, this.gameWidth, this.gameHeight, this.tileWidth, this.canvasName, this.canvasContext, currPiece, this.lineWidth, this.strokeStyle)
+            moveTetrinoAuto(
+                pieceColor,
+                this.gameCoords,
+                this.gameWidth,
+                this.gameHeight,
+                this.tileWidth,
+                this.canvasName,
+                this.canvasContext,
+                currPiece,
+                this.lineWidth,
+                this.strokeColor,
+                this.scoreDOMId,
+                this.lineDOMId,
+                this.levelDOMId,
+            )
             gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.tileWidth)
             this.gameRun()
         }
@@ -133,7 +152,7 @@ class TetrinoGame {
     };
 };
 
-let newGame = new TetrinoGame("gamecanvas", "2d", 5, "grey", 40, 20, 10)
+let newGame = new TetrinoGame("gamecanvas", "2d", 5, "grey", 40, 20, 10, "game_score", "line_score", "game_level")
 newGame.gameBoardCreate(10, 20) // must match game width and height
 newGame.gameBoardFill()
 newGame.loadAllListeners()

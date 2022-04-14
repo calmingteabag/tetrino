@@ -40,7 +40,7 @@ const reloadBoard = (gameCoords, canvasName, canvasContext, tileWidth) => {
     }
 }
 
-const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth, gameWidth) => {
+const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId) => {
     /* 
     It's our main function that is called after moveDownCheck returns false
  
@@ -69,7 +69,7 @@ const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth, gameWidt
             reloadBoard(gameCoords, canvasName, canvasContext, tileWidth)
         }
     }
-    gameScore(cleanedRowCount, "game_score", "line_score", "game_level")
+    gameScore(cleanedRowCount, scoreDOMId, lineDOMId, levelDOMId)
 }
 
 export { rowFillCheck }
