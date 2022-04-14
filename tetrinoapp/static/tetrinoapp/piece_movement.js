@@ -1,13 +1,9 @@
 /* 
-This module is responsible for moving pieces horizontally or vertically. 
+This module is responsible for moving pieces horizontally or vertically and
+its checks for valid positions.
 
-It consists of four functions:
-
-- moveTetrino, main function, will move based on pressed 
-key (currently 'WASD' + R (rotate) and arrow keys)
-- moveChekPosition, checks if movement is valid
-- moveTetrinoAuto, to emulate original tetris's pieces 'falling'
-- moveTetrinoProcess, auxiliary function to declutter moveTetrino
+Everytime a piece wants to move down and encounters an invalid position an
+checking is done to see if any row was filled, so the game can score it
 */
 
 import { gameBoardRefresh } from "./game_handling.js"
@@ -16,8 +12,7 @@ import { rotateCheckPosition, rotateCoord } from "./piece_rotation.js"
 import { rowFillCheck } from "./row_clear_check.js";
 
 const moveCheckPosition = (moveDir, pieceCoords, gameCoords, gameWidth, gameHeight) => {
-    // Loops through each coordinate of a tetrino and check for
-    // collisions (end of board, occupied positions, etc)
+
     if (moveDir == 'down') {
         for (let coord = 0; coord < pieceCoords.length; coord++) {
             let xCoord = pieceCoords[coord][0]
@@ -63,26 +58,21 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
         let currPieceCoords = JSON.stringify(pieceCoords)
         sessionStorage.setItem('pieceCoords', currPieceCoords)
         // first thing it does is set sessionStorage to the last coordinate received. 
-        // For example, if it is called by moveTetrino, it is  after a loop ran
+        // For example, if it is called by moveTetrino, it is after a loop ran
         // through previous set of coordinates. This new set (After the loop) needs
         // to be updated on sessionStorage, or else pieces will keep moving to previous
         // positions after key presses.
 
-        // console.log('Current Position:', pieceCoords)
         gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
         tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle)
     } else if (wantRotate == true) {
         // set current direction to rotate
         sessionStorage.setItem('pieceOrientation', rotateDirection)
-
         // rotate piece
         rotateCoord(piece, rotateDirection, pieceCoords, gameWidth, false)
-
-
         // set new coords to storage
         let currPieceCoords = JSON.stringify(pieceCoords)
         sessionStorage.setItem('pieceCoords', currPieceCoords)
-
         // refresh and redraw after everything is updated
         gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
         tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle)
@@ -91,12 +81,6 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
 }
 
 const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext, lineWidth, strokeStyle) => {
-    /* 
-    Moves tetrino based on pressed key
-    gameBoardRefresh() needs to be called because without cleaning
-    the canvas, tetrinos will left a trail of positions it occupies 
-    while moving) 
-    */
 
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
 
@@ -142,6 +126,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
 
     } else if ((usrkey.key == 'ArrowDown' || usrkey.key == 's') && (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == false)) {
 
+        sessionStorage.setItem('allowMove', 'false')
         for (let coords of currPieceCoords) {
             let xCoord = coords[0]
             let yCoord = coords[1]
@@ -156,23 +141,22 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')
         sessionStorage.setItem('pieceOrientation', '')
+        sessionStorage.setItem('allowMove', 'true')
     }
 };
 
 const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidth, canvasName, canvasContext, piece, lineWidth, strokeStyle) => {
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
-    // currPieceCoords to get updated coordinates
 
     if (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == true) {
         for (let coord of currPieceCoords) {
             coord[0]++
         }
         moveTetrinoProcess(currPieceCoords, pieceColor, gameCoords, tileWidth, false, 'none', piece, gameWidth, canvasName, canvasContext, lineWidth, strokeStyle)
-        // moveTetrinoProcess will update with currentCoordinates
 
     } else if (moveCheckPosition('down', currPieceCoords, gameCoords, gameWidth, gameHeight) == false) {
-        // next tile (downwards) is occupied, mark currPieceCoordinate atribute (color) on gameCoords and set
-        // positions to 'occupied' so next pieces will see it as occupied too.
+
+        sessionStorage.setItem('allowMove', 'false')
         for (let coords of currPieceCoords) {
             let xCoord = coords[0]
             let yCoord = coords[1]
@@ -181,11 +165,12 @@ const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidt
             currPosition.tileColor = pieceColor
         }
 
-        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth)
+        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')
         sessionStorage.setItem('pieceOrientation', '')
+        sessionStorage.setItem('allowMove', 'true')
     }
 }
 

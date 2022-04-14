@@ -1,14 +1,10 @@
-import { tetrinoBaseShape } from "./piece_creation.js"
-import { gameScore } from "./game_score.js"
 /* 
 This module is responsible for the row cleaning that occurs
 when all tiles on a row is filled with tetrinos.
-
-It's still messy and I'm trying to figure out how to do it. Basic 
-idea is to call a main function on this module always after a piece 
-encounters an occupied tile below (so, after movedown check returns
-false)
 */
+
+import { tetrinoBaseShape } from "./piece_creation.js"
+import { gameScore } from "./game_score.js"
 
 const rowFillClear = (gameBoard, row) => {
 
@@ -48,33 +44,32 @@ const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth, gameWidt
     /* 
     It's our main function that is called after moveDownCheck returns false
  
-    It will iterate backwards (from bottom to top) and will count each tile
+    It will iterate gameCoords and will count each tile
     marked as 'occupied' on a row to increment a counter. If this counter on
     a row reaches 10, it means the current row is full, so rowFillProcess is
     called to further process it.
     */
-    sessionStorage.setItem('allowMove', 'false')
-    let cleanedRowCount = 0 // will be sent to future score function
+
+    let cleanedRowCount = 0
 
     for (let row = 0; row < gameCoords.length; row++) {
         let rowFillCount = 0
 
         for (let element = 0; element < gameCoords[row].length; element++) {
             if (gameCoords[row][element].tileStatus == 'occupied') {
-                rowFillCount++
+                rowFillCount += 1
             }
         }
 
         if (rowFillCount == gameWidth) {
-            cleanedRowCount++
+            cleanedRowCount += 1
             console.log(`gameScoreCheck: Current row ${row} is full`)
             console.log('sending it to rowFillProcess')
             rowFillProcess(gameCoords, row)
             reloadBoard(gameCoords, canvasName, canvasContext, tileWidth)
         }
     }
-    gameScore(cleanedRowCount, "game_score", "line_score")
-    sessionStorage.setItem('allowMove', 'true')
+    gameScore(cleanedRowCount, "game_score", "line_score", "game_level")
 }
 
 export { rowFillCheck }

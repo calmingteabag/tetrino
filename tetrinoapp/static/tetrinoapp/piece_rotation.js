@@ -2,22 +2,17 @@
 This module is responsible for rotating pieces.
 
 Rotation is done by applying a set of "transformation" coordinates to the
-current piece's coordinates based on which direction it will face. There is a 
-function elsewhere that refreshes the board after each movement (mainly to avoid 
-pieces leaving trails on board) and by the time it is called, spwned piece will 
-be drawm as if it has 'rotated'.
+current piece's coordinates based on which direction it will face. Before
+allowing full rotation, game checks if rotation position is valid (by 
+appliing transformation coordinates on a copy of current piece's coordi
+nates)
 
-Functions:
-
-rotateCoord is our main function for this module
-rotateCheckPosition will check if rotation ended in valid positions
+It excludes square tetrino for obvious reasons.
 */
 
 import { shiftPosition } from "./piece_shift.js"
 
 const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
-    // rotate pieces based on transformation coordinates
-    // excludes the 'square' tetrino for obvious reasons
 
     const rotateCoords = {
         "shapeS": {
@@ -48,7 +43,6 @@ const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
 
     if (piece != 'shapeSqr' && reverse == false) {
         let rotateDirection = rotateCoords[`${piece}`][`${direction}`]
-        // console.log(rotateDirection)
 
         for (let coord = 0; coord < rotateDirection.length; coord++) {
             pieceCoords[coord][0] += rotateDirection[coord][0]
@@ -76,63 +70,45 @@ const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
 const rotateCheckPosition = (piece, direction, gameCoords, gameWidth) => {
     if (piece != 'shapeSqr') {
         /*  
-        First, to check if rotation position is valid, we need to apply rotation
-        coordinates to current piece. Maybe we should make a copy of pieceCoords
-        instead of applying it on the actual piece coordinates.
-         
-        After appling rotation coordinates, a loop is ran to check if 
-        any piece lands on an invalid position. This is where I think I 
-        messed up.
+        Checking for valid rotation in tetris is a bit more complicated 
+        than it looks like (from my limited perspective of course)
 
-        Just to remember, our call stack goes as follows:
+        Game needs to do two checks for each piece: If it lands on an
+        'occupied' block (valid spaces) and/or out of bounds (clipping the
+        board). The order of those operations matter a lot because it can
+        raise errors depeding on the approach.
 
-        > User presses 'r' key
-        > rotateCheckPosition is called first
-        > if passes, processMove is called
-        > processMove calls rotateCoord to execute movement
-
-        rotateCheckPosition needs to do all the checks before allowing 
-        rotation. We have two approaches, check for occupancy first then
-        for clipping or clipping first.
-
-        If we go for occupancy first we run into an issue of a piece block
-        landing out of our board making our loop break since, for example,
-        our piece coordinates will pass a '-1' coordinate to our game board
-        and our board range starts from 0.
-
-        So we have to go for clipping instead
+        Basically we can either (after "rotating") a piece, go for occupancy
+        checks first or clipping first. IF we go for occupancy first (rememenber
+        we just rotated it, we didn't shift yet) some coordinates will end with 
+        invalid (negative) values, raising errors. Those happens because we are 
+        using coordinates to return objects on specific positions in a 2x2 array
+        and in this case, negative values return error because there is no object.
+   
+        So, we check for clipping first, do the shifting and THEN check for
+        valid spaces, to avoid errors.
         */
 
         let checkCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
-        // console.log(`Original coords: ${checkCoords}`)
         rotateCoord(piece, direction, checkCoords, gameWidth, false)
-        // console.log(`Coords after rotation ${checkCoords}`)
 
         for (let clippingCoords of checkCoords) {
-            // clipping check
 
             if (clippingCoords[1] < 0) {
                 // clipping left wall
                 shiftPosition(checkCoords, 1, 'left', false)
-                // console.log(`Coords after shift ${checkCoords}`)
                 break
 
             } else if (clippingCoords[1] > (gameWidth - 1)) {
                 // clipping right wall
                 shiftPosition(checkCoords, 1, 'right', false)
-                // console.log(`Coords after shift ${checkCoords}`)
                 break
             }
         }
 
-        // console.log(`Coords after rotation and shift ${checkCoords}`)
-
-
         for (let newCoord of checkCoords) {
             let rowCoord = newCoord[0]
             let columnCoord = newCoord[1]
-            // console.log(rowCoord, columnCoord)
-            // console.log(gameCoords[rowCoord][columnCoord])
 
             if (gameCoords[rowCoord][columnCoord].tileStatus == 'occupied') {
                 return false

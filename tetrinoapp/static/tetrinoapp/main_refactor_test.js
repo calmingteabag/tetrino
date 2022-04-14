@@ -1,6 +1,6 @@
 import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
 import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
-import { gameBoardRefresh } from "./game_handling.js";
+import { gameBoardRefresh, gameLocalVarCreate } from "./game_handling.js";
 
 class TetrinoGame {
     constructor(canvasName, canvasContext, lineWidth, strokeStyle, tileWidth, gameHeight, gameWidth) {
@@ -35,14 +35,10 @@ class TetrinoGame {
 
     gameBoardFill() {
         /*
-        Fills Board with objects containing coordinates for drawing and an occupied/free flag for each
-        coordinate.
- 
-        Why yTileValue = -40:
- 
-        Rows are updated on inner loop and their indexes are reset when game changes columns. Since the very 
-        first run already sets yTileValue to +40, making our first set of coordinates wrong (all y coords will 
-        start at 40 insted of 0) I offset initial value to compensate.
+        Why yTileValue = -this.tileWidth
+
+        Second loop starts by incrementing row values. Since values (on canvas) starts from
+        0, -this.tileWidth ensures the first loop returns 0, not tileWidth value
         */
 
         let columnTileValue = 0
@@ -62,25 +58,20 @@ class TetrinoGame {
         }
     }
 
-    gameLocalVarCreate() {
-        const sessionStorageValues = new Map([
-            ['gameState', 'running'],
-            ['currentPiece', ''],
-            ['pieceColor', ''],
-            ['pieceCoords', ''],
-            ['allowMove', 'true']
-        ])
-
-        for (let values of sessionStorageValues) {
-            sessionStorage.setItem(values[0], values[1])
-        }
-    }
-
     gameProcess(key, isManual) {
+        /*
+        Needed to set a flag (allowMoveStatus) to stop game from
+        calling gameProcess while scores/line cleaning is being
+        processed when user holds keydown.
+
+        This happens because the event listener for key press is
+        separated from the rest of the game.
+        */
         let allowMoveStatus = sessionStorage.getItem('allowMove')
 
         if ((isManual && sessionStorage.getItem('currentPiece') == '') &&
             allowMoveStatus == 'true') {
+
             let pieceData = tetrinoSpawn()
             let stringPiece = JSON.stringify(pieceData.coords)
 
@@ -91,7 +82,7 @@ class TetrinoGame {
 
         } else if ((isManual && sessionStorage.getItem('currentPiece') != '') &&
             allowMoveStatus == 'true') {
-            console.log('move is allowed')
+
             moveTetrino(
                 key,
                 sessionStorage.getItem('currentPiece'),
@@ -106,7 +97,7 @@ class TetrinoGame {
                 this.strokeStyle,
             )
         } else if ((!isManual && sessionStorage.getItem('currentPiece') == '') && (allowMoveStatus == 'true')) {
-            console.log('move is allowed')
+
             let pieceData = tetrinoSpawn()
             let stringPiece = JSON.stringify(pieceData.coords)
 
@@ -115,7 +106,7 @@ class TetrinoGame {
             sessionStorage.setItem('pieceColor', pieceData.color)
             sessionStorage.setItem('pieceOrientation', 'north')
         } else {
-            console.log('movemnt locked, game processing')
+            console.log('Movement locked, game processing')
         }
     }
 
@@ -132,19 +123,17 @@ class TetrinoGame {
             moveTetrinoAuto(pieceColor, this.gameCoords, this.gameWidth, this.gameHeight, this.tileWidth, this.canvasName, this.canvasContext, currPiece, this.lineWidth, this.strokeStyle)
             gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.tileWidth)
             this.gameRun()
-        } else {
-            console.log('WAIT')
         }
     }
 
     loadAllListeners() {
-        document.addEventListener('DOMContentLoaded', () => { this.gameLocalVarCreate() }, false)
+        document.addEventListener('DOMContentLoaded', () => { gameLocalVarCreate() }, false)
         document.addEventListener('keydown', (key) => { this.gameProcess(key, true) }, false);
         document.addEventListener('DOMContentLoaded', () => { this.gameRun() }, false)
     };
 };
 
-let newGame = new TetrinoGame("gamecanvas", "2d", 5, "red", 40, 20, 10)
+let newGame = new TetrinoGame("gamecanvas", "2d", 5, "grey", 40, 20, 10)
 newGame.gameBoardCreate(10, 20) // must match game width and height
 newGame.gameBoardFill()
 newGame.loadAllListeners()

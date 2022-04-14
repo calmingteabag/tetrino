@@ -7,18 +7,9 @@ are given to the piece, each representing a position on the game
 array. Based on those coordinates, a function is called to draw an square
 (tile) on each of those coordinates, so we have an illusion of a single
 tetrino being drawn.
-
-Functions:
-
-- tetrinoSpawn, generates the 'logic' tetrinos
-- tetrinoBaseShape, have instructions for a single 'tile'
-- tetrinoDraw, will use tetrinoSpawn coordinates and tetrinoBaseShape to
-create the full tetrino on canvas
-
 */
 
 const tetrinoSpawn = () => {
-    // Randomly generates a tetrino
     const pieceChoice = {
         'shapeSqr': [[[3, 3], [4, 3], [3, 4], [4, 4]], 'yellow'],
         'shapeS': [[[3, 3], [4, 3], [4, 4], [5, 4]], 'green'],
@@ -31,7 +22,6 @@ const tetrinoSpawn = () => {
     let num = Math.floor(percent * (Math.floor(4) - Math.ceil(0) + 1))
 
     let pieceCoord = {
-        // change [1] for [num] to enable random generation
         piece: Object.keys(pieceChoice)[num],
         coords: Object.values(pieceChoice)[num][0],
         color: Object.values(pieceChoice)[num][1]
@@ -72,8 +62,6 @@ const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords, canvasName, can
         let yDraw = currObj.tileXinit
 
         tetrinoBaseShape(xDraw, yDraw, currWidth, pieceColor, canvasName, canvasContext, lineWidth, strokeStyle)
-        // console.log('Current Coordinates')
-        // console.log(xCoord, yCoord, xDraw, yDraw)
     }
 }
 

@@ -5,7 +5,7 @@ for example.
 
 What it does is shift piece position by "space" number of tiles
 to the left or right to keep it in our board.
- 
+
 */
 
 const shiftPosition = (coords, space, position, reverse) => {
