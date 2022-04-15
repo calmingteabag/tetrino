@@ -39,13 +39,14 @@ const tetrinoBaseShape = (yDraw, xDraw, width, color, canvasName, canvasContext,
     const gameCanvas = document.getElementById(canvasName)
     const gameContext = gameCanvas.getContext(canvasContext)
 
+    console.log(color)
+
     let pieceColorConverter = {
         currRedColor: Number(color.split(',')[0]),
         currGreenColor: Number(color.split(',')[1]),
         currBlueColor: Number(color.split(',')[2]),
     }
 
-    console.log(color.split(',')[0])
     console.log(pieceColorConverter.currRedColor)
 
     const styleConverter = {

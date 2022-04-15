@@ -121,7 +121,7 @@ class TetrinoGame {
         let pieceColor = sessionStorage.getItem('pieceColor')
         let currPieceCoord = JSON.parse(sessionStorage.getItem('pieceCoords'))
         let gameRunStat = sessionStorage.getItem('allowMove')
-        console.log(pieceColor)
+
 
         if (gameRunStat == 'true') {
             tetrinoDraw(this.tileWidth, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeColor)
