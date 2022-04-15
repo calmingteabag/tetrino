@@ -63,18 +63,17 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
         // to be updated on sessionStorage, or else pieces will keep moving to previous
         // positions after key presses.
 
-        gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
+        gameBoardRefresh(canvasName, canvasContext, gameCoords, tileWidth)
         tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle)
     } else if (wantRotate == true) {
-        // set current direction to rotate
+
         sessionStorage.setItem('pieceOrientation', rotateDirection)
-        // rotate piece
+
         rotateCoord(piece, rotateDirection, pieceCoords, gameWidth, false)
-        // set new coords to storage
         let currPieceCoords = JSON.stringify(pieceCoords)
         sessionStorage.setItem('pieceCoords', currPieceCoords)
-        // refresh and redraw after everything is updated
-        gameBoardRefresh("gamecanvas", "2d", gameCoords, tileWidth)
+
+        gameBoardRefresh(canvasName, canvasContext, gameCoords, tileWidth)
         tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle)
 
     }

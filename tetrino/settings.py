@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import mimetypes
 from pathlib import Path
 import os
 
@@ -147,6 +148,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CELERY_TASK_TRACK_STARTED = True
 
-if DEBUG:
-    import mimetypes
-    mimetypes.add_type("application/javascript", ".js")
+mimetypes.add_type("application/javascript", ".js")

@@ -9,13 +9,14 @@ array. Based on those coordinates, a function is called to draw an square
 tetrino being drawn.
 */
 
-const tetrinoSpawn = () => {
-    const pieceChoice = {
-        'shapeSqr': [[[3, 3], [4, 3], [3, 4], [4, 4]], 'yellow'],
-        'shapeS': [[[3, 3], [4, 3], [4, 4], [5, 4]], 'green'],
-        'shapeI': [[[3, 3], [4, 3], [5, 3], [6, 3]], 'red'],
-        'shapeL': [[[3, 3], [4, 3], [5, 3], [5, 4]], 'orange'],
-        'shapeCross': [[[3, 4], [4, 3], [4, 4], [4, 5]], 'purple'],
+const tetrinoSpawn = (pieceRGBColors) => {
+
+    let pieceChoice = {
+        'shapeSqr': [[[3, 3], [4, 3], [3, 4], [4, 4]], pieceRGBColors.shapeSqr],
+        'shapeS': [[[3, 3], [4, 3], [4, 4], [5, 4]], pieceRGBColors.shapeS],
+        'shapeI': [[[3, 3], [4, 3], [5, 3], [6, 3]], pieceRGBColors.shapeI],
+        'shapeL': [[[3, 3], [4, 3], [5, 3], [5, 4]], pieceRGBColors.shapeL],
+        'shapeCross': [[[3, 4], [4, 3], [4, 4], [4, 5]], pieceRGBColors.shapeCross],
     }
 
     let percent = Math.random();
@@ -27,6 +28,9 @@ const tetrinoSpawn = () => {
         color: Object.values(pieceChoice)[num][1]
     }
 
+    console.log("tetrinoSpawn")
+    console.log(pieceCoord.color)
+
     return pieceCoord
 }
 
@@ -35,14 +39,31 @@ const tetrinoBaseShape = (yDraw, xDraw, width, color, canvasName, canvasContext,
     const gameCanvas = document.getElementById(canvasName)
     const gameContext = gameCanvas.getContext(canvasContext)
 
-    gameContext.fillStyle = color
+    let pieceColorConverter = {
+        currRedColor: Number(color.split(',')[0]),
+        currGreenColor: Number(color.split(',')[1]),
+        currBlueColor: Number(color.split(',')[2]),
+    }
+
+    console.log(color.split(',')[0])
+    console.log(pieceColorConverter.currRedColor)
+
+    const styleConverter = {
+        redValue: Number(strokeStyle.split(',')[0]),
+        greenValue: Number(strokeStyle.split(',')[1]),
+        blueValue: Number(strokeStyle.split(',')[2]),
+    }
+
+    // gameContext.fillStyle = color
+    gameContext.fillStyle = `rgb(${pieceColorConverter.currRedColor}, ${pieceColorConverter.currGreenColor}, ${pieceColorConverter.currBlueColor})`
     gameContext.fillRect(yDraw, xDraw, width, width)
     gameContext.lineWidth = lineWidth
-    gameContext.strokeStyle = strokeStyle
+    // gameContext.strokeStyle = strokeStyle
+    gameContext.strokeStyle = `rgb(${styleConverter.redValue}, ${styleConverter.greenValue}, ${styleConverter.blueValue})`
     gameContext.strokeRect(yDraw, xDraw, width, width)
 };
 
-const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle) => {
+const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle, pieceRGBColors) => {
     // After generating a tetrino, it needs to be drawn on canvas.
     // It draws each 'square' of the tetrino separately by looping though 
     // its coordinates. Each coordinate is reference to a object's position
