@@ -2,29 +2,40 @@ const getRandNum = () => {
     return Math.floor(Math.random() * (Math.floor(254) - Math.ceil(0) + 1))
 }
 
-const pieceStyling = (useRandom) => {
+const pieceFillStyling = (useRandom) => {
     // should return something
     if (useRandom) {
-        let styling = {
+        let pieceStyling = {
             shapeSqr: `${getRandNum()},${getRandNum()},${getRandNum()}`,
             shapeS: `${getRandNum()},${getRandNum()},${getRandNum()}`,
             shapeI: `${getRandNum()},${getRandNum()},${getRandNum()}`,
             shapeL: `${getRandNum()},${getRandNum()},${getRandNum()}`,
             shapeCross: `${getRandNum()},${getRandNum()},${getRandNum()}`
         }
-        return styling
+        return pieceStyling
 
     } else {
-        let styling = {
-            shapeSqr: `${getRandNum()},${getRandNum()},${getRandNum()}`,
-            shapeS: `${getRandNum()},${getRandNum()},${getRandNum()}`,
-            shapeI: `${getRandNum()},${getRandNum()},${getRandNum()}`,
-            shapeL: `${getRandNum()},${getRandNum()},${getRandNum()}`,
-            shapeCross: `${getRandNum()},${getRandNum()},${getRandNum()}`
+        let pieceStyling = {
+            shapeSqr: '255,191,8',
+            shapeS: '0,255,0',
+            shapeI: '255,0,0',
+            shapeL: '255,90,16',
+            shapeCross: '149,0,255'
         }
-        return styling
+        return pieceStyling
     }
-
 }
 
-export { pieceStyling }
+const pieceColorStyling = (useRandom) => {
+    if (useRandom) {
+        let fillStyle = `${getRandNum()},${getRandNum()},${getRandNum()}`
+        return fillStyle
+
+    } else {
+        let fillStyle = '156,251,255'
+        return fillStyle
+    }
+}
+
+
+export { pieceFillStyling, pieceColorStyling }

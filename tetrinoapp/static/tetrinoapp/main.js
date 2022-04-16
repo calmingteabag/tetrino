@@ -1,4 +1,4 @@
-import { pieceStyling } from "./game_styling.js";
+import { pieceFillStyling, pieceColorStyling } from "./game_styling.js";
 import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
 import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
 import { gameBoardRefresh, gameLocalVarCreate } from "./game_handling.js";
@@ -17,7 +17,7 @@ class TetrinoGame {
         this.scoreDOMId = scoreDOMId
         this.lineDOMId = lineDOMId
         this.levelDOMId = levelDOMId
-        this.piecesRGBColors = pieceStyling()
+        this.piecesRGBColors = pieceFillStyling()
         // this.test = pieceStyling()
     };
 
@@ -158,8 +158,7 @@ class TetrinoGame {
     };
 };
 
-let newGame = new TetrinoGame("gamecanvas", "2d", 5, "15,82,75", 40, 20, 10, "game_score", "line_score", "game_level", pieceStyling(true))
-// canvasName, canvasContext, lineWidth, strokeColor, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId, piecesRGBColors
+let newGame = new TetrinoGame("gamecanvas", "2d", 5, pieceColorStyling(false), 40, 20, 10, "game_score", "line_score", "game_level", pieceFillStyling(false))
 
 newGame.gameBoardCreate(10, 20) // must match game width and height
 newGame.gameBoardFill()
