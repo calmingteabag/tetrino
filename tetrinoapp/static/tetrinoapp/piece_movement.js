@@ -135,7 +135,7 @@ const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth
             currPosition.tileColor = pieceColor
         }
 
-        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId)
+        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId, lineWidth, strokeStyle)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')
@@ -164,7 +164,7 @@ const moveTetrinoAuto = (pieceColor, gameCoords, gameWidth, gameHeight, tileWidt
             currPosition.tileColor = pieceColor
         }
 
-        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId)
+        rowFillCheck(gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId, lineWidth, strokeStyle)
         currPieceCoords = ''
         sessionStorage.setItem('currentPiece', '')
         sessionStorage.setItem('pieceColor', '')

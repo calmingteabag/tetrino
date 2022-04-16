@@ -27,20 +27,21 @@ const rowFillProcess = (gameCoords, filledRow) => {
     }
 }
 
-const reloadBoard = (gameCoords, canvasName, canvasContext, tileWidth) => {
+const reloadBoard = (gameCoords, canvasName, canvasContext, tileWidth, lineWidth, strokeStyle) => {
     for (let row = 0; row < gameCoords.length; row++) {
         for (let element = 0; element < gameCoords[row].length; element++) {
             if (gameCoords[row][element].tileStatus == 'occupied') {
                 let xDraw = gameCoords[row][element].tileYinit
                 let yDraw = gameCoords[row][element].tileXinit
                 let color = gameCoords[row][element].tileColor
-                tetrinoBaseShape(xDraw, yDraw, tileWidth, color, canvasName, canvasContext)
+                tetrinoBaseShape(xDraw, yDraw, tileWidth, color, canvasName, canvasContext, lineWidth, strokeStyle)
+                //yDraw, xDraw, width, color, canvasName, canvasContext, lineWidth, strokeStyle
             }
         }
     }
 }
 
-const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId) => {
+const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth, gameWidth, scoreDOMId, lineDOMId, levelDOMId, lineWidth, strokeStyle) => {
     /* 
     It's our main function that is called after moveDownCheck returns false
  
@@ -63,10 +64,8 @@ const rowFillCheck = (gameCoords, canvasName, canvasContext, tileWidth, gameWidt
 
         if (rowFillCount == gameWidth) {
             cleanedRowCount += 1
-            console.log(`gameScoreCheck: Current row ${row} is full`)
-            console.log('sending it to rowFillProcess')
             rowFillProcess(gameCoords, row)
-            reloadBoard(gameCoords, canvasName, canvasContext, tileWidth)
+            reloadBoard(gameCoords, canvasName, canvasContext, tileWidth, lineWidth, strokeStyle)
         }
     }
     gameScore(cleanedRowCount, scoreDOMId, lineDOMId, levelDOMId)

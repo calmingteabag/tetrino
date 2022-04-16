@@ -64,7 +64,7 @@ const tetrinoBaseShape = (yDraw, xDraw, width, color, canvasName, canvasContext,
     gameContext.strokeRect(yDraw, xDraw, width, width)
 };
 
-const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle, pieceRGBColors) => {
+const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle) => {
     // After generating a tetrino, it needs to be drawn on canvas.
     // It draws each 'square' of the tetrino separately by looping though 
     // its coordinates. Each coordinate is reference to a object's position

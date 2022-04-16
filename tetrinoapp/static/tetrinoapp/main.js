@@ -1,3 +1,4 @@
+import { pieceStyling } from "./game_styling.js";
 import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
 import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
 import { gameBoardRefresh, gameLocalVarCreate } from "./game_handling.js";
@@ -16,10 +17,12 @@ class TetrinoGame {
         this.scoreDOMId = scoreDOMId
         this.lineDOMId = lineDOMId
         this.levelDOMId = levelDOMId
-        this.piecesRGBColors = piecesRGBColors
+        this.piecesRGBColors = pieceStyling()
+        // this.test = pieceStyling()
     };
 
     gameBoardCreate(rowsize, colsize) {
+        console.log(this.test)
 
         for (let column = 0; column < colsize; column++) {
             this.gameCoords.push([])
@@ -101,6 +104,7 @@ class TetrinoGame {
                 this.scoreDOMId,
                 this.lineDOMId,
                 this.levelDOMId,
+                this.piecesRGBColors,
             )
         } else if ((!isManual && sessionStorage.getItem('currentPiece') == '') && (allowMoveStatus == 'true')) {
 
@@ -140,6 +144,7 @@ class TetrinoGame {
                 this.scoreDOMId,
                 this.lineDOMId,
                 this.levelDOMId,
+                this.piecesRGBColors,
             )
             gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.tileWidth)
             this.gameRun()
@@ -153,16 +158,9 @@ class TetrinoGame {
     };
 };
 
-let pieceColors = {
-    shapeSqr: '23,123,144',
-    shapeS: '126,22,10',
-    shapeI: '244,112,98',
-    shapeL: '12,234,44',
-    shapeCross: '98,244,11',
-}
+let newGame = new TetrinoGame("gamecanvas", "2d", 5, "15,82,75", 40, 20, 10, "game_score", "line_score", "game_level", pieceStyling(true))
+// canvasName, canvasContext, lineWidth, strokeColor, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId, piecesRGBColors
 
-let newGame = new TetrinoGame("gamecanvas", "2d", 5, "15,82,75", 40, 20, 10, "game_score", "line_score", "game_level", pieceColors)
-// "254,125,125" as in red green blue
 newGame.gameBoardCreate(10, 20) // must match game width and height
 newGame.gameBoardFill()
 newGame.loadAllListeners()
