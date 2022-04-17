@@ -151,14 +151,16 @@ class TetrinoGame {
         }
     }
 
+
+
     loadAllListeners() {
         document.addEventListener('DOMContentLoaded', () => { gameLocalVarCreate() }, false)
-        document.addEventListener('keydown', (key) => { this.gameProcess(key, true) }, false);
+        document.addEventListener('keydown', (key) => { this.gameProcess(key, true) }, false)
         document.addEventListener('DOMContentLoaded', () => { this.gameRun() }, false)
     };
 };
 
-let newGame = new TetrinoGame("gamecanvas", "2d", 5, pieceColorStyling(false), 40, 20, 10, "game_score", "line_score", "game_level", pieceFillStyling(false))
+let newGame = new TetrinoGame("gamecanvas", "2d", 4, pieceColorStyling(false), 40, 20, 10, "game_score", "line_score", "game_level", pieceFillStyling(false))
 
 newGame.gameBoardCreate(10, 20) // must match game width and height
 newGame.gameBoardFill()

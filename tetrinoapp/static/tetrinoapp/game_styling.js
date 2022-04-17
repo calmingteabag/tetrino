@@ -32,7 +32,7 @@ const pieceColorStyling = (useRandom) => {
         return fillStyle
 
     } else {
-        let fillStyle = '156,251,255'
+        let fillStyle = '4,114,209'
         return fillStyle
     }
 }

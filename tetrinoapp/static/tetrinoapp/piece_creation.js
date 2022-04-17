@@ -57,11 +57,11 @@ const tetrinoBaseShape = (yDraw, xDraw, width, color, canvasName, canvasContext,
 
     // gameContext.fillStyle = color
     gameContext.fillStyle = `rgb(${pieceColorConverter.currRedColor}, ${pieceColorConverter.currGreenColor}, ${pieceColorConverter.currBlueColor})`
-    gameContext.fillRect(yDraw, xDraw, width, width)
+    gameContext.fillRect(yDraw + 2, xDraw + 2, width - 4, width - 4)
     gameContext.lineWidth = lineWidth
     // gameContext.strokeStyle = strokeStyle
     gameContext.strokeStyle = `rgb(${styleConverter.redValue}, ${styleConverter.greenValue}, ${styleConverter.blueValue})`
-    gameContext.strokeRect(yDraw, xDraw, width, width)
+    gameContext.strokeRect(yDraw + 4, xDraw + 4, width - 8, width - 8)
 };
 
 const tetrinoDraw = (width, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle) => {
