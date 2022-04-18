@@ -98,9 +98,6 @@ const gameParamProcess = (usrkey, isManual, gameCoords, tileWidth, gameWidth, ga
 
     } else if ((!isManual && sessionStorage.getItem('currentPiece') != '') && (allowMoveStatus == 'true')) {
 
-
-        // moveTetrinoAuto parameter order:
-        // pieceColor, gameCoords, gameWidth, gameHeight, tileWidth, canvasName, canvasContext, piece, lineWidth, strokeStyle, scoreDOMId, lineDOMId, levelDOMId
         moveTetrinoAuto(
             sessionStorage.getItem('pieceColor'),
             gameCoords,
