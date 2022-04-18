@@ -1,9 +1,13 @@
+/* 
+Module responsible for setting piece styling
+*/
+
 const getRandNum = () => {
     return Math.floor(Math.random() * (Math.floor(254) - Math.ceil(0) + 1))
 }
 
 const pieceFillStyling = (useRandom) => {
-    // should return something
+
     if (useRandom) {
         let pieceStyling = {
             shapeSqr: `${getRandNum()},${getRandNum()},${getRandNum()}`,

@@ -27,10 +27,6 @@ const tetrinoSpawn = (pieceRGBColors) => {
         coords: Object.values(pieceChoice)[num][0],
         color: Object.values(pieceChoice)[num][1]
     }
-
-    console.log("tetrinoSpawn")
-    console.log(pieceCoord.color)
-
     return pieceCoord
 }
 
@@ -39,15 +35,11 @@ const tetrinoBaseShape = (yDraw, xDraw, width, color, canvasName, canvasContext,
     const gameCanvas = document.getElementById(canvasName)
     const gameContext = gameCanvas.getContext(canvasContext)
 
-    console.log(color)
-
     let pieceColorConverter = {
         currRedColor: Number(color.split(',')[0]),
         currGreenColor: Number(color.split(',')[1]),
         currBlueColor: Number(color.split(',')[2]),
     }
-
-    console.log(pieceColorConverter.currRedColor)
 
     const styleConverter = {
         redValue: Number(strokeStyle.split(',')[0]),
@@ -55,11 +47,9 @@ const tetrinoBaseShape = (yDraw, xDraw, width, color, canvasName, canvasContext,
         blueValue: Number(strokeStyle.split(',')[2]),
     }
 
-    // gameContext.fillStyle = color
     gameContext.fillStyle = `rgb(${pieceColorConverter.currRedColor}, ${pieceColorConverter.currGreenColor}, ${pieceColorConverter.currBlueColor})`
     gameContext.fillRect(yDraw + 2, xDraw + 2, width - 4, width - 4)
     gameContext.lineWidth = lineWidth
-    // gameContext.strokeStyle = strokeStyle
     gameContext.strokeStyle = `rgb(${styleConverter.redValue}, ${styleConverter.greenValue}, ${styleConverter.blueValue})`
     gameContext.strokeRect(yDraw + 4, xDraw + 4, width - 8, width - 8)
 };

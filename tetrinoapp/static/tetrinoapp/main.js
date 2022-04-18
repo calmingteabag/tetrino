@@ -1,10 +1,9 @@
 import { pieceFillStyling, pieceColorStyling } from "./game_styling.js";
-import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
-import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
-import { gameBoardRefresh, gameLocalVarCreate } from "./game_handling.js";
+import { tetrinoDraw } from "./piece_creation.js";
+import { gameBoardRefresh, gameLocalVarCreate, gameParamProcess } from "./game_handling.js";
 
 class TetrinoGame {
-    constructor(canvasName, canvasContext, lineWidth, strokeColor, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId, piecesRGBColors) {
+    constructor(canvasName, canvasContext, lineWidth, strokeStyle, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId) {
 
         this.tileWidth = tileWidth;
         this.gameCoords = []; // board
@@ -13,16 +12,14 @@ class TetrinoGame {
         this.canvasName = canvasName
         this.canvasContext = canvasContext
         this.lineWidth = lineWidth
-        this.strokeColor = strokeColor
+        this.strokeStyle = strokeStyle
         this.scoreDOMId = scoreDOMId
         this.lineDOMId = lineDOMId
         this.levelDOMId = levelDOMId
         this.piecesRGBColors = pieceFillStyling()
-        // this.test = pieceStyling()
     };
 
     gameBoardCreate(rowsize, colsize) {
-        console.log(this.test)
 
         for (let column = 0; column < colsize; column++) {
             this.gameCoords.push([])
@@ -64,104 +61,70 @@ class TetrinoGame {
         }
     }
 
-    gameProcess(key, isManual) {
-        /*
-        Needed to set a flag (allowMoveStatus) to stop game from
-        calling gameProcess while scores/line cleaning is being
-        processed when user holds keydown.
-
-        This happens because the event listener for key press is
-        separated from the rest of the game.
-        */
-        let allowMoveStatus = sessionStorage.getItem('allowMove')
-
-        if ((isManual && sessionStorage.getItem('currentPiece') == '') &&
-            allowMoveStatus == 'true') {
-
-            let pieceData = tetrinoSpawn(this.piecesRGBColors)
-            let stringPiece = JSON.stringify(pieceData.coords)
-
-            sessionStorage.setItem('pieceCoords', stringPiece)
-            sessionStorage.setItem('currentPiece', pieceData.piece)
-            sessionStorage.setItem('pieceColor', pieceData.color)
-            sessionStorage.setItem('pieceOrientation', 'north')
-
-        } else if ((isManual && sessionStorage.getItem('currentPiece') != '') &&
-            allowMoveStatus == 'true') {
-
-            moveTetrino(
-                key,
-                sessionStorage.getItem('currentPiece'),
-                sessionStorage.getItem('pieceColor'),
-                this.gameCoords,
-                this.tileWidth,
-                this.gameWidth,
-                this.gameHeight,
-                this.canvasName,
-                this.canvasContext,
-                this.lineWidth,
-                this.strokeColor,
-                this.scoreDOMId,
-                this.lineDOMId,
-                this.levelDOMId,
-                this.piecesRGBColors,
-            )
-        } else if ((!isManual && sessionStorage.getItem('currentPiece') == '') && (allowMoveStatus == 'true')) {
-
-            let pieceData = tetrinoSpawn(this.piecesRGBColors)
-            let stringPiece = JSON.stringify(pieceData.coords)
-            // let colorData = JSON.stringify(pieceData.color)
-
-            sessionStorage.setItem('pieceCoords', stringPiece)
-            sessionStorage.setItem('currentPiece', pieceData.piece)
-            sessionStorage.setItem('pieceColor', pieceData.color)
-            sessionStorage.setItem('pieceOrientation', 'north')
-        }
-    }
-
-    async gameRun() {
-        this.gameProcess('null', false)
-        let currPiece = sessionStorage.getItem('currentPiece')
-        let pieceColor = sessionStorage.getItem('pieceColor')
-        let currPieceCoord = JSON.parse(sessionStorage.getItem('pieceCoords'))
+    gameRunManual(usrkey) {
         let gameRunStat = sessionStorage.getItem('allowMove')
 
-
         if (gameRunStat == 'true') {
-            tetrinoDraw(this.tileWidth, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeColor)
-            await new Promise((resolve) => setTimeout(resolve, 1000))
-            moveTetrinoAuto(
-                pieceColor,
+            gameParamProcess(
+                usrkey,
+                true,
                 this.gameCoords,
+                this.tileWidth,
                 this.gameWidth,
                 this.gameHeight,
-                this.tileWidth,
                 this.canvasName,
                 this.canvasContext,
-                currPiece,
                 this.lineWidth,
-                this.strokeColor,
+                this.strokeStyle,
+                this.scoreDOMId,
+                this.lineDOMId,
+                this.levelDOMId,
+                this.piecesRGBColors
+            )
+        }
+    }
+
+    async gameRunAuto() {
+        let gameRunStat = sessionStorage.getItem('allowMove')
+
+        if (gameRunStat == 'true') {
+            gameParamProcess(
+                'null',
+                false,
+                this.gameCoords,
+                this.tileWidth,
+                this.gameWidth,
+                this.gameHeight,
+                this.canvasName,
+                this.canvasContext,
+                this.lineWidth,
+                this.strokeStyle,
                 this.scoreDOMId,
                 this.lineDOMId,
                 this.levelDOMId,
                 this.piecesRGBColors,
             )
-            gameBoardRefresh("gamecanvas", "2d", this.gameCoords, this.tileWidth)
-            this.gameRun()
+
+            let pieceColor = sessionStorage.getItem('pieceColor')
+            let coords = sessionStorage.getItem('pieceCoords')
+            let currPieceCoord = await JSON.parse(coords)
+
+            tetrinoDraw(this.tileWidth, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeStyle)
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+            gameBoardRefresh(this.canvasName, this.canvasContext, this.gameCoords, this.tileWidth)
+            this.gameRunAuto()
         }
     }
-
-
 
     loadAllListeners() {
         document.addEventListener('DOMContentLoaded', () => { gameLocalVarCreate() }, false)
-        document.addEventListener('keydown', (key) => { this.gameProcess(key, true) }, false)
-        document.addEventListener('DOMContentLoaded', () => { this.gameRun() }, false)
+        document.addEventListener('keydown', (key) => { this.gameRunManual(key) }, false)
+        document.addEventListener('DOMContentLoaded', () => { this.gameRunAuto() }, false)
     };
 };
 
 let newGame = new TetrinoGame("gamecanvas", "2d", 4, pieceColorStyling(false), 40, 20, 10, "game_score", "line_score", "game_level", pieceFillStyling(false))
 
-newGame.gameBoardCreate(10, 20) // must match game width and height
+newGame.gameBoardCreate(10, 20)
 newGame.gameBoardFill()
 newGame.loadAllListeners()
