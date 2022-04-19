@@ -1,6 +1,7 @@
 /* 
 This module brings some auxiliary functions to the game.
 */
+
 import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
 import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
 
