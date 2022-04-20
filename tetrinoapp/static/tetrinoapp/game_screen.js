@@ -3,39 +3,48 @@ This module handles the issue of having fixed canvas size on different screen
 sizes, which makes it look ugly depending on where it's being ran.
 */
 
-const screenSizeReader = () => {
+const canvasSizeCalc = () => {
 
-    let size = {
+    let screenSize = {
         height: window.innerHeight,
         width: window.innerWidth
     }
-    return size
-}
-
-const canvasSizeSet = (canvasName) => {
-    /* 
-    Sets canvas size based on current screen size AT the
-    moment of loading.
-    */
-    let screenSize = screenSizeReader()
-    console.log(screenSize.width, screenSize.height)
-    /* 
-    Assuming widescreen, browser view size:
-
-    1512 x 765 for my firefox
-    1691 x 899 for my chrome 
-    
-    */
 
     if (screenSize.width > screenSize.height) {
-        let targetWidth = Math.floor(screenSize.width / 4)
+
+        let roundWidth = Math.floor(screenSize.width / 5)
+        let targetWidth = Math.floor(roundWidth / 100) * 100 // to return rounded values
         let targetHeight = targetWidth * 2
-        document.getElementById(canvasName).setAttribute("height", targetHeight)
-        document.getElementById(canvasName).setAttribute("width", targetWidth)
+
+        let targetSizes = {
+            height: targetHeight,
+            width: targetWidth
+        }
+        console.log(targetSizes)
+        return targetSizes
 
     } else if (screenSize.width < screenSize.height) {
-        console.log("vertical screen")
+        // do magic
     }
 }
 
-export { canvasSizeSet }
+const canvasSizeSet = (canvasName) => {
+    let setWidth = canvasSizeCalc()
+
+    document.getElementById(canvasName).setAttribute("height", setWidth.height)
+    document.getElementById(canvasName).setAttribute("width", setWidth.width)
+}
+
+const pieceSizeSet = () => {
+    let sizes = canvasSizeCalc()
+    let pieceSize = sizes.width / 10
+    return pieceSize
+}
+
+const setStrokeWidth = () => {
+    let sizes = canvasSizeCalc()
+    let pieceStrokeWidth = sizes.width / 100
+    return pieceStrokeWidth
+}
+
+export { canvasSizeCalc, canvasSizeSet, pieceSizeSet, setStrokeWidth }
