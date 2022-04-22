@@ -1,7 +1,9 @@
 import { pieceFillStyling, pieceColorStyling } from "./game_styling.js";
 import { tetrinoDraw } from "./piece_creation.js";
 import { gameBoardRefresh, gameLocalVarCreate, gameParamProcess } from "./game_handling.js";
-import { canvasSizeSet, canvasSizeCalc, pieceSizeSet, setStrokeWidth } from "./game_screen.js"
+import { canvasSizeSet, canvasSizeCalc, setPieceSize, setStrokeWidth, setGameHeight } from "./game_sizes.js"
+// import { pieceFillStyling, pieceColorStyling } from "./tetris/game_styling.js"
+import { testfunc } from "./tetrinotest.js"
 
 class TetrinoGame {
     constructor(canvasName, canvasContext, lineWidth, strokeStyle, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId) {
@@ -40,7 +42,7 @@ class TetrinoGame {
     gameBoardFill() {
         /*
         Why yTileValue = -this.tileWidth
-
+ 
         Second loop starts by incrementing row values. Since values (on canvas) starts from
         0, -this.tileWidth ensures the first loop returns 0, not tileWidth value
         */
@@ -125,12 +127,11 @@ class TetrinoGame {
 };
 
 // canvasName, canvasContext, lineWidth, strokeStyle, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId
-let newGame = new TetrinoGame("gamecanvas", "2d", setStrokeWidth(), pieceColorStyling(false), pieceSizeSet(), 20, 10, "game_score", "line_score", "game_level", pieceFillStyling(false))
+let newGame = new TetrinoGame("gamecanvas", "2d", setStrokeWidth(true), pieceColorStyling(false),
+    setPieceSize(true), setGameHeight(true), 10, "game_score", "line_score", "game_level", pieceFillStyling(false))
 
-newGame.gameBoardCreate(10, 20)
+newGame.gameBoardCreate(10, setGameHeight(true))
 newGame.gameBoardFill()
 newGame.loadGameListeners()
-
-
 document.addEventListener('DOMContentLoaded', () => { canvasSizeSet("gamecanvas") }, false)
-document.addEventListener('DOMContentLoaded', () => { console.log(pieceSizeSet()) }, false)
+document.addEventListener('DOMContentLoaded', () => { testfunc() }, false)

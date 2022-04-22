@@ -7,18 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tetrino</title>
     <script src="{% static 'tetrinoapp/main.js' %}" type="module"></script>
+    <link rel="shortcut icon" type="image/png" href="{% static 'tetrinoapp/favicon.ico' %}" />
     <link rel="stylesheet" type 'text/css' href="{% static 'tetrinoapp/tetrino.css' %}">
 </head>
 
 <body>
     <div class="game">
-        <div class="game_header">TETRINO</div>
+        <div class="game_header">
+        </div>
         <div class="game_main">
             <div class="tetrino_main" id="">
-                <canvas class="canvas" id="gamecanvas" width="400" height="800"></canvas>
+                <canvas class="canvas" id="gamecanvas" width="" height=""></canvas>
             </div>
-
-            <div class="tetrino_score">
+            <div class="tetrino_score" id="score">
                 <div class="tetrino_score_widget" id="widget_score">
                     <div class="widget_description">Score</div>
                     <div class="widget_value" id="game_score">0</div>
@@ -31,21 +32,26 @@
                     <div class="widget_description">Lines</div>
                     <div class="widget_value" id="line_score">0</div>
                 </div>
-                <div class="tetrino_score_widget" id="widget_next_tetrino">
+                <div class="tetrino_score_widget" id="widget_blank_space">
+
+                </div>
+                <div class="tetrino_score_widget" id="widget_about">
+                    <div class="widget_description" id="widget_about_description">About</div>
+
+                    <!-- <div class="tetrino_score_widget" id="widget_next_tetrino">
                     <div class="widget_description">Next</div>
                     <div class="widget_value"></div>
-                </div>
-                <div class="tetrino_score_widget" id="widget_blank_space"></div>
-            </div>
-        </div>
+                </div> -->
 
-        <div class="game_footer">
+                </div>
+            </div>
+            <!-- <div class="game_footer">
             <div class="game_controls" id="control_left">⇦</div>
             <div class="game_controls" id="control_down">⇨</div>
             <div class="game_controls" id="control_right">⇩</div>
             <div class="game_controls" id="control_rotate">↻</div>
+        </div> -->
         </div>
-    </div>
 </body>
 
 </html>
