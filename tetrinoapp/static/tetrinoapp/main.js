@@ -2,11 +2,26 @@ import { pieceFillStyling, pieceColorStyling } from "./game_styling.js";
 import { tetrinoDraw } from "./piece_creation.js";
 import { gameBoardRefresh, gameLocalVarCreate, gameParamProcess } from "./game_handling.js";
 import { canvasSizeSet, canvasSizeCalc, setPieceSize, setStrokeWidth, setGameHeight } from "./game_sizes.js"
+import { toggleInfo, showInfoListener } from "./game_info.js";
 // import { pieceFillStyling, pieceColorStyling } from "./tetris/game_styling.js"
 import { testfunc } from "./tetrinotest.js"
 
 class TetrinoGame {
-    constructor(canvasName, canvasContext, lineWidth, strokeStyle, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId) {
+    constructor(
+        canvasName,
+        canvasContext,
+        lineWidth,
+        strokeStyle,
+        tileWidth,
+        gameHeight,
+        gameWidth,
+        scoreDOMId,
+        lineDOMId,
+        levelDOMId,
+        domListener,
+        domToggle,
+
+    ) {
 
         this.tileWidth = tileWidth;
         this.gameCoords = []; // board
@@ -20,6 +35,8 @@ class TetrinoGame {
         this.lineDOMId = lineDOMId
         this.levelDOMId = levelDOMId
         this.piecesRGBColors = pieceFillStyling()
+        this.domListener = domListener
+        this.domToggle = domToggle
     };
 
     gameBoardCreate(rowsize, colsize) {
@@ -123,12 +140,24 @@ class TetrinoGame {
         document.addEventListener('DOMContentLoaded', () => { gameLocalVarCreate() }, false)
         document.addEventListener('keydown', (key) => { this.gameRunManual(key) }, false)
         document.addEventListener('DOMContentLoaded', () => { this.gameRunAuto() }, false)
+        document.addEventListener('DOMContentLoaded', () => { showInfoListener(this.domListener, this.domToggle) }, false)
     };
 };
 
 // canvasName, canvasContext, lineWidth, strokeStyle, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId
-let newGame = new TetrinoGame("gamecanvas", "2d", setStrokeWidth(true), pieceColorStyling(false),
-    setPieceSize(true), setGameHeight(true), 10, "game_score", "line_score", "game_level", pieceFillStyling(false))
+let newGame = new TetrinoGame(
+    "gamecanvas",
+    "2d",
+    setStrokeWidth(true),
+    pieceColorStyling(false),
+    setPieceSize(true),
+    setGameHeight(true),
+    10,
+    "game_score",
+    "line_score",
+    "game_level",
+    "widget_about",
+    "game_about")
 
 newGame.gameBoardCreate(10, setGameHeight(true))
 newGame.gameBoardFill()

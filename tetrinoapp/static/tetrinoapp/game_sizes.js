@@ -10,6 +10,9 @@ const canvasSizeCalc = (DOMElement) => {
         width: window.innerWidth
     }
 
+    const currWidth = document.getElementsByClassName("tetrino_main")[0].clientWidth
+    const currHeight = document.getElementsByClassName("tetrino_main")[0].clientHeight
+
     if (screenSize.width > screenSize.height) {
         /* 
         Canvas needed to have a fixed size for the game to work properly and so far
@@ -24,14 +27,14 @@ const canvasSizeCalc = (DOMElement) => {
 
         Not the fanciest or brightest idea, but works.
         */
+        let tile = Math.floor(currWidth / 10)
 
-        const currWidth = document.getElementsByClassName("tetrino_main")[0].clientWidth
-        const currHeight = document.getElementsByClassName("tetrino_main")[0].clientHeight
+        if (tile % 2 != 0) {
+            tile -= 3
+        }
 
-        let newWidth = Math.floor(currWidth / 100) * 100
-        let tile = Math.floor(currWidth / 100) * 10
+        let newWidth = tile * 10
         let tileFill = Math.floor(currHeight / tile)
-
         let newHeight = tileFill * tile
 
         let targetSizes = {
@@ -41,23 +44,29 @@ const canvasSizeCalc = (DOMElement) => {
             gameWidth: 10,
             gameHeight: tileFill
         }
-        console.log(targetSizes)
+
         return targetSizes
 
     } else if (screenSize.width < screenSize.height) {
 
-        // let roundWidth = Math.floor(screenSize.width * 0.70)
-        let x = document.getElementsByClassName("tetrino_main")[0].clientHeight
-        console.log(x)
-        let roundWidth = Math.floor(document.getElementsByClassName("tetrino_main")[0].clientWidth)
-        let targetWidth = Math.floor(roundWidth / 100) * 100
+        let tile = Math.floor(currWidth / 10)
 
-        let targetHeight = targetWidth * 2
-        let targetSizes = {
-            height: targetHeight,
-            width: targetWidth
+        if (tile % 2 != 0) {
+            tile -= 1
         }
-        console.log(targetSizes)
+
+        let newWidth = (tile - 2) * 10
+        let tileFill = Math.floor(currHeight / tile)
+        let newHeight = tileFill * tile
+
+        let targetSizes = {
+            canvasHeight: newHeight,
+            canvasWidth: newWidth,
+            tileSize: tile,
+            gameWidth: 10,
+            gameHeight: tileFill
+        }
+
         return targetSizes
     }
 }
@@ -92,7 +101,6 @@ const setGameHeight = (isWideFormat) => {
 
     if (isWideFormat) {
         let setGameHeight = sizes.gameHeight
-        console.log(setGameHeight)
         return setGameHeight
     }
 }
