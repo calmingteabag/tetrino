@@ -4,6 +4,7 @@ This module brings some auxiliary functions to the game.
 
 import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
 import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
+import { canvasSizeCalc } from "./game_sizes.js";
 
 const gameBoardRefresh = (canvasName, getContextName, gameCoords, tileWidth) => {
     /* 
@@ -43,6 +44,38 @@ const gameLocalVarCreate = () => {
     }
 }
 
+const gameReset = (gameCoords, canvasName, canvasContext) => {
+    // window.location.reload(true)
+    for (let row = 0; row < gameCoords.length; row++) {
+        for (let column = 0; column < gameCoords[row].length; column++) {
+
+            gameCoords[row][column].tileStatus = 'free'
+            gameCoords[row][column].tileColor = ''
+        }
+    }
+
+    const gameCanvas = document.getElementById(canvasName)
+    const gameContext = gameCanvas.getContext(canvasContext)
+
+    let currWidth = document.getElementById(canvasName).width
+    let currHeight = document.getElementById(canvasName).height
+    gameContext.clearRect(0, 0, currWidth, currHeight)
+    sessionStorage.setItem('gameState', 'running')
+}
+
+const gameOverCheck = (pieceCoords, gameCoords) => {
+    for (let coords of pieceCoords) {
+        let xCoord = coords[0]
+        let yCoord = coords[1]
+        let currPosition = gameCoords[xCoord][yCoord]
+
+        if (currPosition.tileStatus == 'occupied') {
+            return false
+        }
+        return true
+    }
+}
+
 const gameParamProcess = (usrkey, isManual, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext, lineWidth, strokeStyle, scoreDOMId, lineDOMId, levelDOMId, piecesRGBColors) => {
     /*
     Needed to set a flag (allowMoveStatus) to stop game from
@@ -53,12 +86,17 @@ const gameParamProcess = (usrkey, isManual, gameCoords, tileWidth, gameWidth, ga
     separated from the rest of the game.
     */
     let allowMoveStatus = sessionStorage.getItem('allowMove')
+    let pieceData = tetrinoSpawn(piecesRGBColors)
+    let stringPiece = JSON.stringify(pieceData.coords)
+    let runStatus = gameOverCheck(pieceData.coords, gameCoords)
 
-    if ((isManual && sessionStorage.getItem('currentPiece') == '') &&
+    if ((isManual && !runStatus) || (!isManual && !runStatus)) {
+        sessionStorage.setItem('gameState', 'notRunning')
+        document.getElementById('gameover').style.visibility = 'visible'
+        return
+
+    } else if ((isManual && sessionStorage.getItem('currentPiece') == '') &&
         allowMoveStatus == 'true') {
-
-        let pieceData = tetrinoSpawn(piecesRGBColors)
-        let stringPiece = JSON.stringify(pieceData.coords)
 
         sessionStorage.setItem('pieceCoords', stringPiece)
         sessionStorage.setItem('currentPiece', pieceData.piece)
@@ -89,9 +127,6 @@ const gameParamProcess = (usrkey, isManual, gameCoords, tileWidth, gameWidth, ga
         )
     } else if ((!isManual && sessionStorage.getItem('currentPiece') == '') && (allowMoveStatus == 'true')) {
 
-        let pieceData = tetrinoSpawn(piecesRGBColors)
-        let stringPiece = JSON.stringify(pieceData.coords)
-
         sessionStorage.setItem('pieceCoords', stringPiece)
         sessionStorage.setItem('currentPiece', pieceData.piece)
         sessionStorage.setItem('pieceColor', pieceData.color)
@@ -118,4 +153,4 @@ const gameParamProcess = (usrkey, isManual, gameCoords, tileWidth, gameWidth, ga
     }
 }
 
-export { gameBoardRefresh, gameLocalVarCreate, gameParamProcess }
+export { gameBoardRefresh, gameLocalVarCreate, gameParamProcess, gameOverCheck, gameReset }

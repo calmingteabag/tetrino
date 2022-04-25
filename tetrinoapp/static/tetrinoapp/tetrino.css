@@ -1,7 +1,7 @@
 /* HTML Body Style */
 body {
     height: 100vh;
-    background-color: rgb(17, 17, 17);
+    background-color: rgb(17, 0, 28);
     padding: 0px;
     margin: 0px;
     border-width: 0px;
@@ -43,26 +43,27 @@ div.game_main {
     margin-left: 4vw;
     margin-right: 4vw;
     margin-bottom: 2vw;
-    gap: 2vw;
+    gap: 5vw;
 }
 
 div.tetrino_main {
-    width: 80%;
+    width: 75%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 4vw;
+    /* margin-right: 4vw; */
 }
 
 canvas.canvas {
     padding: 0px;
     margin: 0px;
-    background: linear-gradient(220deg, #fa4dac33, #6aff6532);
+    background: linear-gradient(220deg, #653b005b, #796b0032);
     border-style: solid;
-    border-width: 1px;
-    border-color: rgb(112, 176, 250);
-    box-shadow: -2px 10px 50px -10px #09ff00,
-        10px -2px 50px -10px #ff008c;
+    border-width: 0.7vw;
+    border-image: linear-gradient(#ffaa00, #ffff90);
+    border-image-slice: 1;
+    box-shadow: -2px 10px 50px -10px #ffa20062,
+        10px -2px 50px -10px #ffa20062;
 }
 
 div.tetrino_score {
@@ -82,66 +83,59 @@ div.tetrino_score_widget {
     display: flex;
     flex-direction: column;
     font-family: Arial, Helvetica, sans-serif;
+    border-width: 0.3vh;
+    border-style: solid;
+    border-image: linear-gradient(#ffaa0099, #fff690ac);
+    border-image-slice: 1;
 }
 
 #widget_score {
     height: 15%;
     width: 100%;
-    border-width: 0.2vh;
-    border-style: solid;
-    border-image: linear-gradient(#FA4DAC, #6aff65);
-    border-image-slice: 1;
+    background-color: #ffa2000e;
 }
 
 #widget_level {
     margin-top: 5vh;
     margin-bottom: 5vh;
-    height: 10%;
+    height: 12%;
     width: 100%;
-    border-width: 0.2vh;
-    border-style: solid;
-    border-image: linear-gradient(#FA4DAC, #6aff65);
-    border-image-slice: 1;
+    background-color: #ffa2000e;
 }
 
 #widget_lines {
-    height: 10%;
+    height: 12%;
     width: 100%;
-    border-width: 0.2vh;
-    border-style: solid;
-    border-image: linear-gradient(#FA4DAC, #6aff65);
-    border-image-slice: 1;
+    background-color: #ffa2000e;
 }
 
 #widget_blank_space {
-    height: 60%;
+    height: 53%;
     width: 100%;
     border: transparent;
 }
 
 #widget_about {
-    height: 5%;
+    height: 8%;
     width: 100%;
 }
 
 #widget_about_description {
     height: 100%;
     width: 100%;
-    border: 1px solid coral;
 }
 
 
 div.widget_description {
-    color: #f48ac4;
+    color: #ffd000;
     width: 100%;
     height: 40%;
     background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 3vw;
-    letter-spacing: 0.2vh;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2vh;
     font-weight: 600;
 }
 
@@ -150,7 +144,7 @@ div.widget_value {
     width: 100%;
     height: 60%;
     font-size: 4vw;
-    background-color: rgba(62, 62, 62, 0.197);
+    /* background-color: rgba(62, 62, 62, 0.197); */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -173,15 +167,17 @@ div.game_footer {
 }
 
 div.game_controls {
+    color: #ffd000;
     width: 80%;
     height: 80%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: Arial, Helvetica, sans-serif;
+    border-width: 0.3vh;
     border-style: solid;
-    border-width: 1px;
-    border-color: rgb(112, 176, 250);
+    border-image: linear-gradient(#ffaa0099, #fff690ac);
+    border-image-slice: 1;
     font-size: 10vw;
     font-weight: 800;
 }
@@ -191,14 +187,27 @@ div.game_controls:hover {
     cursor: pointer;
 }
 
+div.about_wrapper {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 1;
+    background-color: #000000b1;
+}
+
 div.about {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 80vh;
-    width: 70vw;
-    position: fixed;
+    width: 85vw;
     background-color: #000000;
-    z-index: 1;
+    /* animation: "name duration timing-function delay iteration-count direction fill-mode;" */
 }
 
 div.about_header {
@@ -230,7 +239,6 @@ div.about_footer {
     height: 20%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 1.2vh;
-    letter-spacing: 0.1vh;
 }
 
 #widget_about:hover {
@@ -240,12 +248,80 @@ div.about_footer {
     cursor: pointer;
 }
 
+div.gameover_wrapper {
+    background-color: #000000b1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 1;
+}
+
+div.gameover {
+    color: #09ff00;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    width: 70vw;
+    background-color: #000000;
+    border-style: solid;
+    border-width: 0.2vh;
+    border-image: linear-gradient(#7c7c7c, #ececec);
+    border-image-slice: 1;
+
+}
+
+div.gameover_main {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 4vh;
+    height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+div.gameover_footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 30%;
+    width: 100%
+}
+
+div.resetbutton {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 2vh;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 10%;
+    width: 30%;
+    position: fixed;
+    border: solid 1px rgb(85, 85, 85);
+    background-color: #000000
+}
+
+div.resetbutton:hover {
+    background-color: #252525;
+    cursor: pointer;
+}
+
+
 /* Desktop Styling */
 @media only screen and (min-width: 900px) and (orientation: landscape) {
     div.game {
-        font-size: 2vw;
-        letter-spacing: 0.5vw;
-        width: 30vw;
+        width: 20vw;
         height: 100vh;
         margin-top: 0.5vw;
         margin-left: 0.5vw;
@@ -272,11 +348,11 @@ div.about_footer {
         margin-left: 0.5vw;
         margin-right: 0.5vw;
         margin-bottom: 0.5vw;
+        gap: 2vw;
     }
 
     div.tetrino_main {
         width: 80%;
-        margin-right: 0px;
     }
 
     div.tetrino_score {
@@ -296,13 +372,12 @@ div.about_footer {
     }
 
     div.widget_description {
-        font-size: 1.2vw;
-        letter-spacing: 0.09vw;
+        font-size: 1.6vh;
+        letter-spacing: 0.05vh;
     }
 
     div.widget_value {
-        font-size: 1.5vw;
-        letter-spacing: 0.2vw;
+        font-size: 1vw;
     }
 
     div.game_controls {
@@ -314,9 +389,9 @@ div.about_footer {
 
     canvas.canvas {
         border-style: solid;
-        border-width: 0.2vh;
-        border-image: linear-gradient(#FA4DAC, #6aff65);
-        border-image-slice: 1;
+        border-width: 0.3vh;
+        box-shadow: -2px 10px 20px -5px #ffa20062,
+            10px -2px 20px -5px #ffa20062;
     }
 
     div.about {
@@ -338,7 +413,6 @@ div.about_footer {
         width: 100%;
         height: 10%;
         font-size: 1.2vh;
-        letter-spacing: 0.1vh;
     }
 
     a.infocredits {
@@ -347,5 +421,26 @@ div.about_footer {
 
     a.infocredits:hover {
         color: #FA4DAC;
+    }
+
+    div.gameover {
+        height: 50vh;
+        width: 40vw;
+        border-width: 0.2vh;
+    }
+
+    div.gameover_main {
+        height: 70%;
+        width: 100%
+    }
+
+    div.gameover_footer {
+        height: 30%;
+        width: 100%
+    }
+
+    div.resetbutton {
+        height: 3%;
+        width: 5%;
     }
 }

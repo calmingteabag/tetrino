@@ -12,26 +12,44 @@
 </head>
 
 <body>
-
-    <div class="about" id="game_about" style="visibility: hidden;">
-        <div class="about_header"></div>
-        <div class="about_content">
-            <span>Tetris</span>
-            <span>A game by calmingteabag</span>
-        </div>
-        <div class="about_footer">
-            <span>Created by
-                <a class='infocredits' href="https://github.com/calmingteabag">calmingteabag</a> for <b>LEARNING</b>
-                purposes, all credits
-                goes to
-                original creators.
-            </span></br>
-            <span> Tecnologies used: <a class='infocredits' href="https://www.djangoproject.com/">Django</a>, <a
-                    class='infocredits' href="https://www.heroku.com/">Heroku</a>, Python and Vanilla
-                Javascript.
-            </span>
+    <div class="gameover_wrapper" style="visibility: hidden;" id="gameover">
+        <div class="gameover">
+            <div class="gameover_main">
+                <span>Game Over</span>
+            </div>
+            <div class="gameover_footer">
+                <div class="resetbutton" id="resetbutton">
+                    Reset
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="about_wrapper" id="game_about" style="visibility: hidden;">
+        <div class="about">
+            <div class="about_header">
+            </div>
+            <div class="about_content">
+                <div class="testdiv">
+                    <h1>Tetris</h1>
+                </div>
+
+            </div>
+            <div class="about_footer">
+                <span>Created by
+                    <a class='infocredits' href="https://github.com/calmingteabag">calmingteabag</a> for <b>LEARNING</b>
+                    purposes, all credits
+                    goes to
+                    original creators.
+                </span></br>
+                <span> Tecnologies used: <a class='infocredits' href="https://www.djangoproject.com/">Django</a>, <a
+                        class='infocredits' href="https://www.heroku.com/">Heroku</a>, Python and Vanilla
+                    Javascript.
+                </span>
+            </div>
+        </div>
+    </div>
+
 
 
     <div class="game">
@@ -43,7 +61,9 @@
             </div>
             <div class="tetrino_score" id="score">
                 <div class="tetrino_score_widget" id="widget_score">
-                    <div class="widget_description">Score</div>
+                    <div class="widget_description">
+                        <span>Score</span>
+                    </div>
                     <div class="widget_value" id="game_score">0</div>
                 </div>
                 <div class="tetrino_score_widget" id="widget_level">

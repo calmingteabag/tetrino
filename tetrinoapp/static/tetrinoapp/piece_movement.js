@@ -68,11 +68,11 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
     } else if (wantRotate == true) {
 
         sessionStorage.setItem('pieceOrientation', rotateDirection)
-
         rotateCoord(piece, rotateDirection, pieceCoords, gameWidth, false)
-        let currPieceCoords = JSON.stringify(pieceCoords)
-        sessionStorage.setItem('pieceCoords', currPieceCoords)
 
+        let currPieceCoords = JSON.stringify(pieceCoords)
+
+        sessionStorage.setItem('pieceCoords', currPieceCoords)
         gameBoardRefresh(canvasName, canvasContext, gameCoords, tileWidth)
         tetrinoDraw(tileWidth, pieceColor, pieceCoords, gameCoords, canvasName, canvasContext, lineWidth, strokeStyle)
 

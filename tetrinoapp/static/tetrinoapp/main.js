@@ -2,7 +2,7 @@ import { pieceFillStyling, pieceColorStyling } from "./game_styling.js";
 import { tetrinoDraw } from "./piece_creation.js";
 import { gameBoardRefresh, gameLocalVarCreate, gameParamProcess } from "./game_handling.js";
 import { canvasSizeSet, canvasSizeCalc, setPieceSize, setStrokeWidth, setGameHeight } from "./game_sizes.js"
-import { toggleInfo, showInfoListener } from "./game_info.js";
+import { toggleInfo, showInfoListener, showInfoListenerReset } from "./game_info.js";
 // import { pieceFillStyling, pieceColorStyling } from "./tetris/game_styling.js"
 import { testfunc } from "./tetrinotest.js"
 
@@ -18,9 +18,10 @@ class TetrinoGame {
         scoreDOMId,
         lineDOMId,
         levelDOMId,
-        domListener,
-        domToggle,
-
+        domListenerAbout,
+        domToggleAbout,
+        domListenerReset,
+        domToggleReset,
     ) {
 
         this.tileWidth = tileWidth;
@@ -35,8 +36,10 @@ class TetrinoGame {
         this.lineDOMId = lineDOMId
         this.levelDOMId = levelDOMId
         this.piecesRGBColors = pieceFillStyling()
-        this.domListener = domListener
-        this.domToggle = domToggle
+        this.domListenerAbout = domListenerAbout
+        this.domToggleAbout = domToggleAbout
+        this.domListenerReset = domListenerReset
+        this.domToggleReset = domToggleReset
     };
 
     gameBoardCreate(rowsize, colsize) {
@@ -105,9 +108,14 @@ class TetrinoGame {
     }
 
     async gameRunAuto() {
-        let gameRunStat = sessionStorage.getItem('allowMove')
+        let gameRunStat = sessionStorage.getItem('gameState')
 
-        if (gameRunStat == 'true') {
+        while (gameRunStat == 'running') {
+
+            if (gameRunStat != 'running') {
+                break
+            }
+
             gameParamProcess(
                 'null',
                 false,
@@ -125,22 +133,23 @@ class TetrinoGame {
                 this.piecesRGBColors,
             )
 
+
             let pieceColor = sessionStorage.getItem('pieceColor')
             let coords = sessionStorage.getItem('pieceCoords')
             let currPieceCoord = await JSON.parse(coords)
-
             tetrinoDraw(this.tileWidth, pieceColor, currPieceCoord, this.gameCoords, this.canvasName, this.canvasContext, this.lineWidth, this.strokeStyle)
             await new Promise((resolve) => setTimeout(resolve, 1000))
             gameBoardRefresh(this.canvasName, this.canvasContext, this.gameCoords, this.tileWidth)
-            this.gameRunAuto()
         }
     }
 
     loadGameListeners() {
         document.addEventListener('DOMContentLoaded', () => { gameLocalVarCreate() }, false)
         document.addEventListener('keydown', (key) => { this.gameRunManual(key) }, false)
+        // animation function
         document.addEventListener('DOMContentLoaded', () => { this.gameRunAuto() }, false)
-        document.addEventListener('DOMContentLoaded', () => { showInfoListener(this.domListener, this.domToggle) }, false)
+        document.addEventListener('DOMContentLoaded', () => { showInfoListener(this.domListenerAbout, this.domToggleAbout) }, false)
+        document.addEventListener('DOMContentLoaded', () => { showInfoListenerReset(this.domListenerReset, this.domToggleReset, this.gameCoords, this.canvasName, this.canvasContext) }, false)
     };
 };
 
@@ -157,10 +166,13 @@ let newGame = new TetrinoGame(
     "line_score",
     "game_level",
     "widget_about",
-    "game_about")
+    "game_about",
+    "resetbutton",
+    "gameover"
+)
 
 newGame.gameBoardCreate(10, setGameHeight(true))
 newGame.gameBoardFill()
 newGame.loadGameListeners()
 document.addEventListener('DOMContentLoaded', () => { canvasSizeSet("gamecanvas") }, false)
-document.addEventListener('DOMContentLoaded', () => { testfunc() }, false)
+// document.addEventListener('DOMContentLoaded', () => { testfunc() }, false)
