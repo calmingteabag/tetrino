@@ -3,6 +3,7 @@ import { tetrinoDraw } from "./piece_creation.js";
 import { gameBoardRefresh, gameLocalVarCreate, gameParamProcess } from "./game_handling.js";
 import { canvasSizeSet, canvasSizeCalc, setPieceSize, setStrokeWidth, setGameHeight } from "./game_sizes.js"
 import { toggleInfo, showInfoListener, showInfoListenerReset } from "./game_info.js";
+import { touchListener } from "./mobile_controls.js";
 // import { pieceFillStyling, pieceColorStyling } from "./tetris/game_styling.js"
 import { testfunc } from "./tetrinotest.js"
 
@@ -146,10 +147,44 @@ class TetrinoGame {
     loadGameListeners() {
         document.addEventListener('DOMContentLoaded', () => { gameLocalVarCreate() }, false)
         document.addEventListener('keydown', (key) => { this.gameRunManual(key) }, false)
-        // animation function
         document.addEventListener('DOMContentLoaded', () => { this.gameRunAuto() }, false)
         document.addEventListener('DOMContentLoaded', () => { showInfoListener(this.domListenerAbout, this.domToggleAbout) }, false)
         document.addEventListener('DOMContentLoaded', () => { showInfoListenerReset(this.domListenerReset, this.domToggleReset, this.gameCoords, this.canvasName, this.canvasContext) }, false)
+        // targetDOMId,
+        // simulatedKey,
+        // piece,
+        // pieceColor,
+        // gameCoords,
+        // tileWidth,
+        // gameWidth,
+        // gameHeight,
+        // canvasName,
+        // canvasContext,
+        // lineWidth,
+        // strokeStyle,
+        // scoreDOMId,
+        // lineDOMId,
+        // levelDOMId,
+        document.addEventListener('DOMContentLoaded', () => {
+            touchListener(
+                "control_left",
+                "ArrowLeft",
+                sessionStorage.getItem('currentPiece'),
+                sessionStorage.getItem('pieceColor'),
+                this.gameCoords,
+                this.tileWidth,
+                this.gameWidth,
+                this.gameHeight,
+                this.canvasName,
+                this.canvasContext,
+                this.lineWidth,
+                this.strokeStyle,
+                this.scoreDOMId,
+                this.lineDOMId,
+                this.levelDOMId,
+                this.piecesRGBColors,
+            )
+        }, false)
     };
 };
 
