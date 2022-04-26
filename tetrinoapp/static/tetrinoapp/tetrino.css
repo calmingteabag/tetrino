@@ -182,8 +182,8 @@ div.game_controls {
     font-weight: 800;
 }
 
-div.game_controls:hover {
-    background-color: #09ff00;
+div.game_controls:active {
+    background-color: #ff8c00;
     cursor: pointer;
 }
 

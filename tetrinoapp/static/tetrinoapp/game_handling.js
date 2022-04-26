@@ -45,7 +45,6 @@ const gameLocalVarCreate = () => {
 }
 
 const gameReset = (gameCoords, canvasName, canvasContext) => {
-    // window.location.reload(true)
     for (let row = 0; row < gameCoords.length; row++) {
         for (let column = 0; column < gameCoords[row].length; column++) {
 
@@ -106,8 +105,6 @@ const gameParamProcess = (usrkey, isManual, gameCoords, tileWidth, gameWidth, ga
     } else if ((isManual && sessionStorage.getItem('currentPiece') != '') &&
         allowMoveStatus == 'true') {
 
-        // moveTetrino parameters order:
-        // usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext, lineWidth, strokeStyle, scoreDOMId, lineDOMId, levelDOMId
         moveTetrino(
             usrkey,
             sessionStorage.getItem('currentPiece'),

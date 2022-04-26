@@ -150,27 +150,8 @@ class TetrinoGame {
         document.addEventListener('DOMContentLoaded', () => { this.gameRunAuto() }, false)
         document.addEventListener('DOMContentLoaded', () => { showInfoListener(this.domListenerAbout, this.domToggleAbout) }, false)
         document.addEventListener('DOMContentLoaded', () => { showInfoListenerReset(this.domListenerReset, this.domToggleReset, this.gameCoords, this.canvasName, this.canvasContext) }, false)
-        // targetDOMId,
-        // simulatedKey,
-        // piece,
-        // pieceColor,
-        // gameCoords,
-        // tileWidth,
-        // gameWidth,
-        // gameHeight,
-        // canvasName,
-        // canvasContext,
-        // lineWidth,
-        // strokeStyle,
-        // scoreDOMId,
-        // lineDOMId,
-        // levelDOMId,
         document.addEventListener('DOMContentLoaded', () => {
-            touchListener(
-                "control_left",
-                "ArrowLeft",
-                sessionStorage.getItem('currentPiece'),
-                sessionStorage.getItem('pieceColor'),
+            addTouchListeners(
                 this.gameCoords,
                 this.tileWidth,
                 this.gameWidth,
@@ -182,13 +163,11 @@ class TetrinoGame {
                 this.scoreDOMId,
                 this.lineDOMId,
                 this.levelDOMId,
-                this.piecesRGBColors,
-            )
+                this.piecesRGBColors)
         }, false)
     };
 };
 
-// canvasName, canvasContext, lineWidth, strokeStyle, tileWidth, gameHeight, gameWidth, scoreDOMId, lineDOMId, levelDOMId
 let newGame = new TetrinoGame(
     "gamecanvas",
     "2d",
@@ -210,4 +189,3 @@ newGame.gameBoardCreate(10, setGameHeight(true))
 newGame.gameBoardFill()
 newGame.loadGameListeners()
 document.addEventListener('DOMContentLoaded', () => { canvasSizeSet("gamecanvas") }, false)
-// document.addEventListener('DOMContentLoaded', () => { testfunc() }, false)
