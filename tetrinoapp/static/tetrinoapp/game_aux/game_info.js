@@ -1,4 +1,4 @@
-import { gameReset } from "./game_aux/game_handling.js"
+import { gameReset } from "./game_handling.js"
 
 const toggleInfo = (domToggle) => {
     let isVisible = document.getElementById(domToggle).style.visibility

@@ -9,7 +9,7 @@ of being set outside on addTouchListeners simply because this funciton is being 
 one time only and every variable defined here won't be updated anymore.
 */
 
-import { moveTetrino } from "./movement/piece_movement.js"
+import { moveTetrino } from "../movement/piece_movement.js"
 
 
 const addTouchListeners = (gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext, lineWidth, strokeStyle, scoreDOMId, lineDOMId, levelDOMId) => {
