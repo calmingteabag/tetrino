@@ -2,16 +2,9 @@ Scripts/
 Lib/
 migrations/
 notas_dev.md
-test.js
-game_flow.md
 node_modules/
-package-lock.json
-package.json
-test.html
-refactoring.md
 readme.md
 game_prod_history.md
 game_grid.js
 .vscode/
 favicon.ico
-tetrinotest.js
