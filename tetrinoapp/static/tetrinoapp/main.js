@@ -1,11 +1,9 @@
-import { pieceFillStyling, pieceColorStyling } from "./game_styling.js";
-import { tetrinoDraw } from "./piece_creation.js";
-import { gameBoardRefresh, gameLocalVarCreate, gameParamProcess } from "./game_handling.js";
-import { canvasSizeSet, canvasSizeCalc, setPieceSize, setStrokeWidth, setGameHeight } from "./game_sizes.js"
-import { toggleInfo, showInfoListener, showInfoListenerReset } from "./game_info.js";
-import { touchListener } from "./mobile_controls.js";
-// import { pieceFillStyling, pieceColorStyling } from "./tetris/game_styling.js"
-import { testfunc } from "./tetrinotest.js"
+import { pieceFillStyling, pieceColorStyling } from "./styling/game_styling.js";
+import { tetrinoDraw } from "./pieces/piece_creation.js";
+import { gameBoardRefresh, gameLocalVarCreate, gameParamProcess } from "./game_aux/game_handling.js";
+import { canvasSizeSet, setPieceSize, setStrokeWidth, setGameHeight } from "./styling/game_sizes.js"
+import { showInfoListener, showInfoListenerReset } from "./game_aux/game_info.js";
+import { addTouchListeners } from "./mobile_control/mobile_controls.js";
 
 class TetrinoGame {
     constructor(

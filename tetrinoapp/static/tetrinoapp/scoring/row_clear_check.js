@@ -3,8 +3,8 @@ This module is responsible for the row cleaning that occurs
 when all tiles on a row is filled with tetrinos.
 */
 
-import { tetrinoBaseShape } from "./piece_creation.js"
-import { gameScore } from "./game_score.js"
+import { tetrinoBaseShape } from "./pieces/piece_creation.js"
+import { gameScore } from "./scoring/game_score.js"
 
 const rowFillClear = (gameBoard, row) => {
 

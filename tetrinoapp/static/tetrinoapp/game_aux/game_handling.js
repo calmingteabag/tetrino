@@ -2,9 +2,8 @@
 This module brings some auxiliary functions to the game.
 */
 
-import { tetrinoSpawn, tetrinoDraw } from "./piece_creation.js";
-import { moveTetrino, moveTetrinoAuto } from "./piece_movement.js";
-import { canvasSizeCalc } from "./game_sizes.js";
+import { tetrinoSpawn, tetrinoDraw } from "./pieces/piece_creation.js";
+import { moveTetrino, moveTetrinoAuto } from "./movement/piece_movement.js";
 
 const gameBoardRefresh = (canvasName, getContextName, gameCoords, tileWidth) => {
     /* 

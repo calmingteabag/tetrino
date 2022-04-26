@@ -6,10 +6,10 @@ Everytime a piece wants to move down and encounters an invalid position an
 checking is done to see if any row was filled, so the game can score it
 */
 
-import { gameBoardRefresh } from "./game_handling.js"
-import { tetrinoDraw } from "./piece_creation.js"
-import { rotateCheckPosition, rotateCoord } from "./piece_rotation.js"
-import { rowFillCheck } from "./row_clear_check.js";
+import { gameBoardRefresh } from "./game_aux/game_handling.js"
+import { tetrinoDraw } from "./pieces/piece_creation.js"
+import { rotateCheckPosition, rotateCoord } from "./movement/piece_rotation.js"
+import { rowFillCheck } from "./scoring/row_clear_check.js";
 
 const moveCheckPosition = (moveDir, pieceCoords, gameCoords, gameWidth, gameHeight) => {
 

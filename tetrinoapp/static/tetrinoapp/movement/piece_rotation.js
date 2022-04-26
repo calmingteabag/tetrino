@@ -10,7 +10,7 @@ nates)
 It excludes square tetrino for obvious reasons.
 */
 
-import { shiftPosition } from "./piece_shift.js"
+import { shiftPosition } from "./movement/piece_shift.js"
 
 const rotateCoord = (piece, direction, pieceCoords, gameWidth, reverse) => {
 
