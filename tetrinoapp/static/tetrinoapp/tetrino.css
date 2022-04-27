@@ -15,7 +15,7 @@ body {
 div.game {
     display: flex;
     flex-direction: column;
-    height: 95vh;
+    height: 90vh;
     width: 95vw;
 }
 
