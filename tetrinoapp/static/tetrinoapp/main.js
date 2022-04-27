@@ -1,9 +1,8 @@
 import { pieceFillStyling, pieceColorStyling } from "./gamefiles/styling/game_styling.js";
 import { canvasSizeSet, setPieceSize, setStrokeWidth, setGameHeight } from "./gamefiles/styling/game_sizes.js"
-
 import { tetrinoDraw } from "./gamefiles/pieces/piece_creation.js";
 import { gameBoardRefresh, gameLocalVarCreate, gameParamProcess } from "./gamefiles/game_aux/game_handling.js";
-import { showInfoListener, showInfoListenerReset } from "./gamefiles/game_aux/game_info.js";
+import { gameResetListener, gameInfoListener } from "./gamefiles/game_aux/game_info.js";
 import { addTouchListeners } from "./gamefiles/mobile_control/mobile_controls.js";
 
 class TetrinoGame {
@@ -147,8 +146,10 @@ class TetrinoGame {
         document.addEventListener('DOMContentLoaded', () => { gameLocalVarCreate() }, false)
         document.addEventListener('keydown', (key) => { this.gameRunManual(key) }, false)
         document.addEventListener('DOMContentLoaded', () => { this.gameRunAuto() }, false)
-        document.addEventListener('DOMContentLoaded', () => { showInfoListener(this.domListenerAbout, this.domToggleAbout) }, false)
-        document.addEventListener('DOMContentLoaded', () => { showInfoListenerReset(this.domListenerReset, this.domToggleReset, this.gameCoords, this.canvasName, this.canvasContext) }, false)
+        document.addEventListener('DOMContentLoaded', () => { gameInfoListener("game_about", this.domToggleAbout) }, false)
+        document.addEventListener('DOMContentLoaded', () => { gameInfoListener("about_logo", this.domToggleAbout) }, false)
+        document.addEventListener('DOMContentLoaded', () => { gameInfoListener(this.domListenerAbout, this.domToggleAbout) }, false)
+        document.addEventListener('DOMContentLoaded', () => { gameResetListener(this.domListenerReset, this.domToggleReset, this.gameCoords, this.canvasName, this.canvasContext) }, false)
         document.addEventListener('DOMContentLoaded', () => {
             addTouchListeners(
                 this.gameCoords,
@@ -178,7 +179,7 @@ let newGame = new TetrinoGame(
     "game_score",
     "line_score",
     "game_level",
-    "widget_about",
+    "btn_about",
     "game_about",
     "resetbutton",
     "gameover"

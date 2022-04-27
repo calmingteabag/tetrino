@@ -82,8 +82,6 @@ const moveTetrinoProcess = (pieceCoords, pieceColor, gameCoords, tileWidth, want
 const moveTetrino = (usrkey, piece, pieceColor, gameCoords, tileWidth, gameWidth, gameHeight, canvasName, canvasContext, lineWidth, strokeStyle, scoreDOMId, lineDOMId, levelDOMId) => {
 
     let currPieceCoords = JSON.parse(sessionStorage.getItem('pieceCoords'))
-    console.log(usrkey)
-    console.log(typeof usrkey)
 
     if ((usrkey.key == 'ArrowUp' || usrkey.key == 'w')) {
         for (let coord of currPieceCoords) {

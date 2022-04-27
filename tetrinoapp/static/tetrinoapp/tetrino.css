@@ -32,7 +32,50 @@ div.game_header {
     margin-left: 4vw;
     margin-right: 4vw;
     margin-bottom: 2vw;
+}
 
+div.game_header_left {
+    height: 100%;
+    width: 90%;
+    background-color: #3b0055;
+}
+
+div.game_header_right {
+    height: 100%;
+    width: 10%;
+    background-color: #c53b00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+div.game_header_right_top {
+    height: 40%;
+    width: 100%;
+    background-color: darkgreen;
+    transition: all .5s ease-in-out;
+    transform-origin: top right;
+    border-width: 1px;
+}
+
+div.game_header_right_top:hover {
+    background-color: rgb(116, 64, 0);
+    border-style: solid;
+    border-width: 0.5px;
+    border-color: orange;
+    cursor: pointer;
+    overflow: auto;
+    transform: scale(8, 13)
+}
+
+div.header_menu {
+    display: hidden;
+}
+
+div.game_header_right_bottom {
+    height: 60%;
+    width: 100%;
 }
 
 /* Game Main Content */
@@ -115,16 +158,22 @@ div.tetrino_score_widget {
     border: transparent;
 }
 
-#widget_about {
+#btn_about {
     height: 8%;
     width: 100%;
 }
 
-#widget_about_description {
+#btn_about_description {
     height: 100%;
     width: 100%;
 }
 
+#btn_about:hover {
+    border-color: #09ff00;
+    background-color: #7b0044;
+    color: #8aff9f;
+    cursor: pointer;
+}
 
 div.widget_description {
     color: #ffd000;
@@ -196,7 +245,7 @@ div.about_wrapper {
     justify-content: center;
     position: fixed;
     z-index: 1;
-    background-color: #000000b1;
+    background-color: transparent;
 }
 
 div.about {
@@ -206,8 +255,28 @@ div.about {
     justify-content: center;
     height: 80vh;
     width: 85vw;
-    background-color: #000000;
-    /* animation: "name duration timing-function delay iteration-count direction fill-mode;" */
+    background-color: #260054;
+    box-shadow: 2px 0px 82px 27px rgba(24, 1, 60, 0.84);
+}
+
+div.about_logo {
+    color: rgb(255, 195, 110);
+    font-size: 5vh;
+    font-family: Arial, Helvetica, sans-serif;
+    border: 1px solid rgb(255, 170, 114);
+    padding: 3vh;
+}
+
+@keyframes testanim {}
+
+div.about_logo:hover {
+    cursor: pointer;
+    transition-duration: 0.7s;
+    /* transform: rotate(360deg); */
+    transform: scale(1.5) skew(15deg, 15deg);
+    /* color: transparent;
+    animation: testanim 5s infinite; */
+
 }
 
 div.about_header {
@@ -235,17 +304,19 @@ div.about_footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-justify: auto;
     width: 100%;
     height: 20%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 1.2vh;
+    font-size: 1.6vh;
 }
 
-#widget_about:hover {
-    border-color: #09ff00;
-    background-color: #7b0044;
-    color: #8aff9f;
-    cursor: pointer;
+a.infocredits {
+    color: #09ff00;
+}
+
+a.infocredits:hover {
+    color: #FA4DAC;
 }
 
 div.gameover_wrapper {
@@ -316,6 +387,8 @@ div.resetbutton:hover {
     background-color: #252525;
     cursor: pointer;
 }
+
+
 
 
 /* Desktop Styling */
@@ -412,7 +485,7 @@ div.resetbutton:hover {
     div.about_footer {
         width: 100%;
         height: 10%;
-        font-size: 1.2vh;
+        font-size: 1.4vh;
     }
 
     a.infocredits {

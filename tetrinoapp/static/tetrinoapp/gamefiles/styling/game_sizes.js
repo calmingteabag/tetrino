@@ -13,8 +13,6 @@ const canvasSizeCalc = (DOMElement) => {
     const currWidth = document.getElementsByClassName("tetrino_main")[0].clientWidth
     const currHeight = document.getElementsByClassName("tetrino_main")[0].clientHeight
 
-    console.log("curr canvas:", currWidth, currHeight)
-
     if (screenSize.width > screenSize.height) {
         /* 
         Canvas needed to have a fixed size for the game to work properly and so far

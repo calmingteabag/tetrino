@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tetrino</title>
     <script src="{% static 'tetrinoapp/main.js' %}" type="module"></script>
-    <link rel="shortcut icon" type="image/png" href="{% static 'tetrinoapp/favicon.ico' %}" />
+    <link rel="shortcut icon" type="image/png" href="{% static 'tetrinoapp/favicon.ico' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'tetrinoapp/tetrino.css' %}">
 </head>
 
@@ -30,30 +30,39 @@
             <div class="about_header">
             </div>
             <div class="about_content">
-                <div class="testdiv">
-                    <h1>Tetris</h1>
+                <div class="about_logo" id="about_logo">
+                    <span>4-Piece</span>
+                    <span></span>
                 </div>
 
             </div>
             <div class="about_footer">
+                <span>Yes, it is a clone of that certain famous game, but made entirely from scratch. </span>
                 <span>Created by
                     <a class='infocredits' href="https://github.com/calmingteabag">calmingteabag</a> for <b>LEARNING</b>
                     purposes, all credits
                     goes to
                     original creators.
-                </span></br>
+                </span>
                 <span> Tecnologies used: <a class='infocredits' href="https://www.djangoproject.com/">Django</a>, <a
                         class='infocredits' href="https://www.heroku.com/">Heroku</a>, Python and Vanilla
                     Javascript.
                 </span>
+                </br>
+                </br>
             </div>
         </div>
     </div>
 
-
-
     <div class="game">
         <div class="game_header">
+            <!-- <div class="game_header_left">
+
+            </div>
+            <div class="game_header_right">
+                <div class="game_header_right_top"></div>
+                <div class="game_header_right_bottom"></div>
+            </div> -->
         </div>
         <div class="game_main">
             <div class="tetrino_main" id="">
@@ -77,18 +86,10 @@
                 <div class="tetrino_score_widget" id="widget_blank_space">
 
                 </div>
-                <div class="tetrino_score_widget" id="widget_about">
-                    <div class="widget_description" id="widget_about_description">About</div>
-
-                    <!-- <div class="tetrino_score_widget" id="widget_next_tetrino">
-                    <div class="widget_description">Next</div>
-                    <div class="widget_value"></div>
-                </div> -->
-
+                <div class="tetrino_score_widget" id="btn_about">
+                    <div class="widget_description" id="btn_about_description">About</div>
                 </div>
-
             </div>
-
         </div>
         <div class="game_footer">
             <div class="game_controls" id="control_left">⇦</div>
