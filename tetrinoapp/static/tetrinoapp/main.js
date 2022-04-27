@@ -191,6 +191,6 @@ newGame.loadGameListeners()
 document.addEventListener('DOMContentLoaded', () => { canvasSizeSet("gamecanvas") }, false)
 
 window.addEventListener('resize', () => { // workaround to deal with mobiles croping elements
-    let viewHeight = window.innerHeight * 0.01
-    document.getElementById("game_wrapper").style.height = `${viewHeight}vh`
+    let viewHeight = window.innerHeight
+    document.getElementById("game_wrapper").style.height = `${viewHeight * 0.9}vh`
 })
