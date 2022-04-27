@@ -192,6 +192,5 @@ document.addEventListener('DOMContentLoaded', () => { canvasSizeSet("gamecanvas"
 
 window.addEventListener('resize', () => { // workaround to deal with mobiles croping elements
     let viewHeight = window.innerHeight * 0.01
-    document.getElementById("game").setAttribute("height", viewHeight)
-
+    document.getElementById("game").style.height = viewHeight
 })
