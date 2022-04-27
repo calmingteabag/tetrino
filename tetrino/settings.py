@@ -22,14 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&h_lkf7snqvzf@k3+tb^0t)u8le#u7#yvacp&8)5e%+e^x&h^7'
-# SECRET_KEY = os.getenv('DJANGO-KEY')
+# SECRET_KEY = 'django-insecure-&h_lkf7snqvzf@k3+tb^0t)u8le#u7#yvacp&8)5e%+e^x&h^7'
+SECRET_KEY = os.getenv('DJANGO-KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
-    # '.herokuapp.com'
+    '.herokuapp.com'
 ]
 
 
@@ -47,7 +47,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -61,7 +61,9 @@ ROOT_URLCONF = 'tetrino.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates/'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,25 +129,25 @@ STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 STATIC_URL = '/static/'
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
-# CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
-# SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = True
 
-# SECURE_HSTS_SECONDS = 300
+SECURE_HSTS_SECONDS = 300
 
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
-# SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_PRELOAD = True
 
-# CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TRACK_STARTED = True
 
 mimetypes.add_type("application/javascript", ".js")

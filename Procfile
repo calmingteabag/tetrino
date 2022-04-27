@@ -1,1 +1,1 @@
-web: gunicorn wordle_clone.wsgi
+web: gunicorn tetrino.wsgi
