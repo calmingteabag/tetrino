@@ -21,7 +21,7 @@ div.game {
 
 /* Header */
 div.game_header {
-    height: 10%;
+    height: 0%;
     background-color: transparent;
     display: flex;
     align-items: center;
